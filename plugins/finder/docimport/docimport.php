@@ -15,7 +15,7 @@ JLoader::import('joomla.application.component.helper');
 require_once JPATH_ADMINISTRATOR . '/components/com_finder/helpers/indexer/adapter.php';
 
 /**
- * ATS Smart Search plugin
+ * DocImport Smart Search plugin
  */
 
 class plgFinderDocimport extends FinderIndexerAdapter
@@ -186,6 +186,10 @@ class plgFinderDocimport extends FinderIndexerAdapter
 			return;
 		}
 
+                // Do not add category zero items.
+                if ( $item->category == 0 ) return;
+
+
 		// Build the necessary route and path information.
 		$item->url = 'index.php?option=com_docimport&view=article&id='.$item->id;
 		$item->route = $item->url;
@@ -208,8 +212,13 @@ class plgFinderDocimport extends FinderIndexerAdapter
 		// Add the category taxonomy data.
 		$item->addTaxonomy('Category', $item->category, $item->cat_state, $item->cat_access);
 
-		// Index the item.
-		$this->indexer->index($item);
+		// Index the item.  Allow for Joomla 2.5 and Joomla 3.x
+                $jversion = new JVersion();
+                if ( version_compare( $jversion->getShortVersion(), '3.1', 'ge' ) ) {
+                  $this->indexer->index($item);
+                } else {
+                   FinderIndexer::index($item);  // J2.5
+                }
 	}
 
 	/**
@@ -285,9 +294,10 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 */
 	protected function getURL($id, $extension, $view)
 	{
-		$ticket_id  = F0FModel::getTmpInstance('Posts', 'AtsModel')
-			->getItem($id)
-			->ats_ticket_id;
+		// REmove since this is Docimport.
+		// $ticket_id  = F0FModel::getTmpInstance('Posts', 'AtsModel')
+		//	->getItem($id)
+		//	->ats_ticket_id;
 		$url = 'index.php?option=' . $extension . '&view=' . $view . '&id=' . $id;
 		return $url;
 	}
