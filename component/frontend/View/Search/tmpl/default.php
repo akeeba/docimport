@@ -17,6 +17,8 @@ $submitUrl = JRoute::_('index.php?option=com_docimport&view=Search');
 JHtml::_('formbehavior.chosen', 'select.fancySelect')
 ?>
 
+<?php echo $this->loadposition('docimport-search-top'); ?>
+
 <?php if ($this->headerText): ?>
 	<h3><?php echo $this->headerText ?></h3>
 <?php endif; ?>
@@ -102,7 +104,12 @@ JHtml::_('formbehavior.chosen', 'select.fancySelect')
 	<input type="hidden" name="<?php echo JSession::getFormToken() ?>" value="1" />
 </form>
 
-<?php if (empty($this->search)) return; ?>
+<?php if (empty($this->search)): ?>
+<?php echo $this->loadposition('docimport-search-bottom'); ?>
+<?php
+    return;
+    endif;
+?>
 
 <?php if (!$this->pagination->pagesTotal): ?>
 
@@ -189,3 +196,5 @@ if ($this->items['video']['count'] && ($this->items['video']['count'] >= $this->
 </div>
 
 <?php endif; ?>
+
+<?php echo $this->loadposition('docimport-search-bottom'); ?>
