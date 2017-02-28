@@ -18,6 +18,11 @@ JHtml::_('formbehavior.chosen', 'select.fancySelect')
 ?>
 
 <?php echo $this->loadposition('docimport-search-top'); ?>
+<?php if (!empty($this->search)): ?>
+<?php echo $this->loadposition('docimport-search-results-top'); ?>
+<?php else: ?>
+<?php echo $this->loadposition('docimport-search-form-top'); ?>
+<?php endif; ?>
 
 <?php if ($this->headerText): ?>
 	<h3><?php echo $this->headerText ?></h3>
@@ -106,6 +111,7 @@ JHtml::_('formbehavior.chosen', 'select.fancySelect')
 
 <?php if (empty($this->search)): ?>
 <?php echo $this->loadposition('docimport-search-bottom'); ?>
+<?php echo $this->loadposition('docimport-search-form-bottom'); ?>
 <?php
     return;
     endif;
@@ -197,4 +203,5 @@ if ($this->items['video']['count'] && ($this->items['video']['count'] >= $this->
 
 <?php endif; ?>
 
+<?php echo $this->loadposition('docimport-search-results-bottom'); ?>
 <?php echo $this->loadposition('docimport-search-bottom'); ?>
