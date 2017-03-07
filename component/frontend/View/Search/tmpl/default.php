@@ -66,7 +66,7 @@ JHtml::_('formbehavior.chosen', 'select.fancySelect')
 								<label for="dius-searchutils-areas">
 									<?php echo JText::_('COM_DOCIMPORT_SEARCH_LBL_SECTIONS'); ?>
 								</label>
-								<?php echo JHtml::_('select.genericlist', $this->areaOptions, 'areas', [
+								<?php echo JHtml::_('select.genericlist', $this->areaOptions, 'areas[]', [
 									'multiple' => 'multiple',
 									'class' => 'fancySelect form-control',
 									'onchange' => 'akeeba.DocImport.Search.sectionsChange(this)'
