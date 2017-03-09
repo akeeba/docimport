@@ -96,4 +96,38 @@ class JoomlaFulltext extends AbstractAdapter
 
 		return $query;
 	}
+
+	/**
+	 * Override parent search function to run plugins on the results before returning them.
+	 *
+	 * @param string $search
+	 * @param int    $limitstart
+	 * @param int    $limit
+	 *
+	 * @return \Akeeba\DocImport\Site\Model\Search\Result\ResultInterface[]
+	 */
+	public function search($search, $limitstart, $limit)
+	{
+		$results = parent::search($search, $limitstart, $limit);
+
+		if ($results)
+		{
+			\JPluginHelper::importPlugin('content');
+
+			foreach ($results as $result)
+			{
+				// Currently we are working only vs the introtext, since it's the only text displayed in search results.
+				// Otherwise we would have to trigger the same event twice, impacting the performance
+				$fake_article = (object) array(
+					'text' => $result->introtext
+				);
+
+				\JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_docimport.search.joomlafulltext', &$fake_article));
+
+				$result->introtext = $fake_article->text;
+			}
+		}
+
+		return $results;
+	}
 }
