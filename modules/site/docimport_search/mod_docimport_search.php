@@ -58,7 +58,9 @@ $container = FOF30\Container\Container::getInstance('com_docimport', [
 	),
 ]);
 
+$moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8');
+
 ?>
-<div id="mod-docimport-search-<?php echo $module->id ?>" class="mod-docimport-search">
+<div id="mod-docimport-search-<?php echo $module->id ?>" class="mod-docimport-search <?php echo $moduleclass_sfx ?>">
 <?php $container->dispatcher->dispatch(); ?>
 </div>
