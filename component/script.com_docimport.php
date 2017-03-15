@@ -109,9 +109,6 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 ?>
 		<h1>Akeeba DocImport</h1>
 
-		<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-			You can download translation files <a href="http://akeeba-cdn.s3-website-eu-west-1.amazonaws.com/language/docimport/">directly from our CDN page</a>.
-		</div>
 		<img src="../media/com_docimport/images/docimport-48.png" width="48" height="48" alt="Akeeba DocImport" align="left" />
 		<h2 style="font-size: 14pt; font-weight: bold; padding: 0; margin: 0 0 0.5em;">&nbsp;Welcome to Akeeba DocImport!</h2>
 		<span>
