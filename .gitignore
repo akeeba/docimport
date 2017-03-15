@@ -9,12 +9,7 @@
 /component/docimport.xml
 /component/backend/version.php
 /component/cli/*.xml
-component/language/backend/en-GB
-component/language/frontend/en-GB
 
 /documentation/*.xml~
-
-/modules/*/*/language/en-GB
-/plugins/*/*/language/en-GB
 
 release/
