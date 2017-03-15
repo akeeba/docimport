@@ -2,17 +2,13 @@
 
 The simplest way to integrate DocBook XML documentation in your Joomla! site.
 
-## NO SUPPORT
+## Internal project - No support
 
-This software is provided **WITHOUT ANY KIND OF SUPPORT WHATSOEVER**. We have disabled Issues on this repository to stress this. Kindly note that any requests sent to us about this software will not be replied.
- 
-## THIS REPOSITORY IS FOR DEVELOPERS ONLY
+Akeeba DociMport is a project internal to Akeeba Ltd. We use it as own site's documentation system. We make it available free of charge to everyone in hope that it will be useful. However, we will not accept any feature requests, feature patches or support requests. Emails (including through our business site's or personal sites' contact forms), GitHub Issues and Pull Requests containing any of these will be deleted / closed without reply. Thank you for your understanding.
 
-No installable ZIP packages will be provided for this software since March 2016. You can build one from the source following the developer instructions in this README.
+## Downloads
 
-## INTERNAL PROJECT
-
-This is meant to be an internal software development project for use with our site, akeebabackup.com. As such, future versions of this software will drop any features we do not wish to maintain because we do not intend or anticipate to use on our site.
+We provide _infrequent_ builds available for download from [this repository's Releases section](https://github.com/akeeba/docimport/releases). Please note that these are not released or maintained regularly. We urge developers to build their own packages using the instructions provided below.
 
 ## Prerequisites
 
