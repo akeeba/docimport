@@ -31,4 +31,9 @@
 
     <!-- Installation script -->
     <scriptfile>script.docimport.php</scriptfile>
+
+    <!-- Update servers -->
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba DocImport Updates">https://raw.githubusercontent.com/akeeba/docimport/master/update/pkg_docimport_updates.xml</server>
+    </updateservers>
 </extension>
