@@ -40,6 +40,27 @@ abstract class Routing
 	];
 
 	/**
+	 * Caches the slugs of categories by category
+	 *
+	 * @var   array
+	 */
+	private static $categorySlugs = null;
+
+	/**
+	 * Caches the slugs of articles by article ID
+	 *
+	 * @var   array
+	 */
+	private static $articleSlugs = null;
+
+	/**
+	 * Caches the category ID per article ID
+	 *
+	 * @var   array
+	 */
+	private static $articleToCategory = null;
+
+	/**
 	 * Get all menu items pointing to DocImport
 	 *
 	 * @return   \stdClass[]
@@ -391,4 +412,121 @@ abstract class Routing
 		return $value;
 	}
 
+	/**
+	 * Returns the slug for the specified category ID
+	 *
+	 * @param   int  $categoryID  The category ID
+	 *
+	 * @return  string|null  The category slug or null if it's not found
+	 */
+	static function getCategorySlug($categoryID)
+	{
+		self::initCategoryAndArticleCaches();
+
+		if (isset(self::$categorySlugs[$categoryID]))
+		{
+			return self::$categorySlugs[$categoryID];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the slug for the specified article ID
+	 *
+	 * @param   int  $articleID  The article ID
+	 *
+	 * @return  string|null  The article slug or null if it's not found
+	 */
+	static function getArticleSlug($articleID)
+	{
+		self::initCategoryAndArticleCaches();
+
+		if (isset(self::$articleSlugs[$articleID]))
+		{
+			return self::$articleSlugs[$articleID];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the _category_ ID for the specified article ID
+	 *
+	 * @param   int  $articleID  The article ID
+	 *
+	 * @return  int|null  The category ID or null if it's not found
+	 */
+	static function getArticleCategoryId($articleID)
+	{
+		self::initCategoryAndArticleCaches();
+
+		if (isset(self::$articleToCategory[$articleID]))
+		{
+			return self::$articleToCategory[$articleID];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the _category_ slug for the specified article ID
+	 *
+	 * @param   int  $articleID  The article ID
+	 *
+	 * @return  string|null  The _category_ slug or null if it's not found
+	 */
+	static function getArticleCategorySlug($articleID)
+	{
+		$catId = self::getArticleCategoryId($articleID);
+
+		if (empty($catId))
+		{
+			return '';
+		}
+
+		return self::getArticleCategorySlug($catId);
+	}
+
+	/**
+	 * Initialize the article and category caches
+	 *
+	 * @return  void
+	 */
+	private static function initCategoryAndArticleCaches()
+	{
+		if (!is_null(self::$categorySlugs))
+		{
+			return;
+		}
+
+		self::$categorySlugs     = [];
+		self::$articleSlugs      = [];
+		self::$articleToCategory = [];
+
+		$db = \JFactory::getDbo();
+		$query = $db->getQuery(true)
+		            ->select(array(
+			            $db->qn('docimport_category_id') . ' AS ' . $db->qn('id'),
+			            $db->qn('slug')
+		            ))->from($db->qn('#__docimport_categories'));
+		self::$categorySlugs = $db->setQuery($query)->loadAssocList('id', 'slug');
+
+		$query = $db->getQuery(true)
+		            ->select(array(
+			            $db->qn('docimport_article_id') . ' AS ' . $db->qn('id'),
+			            $db->qn('slug'),
+			            $db->qn('docimport_category_id') . ' AS ' . $db->qn('catid')
+		            ))->from($db->qn('#__docimport_articles'));
+		$cache = $db->setQuery($query)->loadAssocList();
+
+		if (!empty($cache))
+		{
+			foreach ($cache as $item)
+			{
+				self::$articleToCategory[$item['id']] = $item['catid'];
+				self::$articleSlugs[$item['id']] = $item['slug'];
+			}
+		}
+	}
 }
