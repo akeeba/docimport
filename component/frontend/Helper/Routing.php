@@ -419,7 +419,7 @@ abstract class Routing
 	 *
 	 * @return  string|null  The category slug or null if it's not found
 	 */
-	static function getCategorySlug($categoryID)
+	public static function getCategorySlug($categoryID)
 	{
 		self::initCategoryAndArticleCaches();
 
@@ -438,7 +438,7 @@ abstract class Routing
 	 *
 	 * @return  string|null  The article slug or null if it's not found
 	 */
-	static function getArticleSlug($articleID)
+	public static function getArticleSlug($articleID)
 	{
 		self::initCategoryAndArticleCaches();
 
@@ -457,7 +457,7 @@ abstract class Routing
 	 *
 	 * @return  int|null  The category ID or null if it's not found
 	 */
-	static function getArticleCategoryId($articleID)
+	public static function getArticleCategoryId($articleID)
 	{
 		self::initCategoryAndArticleCaches();
 
@@ -476,7 +476,7 @@ abstract class Routing
 	 *
 	 * @return  string|null  The _category_ slug or null if it's not found
 	 */
-	static function getArticleCategorySlug($articleID)
+	public static function getArticleCategorySlug($articleID)
 	{
 		$catId = self::getArticleCategoryId($articleID);
 
@@ -486,6 +486,45 @@ abstract class Routing
 		}
 
 		return self::getArticleCategorySlug($catId);
+	}
+
+	public static function getCategoryFromSlug($slug)
+	{
+		self::initCategoryAndArticleCaches();
+
+		if (empty(self::$categorySlugs))
+		{
+			return null;
+		}
+
+		$id = array_search($slug, self::$categorySlugs);
+
+		return empty($id) ? null : $id;
+	}
+
+	public static function getArticleFromSlug($categoryId, $slug)
+	{
+		self::initCategoryAndArticleCaches();
+
+		if (empty(self::$articleSlugs))
+		{
+			return null;
+		}
+
+		foreach (self::$articleToCategory as $aid => $cid)
+		{
+			if ($cid != $categoryId)
+			{
+				continue;
+			}
+
+			if (self::$articleSlugs[$aid] == $slug)
+			{
+				return $aid;
+			}
+		}
+
+		return null;
 	}
 
 	/**

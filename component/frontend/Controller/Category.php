@@ -31,7 +31,7 @@ class Category extends DataController
 
 		if (is_object($menuItem) && isset($menuItem->params) && ($menuItem->params instanceof Registry))
 		{
-			$id = $menuItem->params->get('catid', $id);
+			$catid = $menuItem->params->get('catid', $catid);
 		}
 
 		if (!$id && $catid)

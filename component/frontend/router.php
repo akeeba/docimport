@@ -16,6 +16,10 @@ if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/inclu
 	return;
 }
 
+// Make sure the autoloader is registered for this component
+$tempAutoloaderRemoveMe = \FOF30\Container\Container::getInstance('com_docimport');
+unset($tempAutoloaderRemoveMe);
+
 function docimportBuildRoute(&$query)
 {
 	// Initialize the segments
@@ -265,5 +269,89 @@ function docimportBuildRoute(&$query)
 
 function docimportParseRoute(&$segments)
 {
-	die('PARSE ROUTE NOT IMPLEMENTED');
+	// Initialize
+	$query = array();
+
+	// Make sure we have SOMETHING to do.
+	if (empty($segments))
+	{
+		return $query;
+	}
+
+	// Prepare the segments and get some basic current menu item information
+	$segments    = Routing::preconditionSegments($segments);
+	$currentItem = JFactory::getApplication()->getMenu()->getActive();
+	$Itemid      = (is_object($currentItem) && isset($currentItem->id)) ? $currentItem->id : 0;
+	$info        = Routing::getMenuItemInfo($Itemid);
+
+	// We have no idea what this menu item is?
+	if (empty($info['type']))
+	{
+		return $query;
+	}
+
+	// Is this a menu item which results in no parsable segments?
+	if (in_array($info['type'], ['categories', 'search', 'article']))
+	{
+		$query['view'] = ucfirst($info['type']);
+
+		return $query;
+	}
+
+	$categorySlug = null;
+	$articleSlug  = null;
+
+	switch ($info['type'])
+	{
+		case 'categories':
+			// How many slugs do I have?
+			if (count($segments) >= 2)
+			{
+				$query['view'] = 'Article';
+				$categorySlug  = array_shift($segments);
+				$articleSlug   = array_shift($segments);
+			}
+			elseif (count($segments) == 1)
+			{
+				$query['view'] = 'Category';
+				$categorySlug  = array_shift($segments);
+			}
+			else
+			{
+				$query['view'] = 'Categories';
+			}
+			break;
+
+		case 'category':
+			// How many slugs do I have?
+			if (count($segments) >= 1)
+			{
+				$query['view'] = 'Article';
+				$articleSlug   = array_shift($segments);
+			}
+			else
+			{
+				$query['view'] = 'Category';
+			}
+
+			$query['id'] = $info['id'];
+			break;
+	}
+
+	// Convert a category slug to an ID
+	if (!empty($categorySlug))
+	{
+		$catId       = Routing::getCategoryFromSlug($categorySlug);
+		$query['id'] = $catId;
+	}
+
+	// Convert an article slug to an ID
+	if (!empty($articleSlug))
+	{
+		$catId       = Routing::getAndPop($query, 'id', 0);
+		$aID         = Routing::getArticleFromSlug($catId, $articleSlug);
+		$query['id'] = $aID;
+	}
+
+	return $query;
 }
