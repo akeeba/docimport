@@ -428,9 +428,7 @@ function docimportParseRoute(&$segments)
 	$slug_article  = null;
 	$slug_category = null;
 
-	/** @var JRegistry $menuparams */
-	$menuparams = $menu->params;
-	$catid = $menuparams->get('catid', null);
+	$catid = isset($menu->query) ? $menu->query['catid'] : null;
 
 	if (($view == 'Categories') || ($view == 'categories'))
 	{
