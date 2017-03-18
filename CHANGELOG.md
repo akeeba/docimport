@@ -3,6 +3,7 @@
 **Bug fixes**
 
 * Module class suffix not honored in the modules
+* Routing an article through a category menu item results in the category index being shown instead of the article
 
 # 2.0.0
 

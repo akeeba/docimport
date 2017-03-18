@@ -471,6 +471,7 @@ function docimportParseRoute(&$segments)
 				// Article view
 				$query['view'] = 'Article';
 				$view          = 'Article';
+				$slug_article  = array_pop($segments);
 				break;
 		}
 	}
