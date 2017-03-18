@@ -8,326 +8,258 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
+use Akeeba\DocImport\Site\Helper\Routing;
+
+// Make sure FOF 3 can be loader
 if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
 {
-	throw new RuntimeException('FOF 3.0 is not installed', 500);
+	return;
 }
+
+// Make sure the autoloader is registered for this component
+$tempAutoloaderRemoveMe = \FOF30\Container\Container::getInstance('com_docimport');
+unset($tempAutoloaderRemoveMe);
 
 function docimportBuildRoute(&$query)
 {
-	$segments = array();
+	// Initialize the segments
+	$segments = [];
 
-	//If there is only the option and Itemid, let Joomla! decide on the naming scheme
-	if (isset($query['option']) && isset($query['Itemid']) &&
-	    !isset($query['view']) && !isset($query['task']) &&
-	    !isset($query['layout']) && !isset($query['id'])
-	)
+	// Get some basic query string parameters
+	$option = Routing::getAndPop($query, 'option', 'com_docimport');
+
+	if ($option != 'com_docimport')
+	{
+		$query['option'] = $option;
+
+		return $segments;
+	}
+
+	$view   = Routing::getAndPop($query, 'view', null);
+	$task   = Routing::getAndPop($query, 'task', null);
+	$itemID = Routing::getAndPop($query, 'Itemid', null);
+	$view   = is_string($view) ? strtolower($view) : $view;
+	$task   = is_string($task) ? strtolower($task) : $task;
+
+
+	// If we are not asked for a specific view AND there is a menu item THEN return no segments; Joomla! already uses the menu item alias.
+	if (empty($view) && $itemID)
 	{
 		return $segments;
 	}
 
-	// Load the site's menus
-	$menus = JMenu::getInstance('site');
-
-	// Get some interesting variables
-	$view        = DocimportRouterHelper::getAndPop($query, 'view', 'Categories');
-	$task        = DocimportRouterHelper::getAndPop($query, 'task', 'browse');
-	$id          = DocimportRouterHelper::getAndPop($query, 'id');
-	$queryItemid = DocimportRouterHelper::getAndPop($query, 'Itemid');
-
-	$catSlugs = DocimportRouterHelper::getCategorySlugs();
-
-	// Fix the View/Task variables
 	switch ($view)
 	{
-		case 'category':
-		case 'Category':
-			if (($task == 'browse') && !empty($id))
-			{
-				$task = 'read';
-			}
-			elseif (empty($id))
-			{
-				$view = 'Categories';
-				$task = 'browse';
-			}
-			break;
-
-		case 'Categories':
 		case 'categories':
-			$task = 'browse';
-			break;
-
-		case 'article':
-		case 'Article':
-			if (empty($id))
-			{
-				$view = 'Categories';
-				$task = 'browse';
-			}
-			else
-			{
-				$task = 'read';
-			}
-			break;
-
-		case 'search':
-		case 'Search':
-			$view = 'Search';
-			$task = 'main';
-			break;
-
 		default:
-			$view = 'Categories';
-			$task = 'browse';
-			break;
-	}
-
-	$qoptions = array('view' => $view, 'id' => $id, 'option' => 'com_docimport');
-
-	switch ($view)
-	{
-		case 'Categories':
-		case 'categories':
-			// Find a suitable Itemid
-			$menu   = DocimportRouterHelper::findMenu($qoptions);
-			$Itemid = empty($menu) ? null : $menu->id;
-
-			if (empty($Itemid))
+			// Do I already have a menu item pointing to Categories?
+			if ($itemID)
 			{
-				$qoptions['view'] = strtolower($qoptions['view']);
-				$menu   = DocimportRouterHelper::findMenu($qoptions);
-				$Itemid = empty($menu) ? null : $menu->id;
-			}
+				$info = Routing::getMenuItemInfo($itemID);
 
-			if (!empty($Itemid))
-			{
-				// Joomla! will let the menu item naming work its magic
-				$query['Itemid'] = $Itemid;
-			}
-			else
-			{
-				if ($queryItemid)
+				if ($info['type'] == 'categories')
 				{
-					$menu  = $menus->getItem($queryItemid);
-					$mView = isset($menu->query['view']) ? $menu->query['view'] : 'Categories';
-					// No, we have to find another root
-					if (!in_array($menu, ['categories', 'Categories']))
-					{
-						$Itemid = null;
-					}
+					$query = [
+						'option' => $option,
+						'Itemid' => $itemID
+					];
+
+					return $segments;
 				}
 			}
 
-			break;
+			// Nope. I need a different menu item.
+			$searchMenuItems  = Routing::getDocImportMenuItemsByType('categories');
 
-		case 'Search':
-		case 'search':
-			// Find a suitable Itemid
-			$menu   = DocimportRouterHelper::findMenu($qoptions);
-			$Itemid = empty($menu) ? null : $menu->id;
-
-			if (empty($Itemid))
+			if (empty($searchMenuItems))
 			{
-				$qoptions['view'] = strtolower($qoptions['view']);
-				$menu   = DocimportRouterHelper::findMenu($qoptions);
-				$Itemid = empty($menu) ? null : $menu->id;
+				$query = [
+					'option' => $option,
+					'view'   => 'Categories',
+				];
+
+				return $segments;
 			}
 
-			if (!empty($Itemid))
-			{
-				// Joomla! will let the menu item naming work its magic
-				$query['Itemid'] = $Itemid;
-			}
-			else
-			{
-				if (!empty($Itemid))
-				{
-					// Push the Itemid and category alias
-					$query['Itemid'] = $Itemid;
-				}
-				else
-				{
-					// Push the browser layout and category alias
-					$segments[] = 'Search';
-				}
-			}
+			$item = array_shift($searchMenuItems);
+			$query = [
+				'option' => $option,
+				'Itemid' => $item->id
+			];
 
-			if (empty($Itemid) && !empty($queryItemid))
-			{
-				$menu  = $menus->getItem($queryItemid);
-				$mView = isset($menu->query['view']) ? $menu->query['view'] : 'Search';
-				// No, we have to find another root
-				if (!in_array($menu, ['search', 'Search']))
-				{
-					$Itemid = null;
-				}
-			}
+			return $segments;
 
 			break;
 
 		case 'category':
-		case 'Category':
-			// Get category slug
-			$slug = array_key_exists($id, $catSlugs) ? $catSlugs[$id] : '';
+			$catId = Routing::getAndPop($query, 'id', null);
+			$catId = Routing::getAndPop($query, 'catid', $catId);
 
-			// Try to find a menu item for this category
-			$options = $qoptions;
-			unset($options['id']);
-			$params = array('catid' => $id);
-			$menu   = DocimportRouterHelper::findMenu($options, $params);
-			$Itemid = empty($menu) ? null : $menu->id;
-
-			if (empty($itemId))
+			// Do I have a menu item pointing to this category?
+			if ($itemID)
 			{
-				$options['view'] = strtolower($options['view']);
-				$menu   = DocimportRouterHelper::findMenu($options, $params);
-				$Itemid = empty($menu) ? null : $menu->id;
-			}
+				$info = Routing::getMenuItemInfo($itemID);
 
-			if (!empty($Itemid))
-			{
-				// A category menu item found, use it
-				$query['Itemid'] = $Itemid;
-			}
-			else
-			{
-				// Not found. Try fetching a browser menu item
-				$options = array('view' => 'Categories', 'option' => 'com_docimport');
-				$menu    = DocimportRouterHelper::findMenu($options);
-				$Itemid  = empty($menu) ? null : $menu->id;
+				if (($info['type'] == 'category') && ($info['id'] == $catId))
+				{
+					$query = [
+						'option' => $option,
+						'Itemid' => $itemID
+					];
 
-				// Legacy menu item search
-				if (empty($Itemid))
-				{
-					$options = array('view' => 'categories', 'option' => 'com_docimport');
-					$menu    = DocimportRouterHelper::findMenu($options);
-					$Itemid  = empty($menu) ? null : $menu->id;
-				}
-
-				if (!empty($Itemid))
-				{
-					// Push the Itemid and category alias
-					$query['Itemid'] = $menu->id;
-					$segments[]      = $slug;
-				}
-				else
-				{
-					// Push the browser layout and category alias
-					$segments[] = 'Categories';
-					$segments[] = $slug;
+					return $segments;
 				}
 			}
 
+			// In any other case I have to first look for a menu item to this category
+			$item = Routing::findExactCategoryMenu($catId);
 
-			// Do we have a category menu?
-			if (empty($Itemid) && !empty($queryItemid))
+			if (!empty($item))
 			{
-				$itemId = $queryItemid;
-				$menu   = $menus->getItem($Itemid);
-				$mView  = isset($menu->query['view']) ? $menu->query['view'] : 'Categories';
-				// No, we have to find another root
-				if (($mView == 'category') || ($mView == 'Category'))
-				{
-					$params = ($menu->params instanceof JRegistry) ? $menu->params : $menus->getParams($Itemid);
-					if ($params->get('catid', 0) == $id)
-					{
-						$query['Itemid'] = $Itemid;
-					}
-				}
+				$query = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+
+				return $segments;
 			}
+
+			// Hm, maybe there is a Categories menu item I can build upon?
+			$searchMenuItems = Routing::getDocImportMenuItemsByType('categories');
+
+			if (!empty($searchMenuItems))
+			{
+				$item       = array_shift($searchMenuItems);
+				$query      = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+				$segments[] = Routing::getCategorySlug($catId);
+
+				return $segments;
+			}
+
+			// Nope, there's no routable menu item for this category
+			$query = [
+				'option' => 'com_docimport',
+				'view'   => 'Category',
+				'id'     => $catId
+			];
+
 			break;
 
 		case 'article':
-		case 'Article':
-			// Get article info
-			$articleSlugs = DocimportRouterHelper::getArticleSlugs();
+			$aId = Routing::getAndPop($query, 'id', null);
 
-			$catId = 0;
-			$articleSlug = '';
-
-			if (isset($articleSlugs[$id]))
+			// Do I have a menu item pointing to this article?
+			if ($itemID)
 			{
-				$article = $articleSlugs[$id];
-				$catId = $article['catid'];
-				$articleSlug = $article['slug'];
-			}
+				$info = Routing::getMenuItemInfo($itemID);
 
-			// Get slug
-			$slug = array_key_exists($catId, $catSlugs) ? $catSlugs[$catId] : '';
-
-			// Try to find a category menu item
-			$options = array('view' => 'Category', 'option' => 'com_docimport');
-			$params  = array('catid' => $catId);
-			$menu    = DocimportRouterHelper::findMenu($options, $params);
-			$Itemid  = null;
-
-			if (empty($menu))
-			{
-				$options['view'] = strtolower($options['view']);
-				$menu    = DocimportRouterHelper::findMenu($options, $params);
-				$Itemid  = null;
-			}
-
-			if (!empty($menu))
-			{
-				// Found it! Just append the article slug
-				$Itemid          = $menu->id;
-				$query['Itemid'] = $menu->id;
-				$segments[]      = $articleSlug;
-			}
-			else
-			{
-				// Nah. Let's find a categories menu item.
-				$options = array('view' => 'Categories', 'option' => 'com_docimport');
-				$menu    = DocimportRouterHelper::findMenu($options);
-
-				if (empty($menu))
+				if (($info['type'] == 'article') && ($info['id'] == $aId))
 				{
-					$options = array('view' => 'categories', 'option' => 'com_docimport');
-					$menu    = DocimportRouterHelper::findMenu($options);
-				}
+					$query = [
+						'option' => $option,
+						'Itemid' => $itemID
+					];
 
-				if (!empty($menu))
-				{
-					// We must add the category and article slug.
-					$Itemid          = $menu->id;
-					$query['Itemid'] = $menu->id;
-					$segments[]      = $slug;
-					$segments[]      = $articleSlug;
-				}
-				else
-				{
-					// I must add the full path
-					$segments[] = 'Categories';
-					$segments[] = $slug;
-					$segments[] = $articleSlug;
+					return $segments;
 				}
 			}
 
-			// Do we have a "category" menu?
-			if (!$Itemid && $queryItemid)
-			{
-				$Itemid = $queryItemid;
-				$menu   = $menus->getItem($Itemid);
-				$mView  = isset($menu->query['view']) ? $menu->query['view'] : 'Categories';
+			// Look for a menu item to this article
+			$item = Routing::findExactArticleMenu($aId);
 
-				if (in_array($mView, ['categories', 'Categories']))
+			if (!empty($item))
+			{
+				$query = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+
+				return $segments;
+			}
+
+			// Look for a menu item to the category of the article
+			$cId   = Routing::getArticleCategoryId($aId);
+			$aSlug = Routing::getArticleSlug($aId);
+			$item  = Routing::findExactCategoryMenu($cId);
+
+			if (!empty($item))
+			{
+				$query = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+
+				$segments[] = $aSlug;
+
+				return $segments;
+			}
+
+			// Look for a menu item to Categories
+			$cSlug               = Routing::getArticleCategorySlug($aId);
+			$searchMenuItems = Routing::getDocImportMenuItemsByType('categories');
+
+			if (!empty($searchMenuItems))
+			{
+				$item  = array_shift($searchMenuItems);
+				$query = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+
+				$segments[] = $cSlug;
+				$segments[] = $aSlug;
+
+				return $segments;
+			}
+
+			// Nope, there's no routable menu item for this category
+			$query = [
+				'option' => 'com_docimport',
+				'view'   => 'Article',
+				'id'     => $aId
+			];
+			break;
+
+		case 'search':
+			// Do I have a menu item pointing to Search?
+			if ($itemID)
+			{
+				$info = Routing::getMenuItemInfo($itemID);
+
+				if (($info['type'] == 'search'))
 				{
-					// No. It is a categories menu item. We must add the category and article slug.
-					$query['Itemid'] = $Itemid;
-				}
-				if (in_array($mView, ['category', 'Category']))
-				{
-					// Yes! Is it the category we want?
-					$params = ($menu->params instanceof JRegistry) ? $menu->params : $menus->getParams($Itemid);
-					if ($params->get('catid', 0) == $catId)
-					{
-						// Cool! Just append the article slug
-						$query['Itemid'] = $Itemid;
-					}
+					$query = [
+						'option' => $option,
+						'Itemid' => $itemID
+					];
+
+					return $segments;
 				}
 			}
+
+			// No? Get a search menu item
+			$searchMenuItems = Routing::getDocImportMenuItemsByType('search');
+
+			if (!empty($searchMenuItems))
+			{
+				$item  = array_shift($searchMenuItems);
+
+				$query = [
+					'option' => $option,
+					'Itemid' => $item->id
+				];
+
+				return $segments;
+			}
+
+			// Nope, there's no routable menu item for this category
+			$query = [
+				'option' => 'com_docimport',
+				'view'   => 'Saerch',
+			];
 
 			break;
 	}
@@ -337,373 +269,89 @@ function docimportBuildRoute(&$query)
 
 function docimportParseRoute(&$segments)
 {
-	$segments = DocimportRouterHelper::preconditionSegments($segments);
-
+	// Initialize
 	$query = array();
-	$menus = JMenu::getInstance('site');
-	$menu  = $menus->getActive();
 
-	if (is_null($menu))
+	// Make sure we have SOMETHING to do.
+	if (empty($segments))
 	{
-		// No menu. The segments are categories/category_slug/article_slug
-		switch (count($segments))
-		{
-			case 1:
-				// Categories or Search view
-				$query['view'] = 'Categories';
-				$slug = array_pop($segments); // Remove the "categories" thingy
+		return $query;
+	}
 
-				if (strtolower($slug) == 'search')
-				{
-					$query['view'] = 'Search';
-				}
+	// Prepare the segments and get some basic current menu item information
+	$segments    = Routing::preconditionSegments($segments);
+	$currentItem = JFactory::getApplication()->getMenu()->getActive();
+	$Itemid      = (is_object($currentItem) && isset($currentItem->id)) ? $currentItem->id : 0;
+	$info        = Routing::getMenuItemInfo($Itemid);
 
-				break;
+	// We have no idea what this menu item is?
+	if (empty($info['type']))
+	{
+		return $query;
+	}
 
-			case 2:
-				// Category view
-				$query['view'] = 'Category';
-				$slug          = array_pop($segments);
-				array_pop($segments); // Remove the "categories" thingy
-
-				// Load the category
-				/** @var \Akeeba\DocImport\Site\Model\Categories $category */
-				$category = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Categories')->tmpInstance();
-				$category
-					->slug($slug)
-					->removeBehaviour('Enabled')
-					->firstOrNew();
-
-				if (empty($category))
-				{
-					$query['view'] = 'Categories';
-				}
-				else
-				{
-					$query['id'] = $category->docimport_category_id;
-				}
-				break;
-
-			case 3:
-				// Article view
-				$query['view'] = 'Article';
-				$slug_article  = array_pop($segments);
-				$slug_category = array_pop($segments);
-				array_pop($segments); // Remove the "Categories" thingy
-
-				// Load the category
-				/** @var \Akeeba\DocImport\Site\Model\Categories $category */
-				$category = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Categories')->tmpInstance();
-				$category
-					->slug($slug_category)
-					->removeBehaviour('Enabled')
-					->firstOrNew();
-
-				// Load the article
-				/** @var \Akeeba\DocImport\Site\Model\Articles $article */
-				$article = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Articles')->tmpInstance();
-				$article
-					->category($category->docimport_category_id)
-				    ->slug($slug_article)
-					->removeBehaviour('Enabled')
-				    ->firstOrNew();
-
-				if (empty($article->docimport_article_id))
-				{
-					$query['view'] = 'Categories';
-				}
-				else
-				{
-					$query['id'] = $article->docimport_article_id;
-				}
-
-				break;
-		}
+	// Is this a menu item which results in no parsable segments?
+	if (in_array($info['type'], ['categories', 'search', 'article']))
+	{
+		$query['view'] = ucfirst($info['type']);
 
 		return $query;
 	}
 
-	// A menu item is defined
-	$view          = $menu->query['view'];
-	$slug_article  = null;
-	$slug_category = null;
+	$categorySlug = null;
+	$articleSlug  = null;
 
-	$catid = isset($menu->query) ? $menu->query['catid'] : null;
-
-	if (($view == 'Categories') || ($view == 'categories'))
+	switch ($info['type'])
 	{
-		switch (count($segments))
-		{
-			case 1:
-				// Category view
-				$query['view'] = 'Category';
-				$view          = 'Category';
-				$slug_category = array_pop($segments);
-				break;
-
-			case 2:
-				// Article view
+		case 'categories':
+			// How many slugs do I have?
+			if (count($segments) >= 2)
+			{
 				$query['view'] = 'Article';
-				$view          = 'Article';
-				$slug_article  = array_pop($segments);
-				$slug_category = array_pop($segments);
-				break;
-		}
-	}
-	elseif (($view == 'Search') || ($view == 'search'))
-	{
-		$query['view'] = 'Search';
-		$view          = 'Search';
-	}
-	elseif (empty($view) || count($segments))
-	{
-		switch (count($segments))
-		{
-			case 0:
-				// Category view
+				$categorySlug  = array_shift($segments);
+				$articleSlug   = array_shift($segments);
+			}
+			elseif (count($segments) == 1)
+			{
 				$query['view'] = 'Category';
-				$view          = 'Category';
-				break;
+				$categorySlug  = array_shift($segments);
+			}
+			else
+			{
+				$query['view'] = 'Categories';
+			}
+			break;
 
-			case 1:
-				// Article view
+		case 'category':
+			// How many slugs do I have?
+			if (count($segments) >= 1)
+			{
 				$query['view'] = 'Article';
-				$view          = 'Article';
-				$slug_article  = array_pop($segments);
-				break;
-		}
-	}
-	else
-	{
-		$query['view'] = 'Article';
+				$articleSlug   = array_shift($segments);
+			}
+			else
+			{
+				$query['view'] = 'Category';
+			}
+
+			$query['id'] = $info['id'];
+			break;
 	}
 
-	if (!is_null($slug_category))
+	// Convert a category slug to an ID
+	if (!empty($categorySlug))
 	{
-		/** @var \Akeeba\DocImport\Site\Model\Categories $categoriesModel */
-		$categoriesModel = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Categories')->tmpInstance();
-		$category        = $categoriesModel
-			->slug($slug_category)
-			->removeBehaviour('Enabled')
-			->firstOrNew();
-		$catid = $category->getId();
+		$catId       = Routing::getCategoryFromSlug($categorySlug);
+		$query['id'] = $catId;
 	}
 
-	if (!is_null($slug_article))
+	// Convert an article slug to an ID
+	if (!empty($articleSlug))
 	{
-		// Load the article
-
-		/** @var \Akeeba\DocImport\Site\Model\Articles $articlesModel */
-		$articlesModel = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Articles')->tmpInstance();
-		$article       = $articlesModel
-			->category((int) $catid)
-			->slug($slug_article)
-			->removeBehaviour('Enabled')
-			->firstOrNew();
-
-		if (empty($article->docimport_article_id))
-		{
-			$query['view'] = 'Category';
-			$query['id']   = $catid;
-		}
-		else
-		{
-			$query['id'] = $article->docimport_article_id;
-		}
-	}
-	elseif (!in_array($view, ['categories', 'Categories', 'search', 'Search']))
-	{
-		// Load the category
-		/** @var \Akeeba\DocImport\Site\Model\Categories $categoriesModel */
-		$categoriesModel = FOF30\Container\Container::getInstance('com_docimport')->factory->model('Categories')->tmpInstance();
-		$category        = $categoriesModel->find($catid);
-
-		if (empty($category->docimport_category_id))
-		{
-			$query['view'] = 'Categories';
-		}
-		else
-		{
-			$query['view'] = 'Category';
-			$query['id']   = $catid;
-		}
-	}
-	elseif (in_array($view, ['search', 'Search']))
-	{
-		$query['view'] = 'Search';
-	}
-	else
-	{
-		$query['view'] = 'Categories';
+		$catId       = Routing::getAndPop($query, 'id', 0);
+		$aID         = Routing::getArticleFromSlug($catId, $articleSlug);
+		$query['id'] = $aID;
 	}
 
 	return $query;
-}
-
-class DocimportRouterHelper
-{
-	static function getCategorySlugs()
-	{
-		static $cache = null;
-
-		if (is_null($cache))
-		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true)
-				->select(array(
-					$db->qn('docimport_category_id') . ' AS ' . $db->qn('id'),
-					$db->qn('slug')
-				))->from($db->qn('#__docimport_categories'));
-			$cache = $db->setQuery($query)->loadAssocList('id', 'slug');
-		}
-
-		return $cache;
-	}
-
-	static function getArticleSlugs()
-	{
-		static $cache = null;
-
-		if (is_null($cache))
-		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true)
-				->select(array(
-					$db->qn('docimport_article_id') . ' AS ' . $db->qn('id'),
-					$db->qn('slug'),
-					$db->qn('docimport_category_id') . ' AS ' . $db->qn('catid')
-				))->from($db->qn('#__docimport_articles'));
-			$cache = $db->setQuery($query)->loadAssocList('id');
-		}
-
-		return $cache;
-	}
-
-	static function getAndPop(&$query, $key, $default = null)
-	{
-		if (isset($query[ $key ]))
-		{
-			$value = $query[ $key ];
-			unset($query[ $key ]);
-
-			return $value;
-		}
-		else
-		{
-			return $default;
-		}
-	}
-
-	/**
-	 * Finds a menu whose query parameters match those in $qoptions
-	 *
-	 * @param array $qoptions The query parameters to look for
-	 * @param array $params   The menu parameters to look for
-	 *
-	 * @return null|object Null if not found, or the menu item if we did find it
-	 */
-	static public function findMenu($qoptions = array(), $params = null)
-	{
-		// Convert $qoptions to an object
-		if (empty($qoptions) || !is_array($qoptions))
-		{
-			$qoptions = array();
-		}
-
-		$menus    = JMenu::getInstance('site');
-		$menuitem = $menus->getActive();
-
-		// First check the current menu item (fastest shortcut!)
-		if (is_object($menuitem))
-		{
-			if (self::checkMenu($menuitem, $qoptions, $params))
-			{
-				return $menuitem;
-			}
-		}
-
-		foreach ($menus->getMenu() as $item)
-		{
-			if (self::checkMenu($item, $qoptions, $params))
-			{
-				return $item;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Checks if a menu item conforms to the query options and parameters specified
-	 *
-	 * @param object $menu     A menu item
-	 * @param array  $qoptions The query options to look for
-	 * @param array  $params   The menu parameters to look for
-	 *
-	 * @return bool
-	 */
-	static public function checkMenu($menu, $qoptions, $params = null)
-	{
-		$query = $menu->query;
-		foreach ($qoptions as $key => $value)
-		{
-			if (is_null($value))
-			{
-				continue;
-			}
-			if (!isset($query[ $key ]))
-			{
-				return false;
-			}
-			if ($query[ $key ] != $value)
-			{
-				return false;
-			}
-		}
-
-		if (!is_null($params))
-		{
-			$menus = JMenu::getInstance('site');
-			$check = $menu->params instanceof JRegistry ? $menu->params : $menus->getParams($menu->id);
-
-			foreach ($params as $key => $value)
-			{
-				if (is_null($value))
-				{
-					continue;
-				}
-				if ($check->get($key) != $value)
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	static public function preconditionSegments($segments)
-	{
-		$newSegments = array();
-		if (!empty($segments))
-		{
-			foreach ($segments as $segment)
-			{
-				if (strstr($segment, ':'))
-				{
-					$segment = str_replace(':', '-', $segment);
-				}
-				if (is_array($segment))
-				{
-					$newSegments[] = implode('-', $segment);
-				}
-				else
-				{
-					$newSegments[] = $segment;
-				}
-			}
-		}
-
-		return $newSegments;
-	}
 }

@@ -14,6 +14,7 @@
 	<files folder="frontend">
 		<folder>Controller</folder>
 		<folder>Dispatcher</folder>
+		<folder>Helper</folder>
 		<folder>Model</folder>
 		<folder>View</folder>
 		<folder>views</folder>

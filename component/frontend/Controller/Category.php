@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 use Akeeba\DocImport\Admin\Model\Articles;
 use FOF30\Controller\DataController;
 use FOF30\Controller\Exception\ItemNotFound;
+use Joomla\Registry\Registry;
 
 class Category extends DataController
 {
@@ -25,6 +26,13 @@ class Category extends DataController
 	{
 		$id = $this->input->getInt('id', 0);
 		$catid = $this->input->getInt('catid', 0);
+
+		$menuItem = \JFactory::getApplication()->getMenu()->getActive();
+
+		if (is_object($menuItem) && isset($menuItem->params) && ($menuItem->params instanceof Registry))
+		{
+			$catid = $menuItem->params->get('catid', $catid);
+		}
 
 		if (!$id && $catid)
 		{
