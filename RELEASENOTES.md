@@ -10,10 +10,7 @@ Akeeba Release System should be compatible with:
 
 ## Changelog
 
-**Removed features**
+**Bug fixes**
 
-* Removed the pointless control panel page
-
-**Miscellaneous changes**
-
-* Rewritten in FOF 3
+* Module class suffix not honored in the modules
+* Router is broken in many ways
