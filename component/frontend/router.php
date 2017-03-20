@@ -26,7 +26,7 @@ function docimportBuildRoute(&$query)
 	$segments = [];
 
 	// Get some basic query string parameters
-	$option = Routing::getAndPop($query, 'option', 'com_docimport');
+	$option = Routing::getAndPop($query, 'option', null);
 
 	if ($option != 'com_docimport')
 	{
@@ -45,6 +45,11 @@ function docimportBuildRoute(&$query)
 	// If we are not asked for a specific view AND there is a menu item THEN return no segments; Joomla! already uses the menu item alias.
 	if (empty($view) && $itemID)
 	{
+		$query = [
+			'option' => $option,
+			'Itemid' => $itemID
+		];
+
 		return $segments;
 	}
 
