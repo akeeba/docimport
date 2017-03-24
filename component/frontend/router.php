@@ -263,7 +263,7 @@ function docimportBuildRoute(&$query)
 			// Nope, there's no routable menu item for this category
 			$query = [
 				'option' => 'com_docimport',
-				'view'   => 'Saerch',
+				'view'   => 'Search',
 			];
 
 			break;
