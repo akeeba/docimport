@@ -5,6 +5,7 @@
 * Typo in router doesn't let the unified search to work correctly
 * Wrong category link in ATS results
 * Backend Articles view: no link to Categories view
+* Invalid URLs created when processing new documentation
 
 # 2.0.1
 

@@ -156,32 +156,14 @@ class Articles extends DataModel
 			$this->slug = \JApplicationHelper::stringURLSafe($this->slug);
 		}
 
-		// Look for a similar slug
-		/** @var self $existingItems */
-		$existingItems = $this->getClone()->setIgnoreRequest(true)->savestate(false)
-		                      ->slug([
-			                      'method' => 'exact',
-			                      'value' => $this->slug
-		                      ])
-		                      ->get(true);
+		/**
+		 * WARNING! DO NOT SEARCH FOR SIMILAR SLUGS, DO NOT CHANGE THE SLUG IN ANY OTHER WAY.
+		 *
+		 * The slugs come from the DocBook XML. They are the XML IDs of other sections, paragraphs etc. They are used
+		 * as link targets in internal link references. When you change the article slug DocImport cannot translate the
+		 * internal references to  DocImport article IDs. As a result it produces broken non-SEF links inside the
+		 * article source. When these are parsed in the front-end you get all sorts of weird behavior.
+		 */
 
-		if ($existingItems->count())
-		{
-			$count = 0;
-			$k     = $this->getKeyName();
-
-			foreach ($existingItems as $item)
-			{
-				if ($item->$k != $this->$k)
-				{
-					$count ++;
-				}
-			}
-
-			if ($count != 0)
-			{
-				$this->slug .= ' ' . \JFactory::getDate()->toUnix();
-			}
-		}
 	}
 }
