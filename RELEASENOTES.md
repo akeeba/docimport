@@ -10,7 +10,13 @@ Akeeba Release System should be compatible with:
 
 ## Changelog
 
+**Miscellaneous changes**
+
+* Refactored CLI script
+
 **Bug fixes**
 
-* Module class suffix not honored in the modules
-* Router is broken in many ways
+* Typo in router doesn't let the unified search to work correctly
+* Wrong category link in ATS results
+* Backend Articles view: no link to Categories view
+* Invalid URLs created when processing new documentation
