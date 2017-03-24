@@ -1,5 +1,9 @@
 # 2.0.2
 
+**Miscellaneous changes**
+
+* Refactored CLI script
+
 **Bug fixes**
 
 * Typo in router doesn't let the unified search to work correctly
