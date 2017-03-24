@@ -4,6 +4,7 @@
 
 * Typo in router doesn't let the unified search to work correctly
 * Wrong category link in ATS results
+* Backend Articles view: no link to Categories view
 
 # 2.0.1
 

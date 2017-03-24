@@ -26,6 +26,8 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 
 	public function onArticlesBrowse()
 	{
+		$this->renderSubmenu();
+
 		// Set toolbar title
 		$subtitle_key = $this->container->componentName . '_TITLE_ARTICLES';
 		JToolBarHelper::title(JText::_($this->container->componentName) . ' &ndash; <small>' . JText::_($subtitle_key) . '</small>', $this->container->bareComponentName);
