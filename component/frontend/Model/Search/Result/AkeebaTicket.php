@@ -53,11 +53,6 @@ class AkeebaTicket extends AbstractResult
 	 */
 	public function getLink()
 	{
-		if (!class_exists('ContentHelperRoute'))
-		{
-			require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-		}
-
 		return JRoute::_('index.php?option=com_ats&view=Ticket&id=' . $this->id);
 	}
 
@@ -68,11 +63,6 @@ class AkeebaTicket extends AbstractResult
 	 */
 	public function getCategoryLink()
 	{
-		if (!class_exists('ContentHelperRoute'))
-		{
-			require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-		}
-
-		return JRoute::_(ContentHelperRoute::getCategoryRoute($this->catid, $this->language));
+		return JRoute::_('index.php?option=com_ats&view=Tickets&category=' . $this->catid);
 	}
 }

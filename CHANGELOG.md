@@ -1,3 +1,10 @@
+# 2.0.2
+
+**Bug fixes**
+
+* Typo in router doesn't let the unified search to work correctly
+* Wrong category link in ATS results
+
 # 2.0.1
 
 **Bug fixes**
