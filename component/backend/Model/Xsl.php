@@ -102,7 +102,9 @@ HTACCESS;
 		$xmlfiles = JFolder::files($dir_src, '\.xml$', false, true);
 
 		// If we have many files, let's filter out only articles and books
-		if (count($xmlfiles) > 1)
+		$hasManySourceFiles = count($xmlfiles) > 1;
+
+		if ($hasManySourceFiles)
 		{
 			$files    = $xmlfiles;
 			$xmlfiles = array();
@@ -127,7 +129,7 @@ HTACCESS;
 			}
 		}
 
-		$xslt_filename = (count($xmlfiles) > 1) ? 'onechunk.xsl' : 'chunk.xsl';
+		$xslt_filename = ($hasManySourceFiles) ? 'onechunk.xsl' : 'chunk.xsl';
 
 		if (($xmlfiles === false) || (empty($xmlfiles)))
 		{
@@ -161,7 +163,7 @@ HTACCESS;
 
 			$filesprefix = '';
 
-			if (count($xmlfiles) > 1)
+			if ($hasManySourceFiles)
 			{
 				$filesprefix = basename($file_xml, '.xml');
 			}
@@ -182,6 +184,14 @@ HTACCESS;
 				'chunk.section.depth' => 3,
 				'highlight.source'    => 1,
 			);
+
+			if ($hasManySourceFiles)
+			{
+				$parameters['use.id.as.filename'] = 0;
+				$parameters['base.dir'] = rtrim($dir_output, '/');
+				$parameters['root.filename'] = (empty($filesprefix) ? '' : $filesprefix . '-') . 'index.html';
+			}
+
 			$xslt       = new XSLTProcessor();
 			$xslt->importStylesheet($xslDoc);
 

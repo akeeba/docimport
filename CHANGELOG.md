@@ -1,3 +1,9 @@
+# 2.0.3
+
+**Bug fixes**
+
+* Could not rebuild categories consisting of multiple, single article files.
+
 # 2.0.2
 
 **Miscellaneous changes**
