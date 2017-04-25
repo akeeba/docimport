@@ -4,6 +4,7 @@
 
 * Could not rebuild categories consisting of multiple, single article files.
 * Routing issues when there's no menu item linking to the documentation Category
+* Joomla! 3.7 broke the routing due to changes in the JMenuItem class
 
 # 2.0.2
 

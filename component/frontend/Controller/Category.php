@@ -29,9 +29,12 @@ class Category extends DataController
 
 		$menuItem = \JFactory::getApplication()->getMenu()->getActive();
 
-		if (is_object($menuItem) && isset($menuItem->params) && ($menuItem->params instanceof Registry))
+		if (is_object($menuItem))
 		{
-			$catid = $menuItem->params->get('catid', $catid);
+			if ($menuItem->params instanceof Registry)
+			{
+				$catid = $menuItem->params->get('catid', $catid);
+			}
 		}
 
 		if (!$id && $catid)

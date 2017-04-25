@@ -202,7 +202,7 @@ abstract class Routing
 				}
 
 				// Legacy DocImport 1.x menu items have the category ID as a menu item parameter
-				if (empty($catId) && isset($item->params) && ($item->params instanceof Registry))
+				if (empty($catId) && ($item->params instanceof Registry))
 				{
 					$catId = $item->params->get('catid', null);
 				}
@@ -250,7 +250,7 @@ abstract class Routing
 				}
 
 				// Legacy DocImport 1.x menu items have the category ID as a menu item parameter
-				if (empty($aID) && isset($item->params) && ($item->params instanceof Registry))
+				if (empty($aID) && ($item->params instanceof Registry))
 				{
 					$aID = $item->params->get('id', null);
 				}
@@ -324,7 +324,7 @@ abstract class Routing
 					}
 
 					// Legacy DocImport 1.x menu items have the category ID as a menu item parameter
-					if (empty($catId) && isset($item->params) && ($item->params instanceof Registry))
+					if (empty($catId) && ($item->params instanceof Registry))
 					{
 						$catId = $item->params->get('catid', null);
 					}
@@ -342,9 +342,9 @@ abstract class Routing
 					}
 
 					// Legacy DocImport 1.x menu items have the category ID as a menu item parameter
-					if (empty($aID) && isset($item->params) && ($item->params instanceof Registry))
+					if (empty($aID) && ($item->params instanceof Registry))
 					{
-						$aID = $item->params->get('id', null);
+						$aId = $item->params->get('id', null);
 					}
 
 					$ret['id'] = empty($aId) ? null : $aId;
