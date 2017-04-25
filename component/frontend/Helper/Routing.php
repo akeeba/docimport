@@ -94,6 +94,11 @@ abstract class Routing
 				/** @var  array  $query */
 				$query = $item->query;
 
+				if (!isset($query['option']))
+				{
+					continue;
+				}
+
 				if ($query['option'] != 'com_docimport')
 				{
 					continue;
@@ -485,7 +490,7 @@ abstract class Routing
 			return '';
 		}
 
-		return self::getArticleCategorySlug($catId);
+		return self::getCategorySlug($catId);
 	}
 
 	public static function getCategoryFromSlug($slug)

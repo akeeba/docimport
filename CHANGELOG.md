@@ -3,6 +3,7 @@
 **Bug fixes**
 
 * Could not rebuild categories consisting of multiple, single article files.
+* Routing issues when there's no menu item linking to the documentation Category
 
 # 2.0.2
 

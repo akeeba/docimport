@@ -203,7 +203,7 @@ function docimportBuildRoute(&$query)
 			}
 
 			// Look for a menu item to Categories
-			$cSlug               = Routing::getArticleCategorySlug($aId);
+			$cSlug           = Routing::getArticleCategorySlug($aId);
 			$searchMenuItems = Routing::getDocImportMenuItemsByType('categories');
 
 			if (!empty($searchMenuItems))
@@ -300,7 +300,8 @@ function docimportParseRoute(&$segments)
 	{
 		$query['view'] = ucfirst($info['type']);
 
-		return $query;
+		// This causes legacy menu items to not display anything?
+		// return $query;
 	}
 
 	$categorySlug = null;
