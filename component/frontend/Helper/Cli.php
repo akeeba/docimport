@@ -306,6 +306,7 @@ class AkeebaCliBase
 			$dispatcher = new JEventDispatcher();
 			$session = JFactory::getSession();
 			$session->initialise($this->input, $dispatcher);
+			$session->start();
 		}
 
 		// Work around Joomla! 3.4.7's JSession bug
