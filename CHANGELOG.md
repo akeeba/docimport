@@ -1,3 +1,7 @@
+# 2.0.4
+
+* Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
+
 # 2.0.3
 
 **Bug fixes**
