@@ -274,7 +274,7 @@ class Categories extends DataModel
 
 			if ($count != 0)
 			{
-				$this->slug .= ' ' . \JFactory::getDate()->toUnix();
+				$this->slug .= ' ' . $this->container->platform->getDate()->toUnix();
 			}
 		}
 

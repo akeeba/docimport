@@ -1,7 +1,10 @@
 # 2.0.4
 
+**Bug fixes**
+
 * Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
 * Joomla! 3.7 added a fixed width to specific button classes in the toolbar, breaking the page layout
+* Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
 
 # 2.0.3
 
