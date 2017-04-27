@@ -30,3 +30,8 @@ fieldset.docimport-float-left {
 
 .di3categorypic { float: left; margin-right: 3px; }
 .di3category { float: left; margin-top: 10px; }
+
+/**
+ * Joomla! 3.7 made success buttons fixed width.
+ */
+#toolbar .btn-success { width: auto !important; }
