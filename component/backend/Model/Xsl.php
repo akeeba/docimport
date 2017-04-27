@@ -7,8 +7,9 @@
 
 namespace Akeeba\DocImport\Admin\Model;
 
+use FOF30\Date\Date;
 use FOF30\Model\Model;
-use JText, JLoader, JFolder, JFile, JDate, JFactory, JApplicationHelper;
+use JText, JLoader, JFolder, JFile, JFactory, JApplicationHelper;
 use DOMDocument, XSLTProcessor;
 
 defined('_JEXEC') or die();
@@ -380,7 +381,7 @@ HTACCESS;
 				{
 					JLoader::import('joomla.utilities.date');
 
-					$jNow = new JDate();
+					$jNow = new Date();
 
 					$user_id = JFactory::getUser()->id;
 
@@ -425,7 +426,7 @@ HTACCESS;
 
 					JLoader::import('joomla.utilities.date');
 
-					$jNow = new JDate();
+					$jNow = new Date();
 
 					$user_id = JFactory::getUser()->id;
 
