@@ -17,9 +17,6 @@
         <!-- Component -->
         <file type="component" id="com_docimport">com_docimport.zip</file>
 
-        <!-- CLI scripts -->
-        <file type="file" id="file_ats">file_docimport.zip</file>
-
         <!-- Modules -->
         <file type="module" client="site" id="mod_docimport_search">mod_docimport_search.zip</file>
 

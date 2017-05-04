@@ -65,6 +65,10 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	 */
 	protected $removeFilesAllVersions = array(
 		'files'	=> array(
+            // Obsolete CLI script
+            'cli/docimport-update.php',
+
+			// Obsolete update information
 			'cache/com_docimport.updates.php',
 			'cache/com_docimport.updates.ini',
 			'administrator/components/com_docimport/controllers/urls.php',

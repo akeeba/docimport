@@ -1,10 +1,12 @@
 # 2.0.4
 
+**Removed features**
+* Removing the automatic update CLI script. Joomla! 3.7.0 can no longer execute extension installation under a CLI application.
+
 **Bug fixes**
 
 * Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
 * Joomla! 3.7 added a fixed width to specific button classes in the toolbar, breaking the page layout
-* Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
 
 # 2.0.3
 

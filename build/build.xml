@@ -30,11 +30,6 @@
 		<include name="script.*.php" />
 	</fileset>
 
-	<fileset dir="${dirs.component}/cli" id="cli">
-		<include name="*.php" />
-		<include name="file_docimport.xml" />
-	</fileset>
-
 	<!--
 	====================================================================================================
 	Tasks - Project management
