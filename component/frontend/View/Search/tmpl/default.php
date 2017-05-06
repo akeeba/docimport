@@ -17,11 +17,11 @@ $submitUrl = JRoute::_('index.php?option=com_docimport&view=Search');
 JHtml::_('formbehavior.chosen', 'select.fancySelect')
 ?>
 
-<?php echo $this->loadposition('docimport-search-top'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-top'); ?>
 <?php if (!empty($this->search)): ?>
-<?php echo $this->loadposition('docimport-search-results-top'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-results-top'); ?>
 <?php else: ?>
-<?php echo $this->loadposition('docimport-search-form-top'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-form-top'); ?>
 <?php endif; ?>
 
 <?php if ($this->headerText): ?>
@@ -110,8 +110,8 @@ JHtml::_('formbehavior.chosen', 'select.fancySelect')
 </form>
 
 <?php if (empty($this->search)): ?>
-<?php echo $this->loadposition('docimport-search-bottom'); ?>
-<?php echo $this->loadposition('docimport-search-form-bottom'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-bottom'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-form-bottom'); ?>
 <?php
     return;
     endif;
@@ -203,5 +203,5 @@ if ($this->items['video']['count'] && ($this->items['video']['count'] >= $this->
 
 <?php endif; ?>
 
-<?php echo $this->loadposition('docimport-search-results-bottom'); ?>
-<?php echo $this->loadposition('docimport-search-bottom'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-results-bottom'); ?>
+<?php echo $this->getContainer()->template->loadPosition('docimport-search-bottom'); ?>

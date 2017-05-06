@@ -24,11 +24,11 @@ class Html extends BaseView
 	{
 		parent::onBeforeRead();
 
-		$document = \JFactory::getDocument();
+		$document = $this->container->platform->getDocument();
 
 		// Load highlight.js
-		$document->addScript('//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js', 'text/javascript', false, false);
-		$document->addStyleSheet('//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css');
+		$this->addJavascriptFile('//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js', 'text/javascript', false, false);
+		$this->addCssFile('//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css');
 
 		$document->setTitle($this->item->category->title . ' :: ' . $this->item->title);
 

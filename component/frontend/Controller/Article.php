@@ -39,7 +39,7 @@ class Article extends DataController
 		}
 
 		// Is the category access within those allowed to our user?
-		$views = \JFactory::getUser()->getAuthorisedViewLevels();
+		$views = $this->container->platform->getUser()->getAuthorisedViewLevels();
 
 		return in_array($article->category->access, $views);
 	}

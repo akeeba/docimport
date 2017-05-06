@@ -31,12 +31,12 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 		$model = $this->container->factory->model('ControlPanel')->tmpInstance();
 
 		// Update the db structure if necessary (once per session at most)
-		$lastVersion = $this->container->session->get('magicParamsUpdateVersion', null, 'com_docimport');
+		$lastVersion = $this->container->platform->getSessionVar('magicParamsUpdateVersion', null, 'com_docimport');
 
 		if ($lastVersion != DOCIMPORT_VERSION)
 		{
 			$model->checkAndFixDatabase();
-			$this->container->session->set('magicParamsUpdateVersion', DOCIMPORT_VERSION, 'com_docimport');
+			$this->container->platform->setSessionVar('magicParamsUpdateVersion', DOCIMPORT_VERSION, 'com_docimport');
 		}
 
 		// Update magic parameters if necessary

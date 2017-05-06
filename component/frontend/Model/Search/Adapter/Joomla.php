@@ -34,7 +34,7 @@ class Joomla extends AbstractAdapter
 		$db = $this->container->db;
 
 		// Get the authorized user access levels
-		$accessLevels = \JFactory::getUser()->getAuthorisedViewLevels();
+		$accessLevels = $this->container->platform->getUser()->getAuthorisedViewLevels();
 		$accessLevels = array_map([$db, 'quote'], $accessLevels);
 
 		// Sanitize categories

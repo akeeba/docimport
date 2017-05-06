@@ -6,6 +6,8 @@
  */
 
 // Protect from unauthorized access
+use FOF30\Container\Container;
+
 defined('_JEXEC') or die();
 
 JLoader::import('joomla.plugin.plugin');
@@ -15,6 +17,13 @@ JLoader::import('joomla.plugin.plugin');
  */
 class plgSearchDocimport extends JPlugin
 {
+	/**
+	 * The component's container
+	 *
+	 * @var   Container
+	 */
+	protected $container;
+
 	/**
 	 * Constructor
 	 *
@@ -26,6 +35,8 @@ class plgSearchDocimport extends JPlugin
 		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
+
+		$this->container = Container::getInstance('com_docimport');
 	}
 
 	/**
@@ -59,8 +70,8 @@ class plgSearchDocimport extends JPlugin
 	{
 		/** @var  JApplicationSite  $app */
 		$app    = JFactory::getApplication();
-		$db     = JFactory::getDbo();
-		$user   = JFactory::getUser();
+		$db     = $this->container->db;
+		$user   = $this->container->platform->getUser();
 		$groups = implode(',', $user->getAuthorisedViewLevels());
 
 		$searchText = $text;

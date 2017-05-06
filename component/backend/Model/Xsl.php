@@ -318,7 +318,7 @@ HTACCESS;
 		}
 
 		// Load the list of articles in this category
-		$db    = \JFactory::getDbo();
+		$db    = $this->container->db;
 
 		$query = $db->getQuery(true)
 		            ->from($db->quoteName('#__docimport_articles'))
@@ -383,7 +383,7 @@ HTACCESS;
 
 					$jNow = new Date();
 
-					$user_id = JFactory::getUser()->id;
+					$user_id = $this->container->platform->getUser()->id;
 
 					if (empty($user_id))
 					{
@@ -428,7 +428,7 @@ HTACCESS;
 
 					$jNow = new Date();
 
-					$user_id = JFactory::getUser()->id;
+					$user_id = $this->container->platform->getUser()->id;
 
 					if (empty($user_id))
 					{
@@ -472,7 +472,7 @@ HTACCESS;
 		}
 
 		// Fourth pass: Load a list of enabled articles (IDs and slugs)
-		$db    = JFactory::getDbo();
+		$db    = $this->container->db;
 		$query = $db->getQuery(true)
 		            ->from($db->qn('#__docimport_articles'))
 		            ->select(array(
@@ -630,7 +630,7 @@ HTACCESS;
 	public function scanCategories()
 	{
 		// Load a list of categories
-		$db    = JFactory::getDbo();
+		$db    = $this->container->db;
 		$query = $db->getQuery(true)
 		            ->from($db->qn('#__docimport_categories'))
 		            ->select(array(
