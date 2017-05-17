@@ -1,6 +1,7 @@
 # 2.0.4
 
 **Removed features**
+
 * Removing the automatic update CLI script. Joomla! 3.7.0 can no longer execute extension installation under a CLI application.
 
 **Bug fixes**

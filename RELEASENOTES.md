@@ -10,8 +10,11 @@ Akeeba DocImport should be compatible with:
 
 ## Changelog
 
+**Removed features**
+
+* Removing the automatic update CLI script. Joomla! 3.7.0 can no longer execute extension installation under a CLI application.
+
 **Bug fixes**
 
-* Could not rebuild categories consisting of multiple, single article files.
-* Routing issues when there's no menu item linking to the documentation Category
-* Joomla! 3.7 broke the routing due to changes in the JMenuItem class
+* Joomla! 3.7.0 broke backwards compatibility again, making CLI scripts fail.
+* Joomla! 3.7 added a fixed width to specific button classes in the toolbar, breaking the page layout
