@@ -18,38 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// no direct access
 defined('_JEXEC') or die;
 
+// Load FOF if not already loaded
 if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
 {
-	throw new RuntimeException('FOF 3.0 is not installed', 500);
+	throw new RuntimeException('This extension requires FOF 3.0.');
 }
 
-// Load the language files
-$lang = JFactory::getLanguage();
-$lang->load('mod_docimport_search', JPATH_SITE, 'en-GB', true);
-$lang->load('mod_docimport_search', JPATH_SITE, null, true);
-$lang->load('com_docimport', JPATH_SITE, 'en-GB', true);
-$lang->load('com_docimport', JPATH_SITE, null, true);
-
-$id = $params->get('id', 0);
-
-$container = FOF30\Container\Container::getInstance('com_docimport', [
-	'tempInstance' => true,
-	'input'        => [
-		'savestate' => 0,
-		'option'    => 'com_docimport',
-		'view'      => 'Category',
-		'layout'    => 'item',
-		'task'      => 'read',
-	    'id'        => $id
-	],
-]);
-
-$moduleclass_sfx = htmlspecialchars($params->get('moduleclass_sfx'), ENT_COMPAT, 'UTF-8');
-
-?>
-<div id="mod-docimport-category-<?php echo $module->id ?>" class="mod-docimport-categories <?php echo $moduleclass_sfx ?>">
-	<?php $container->dispatcher->dispatch(); ?>
-</div>
+class plgSearchDocimportInstallerScript extends FOF30\Utils\InstallScript\Plugin
+{
+}

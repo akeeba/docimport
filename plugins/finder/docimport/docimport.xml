@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="finder" method="upgrade">
-	<name>plg_finder_docimport</name>
-	<author>Nicholas K. Dionysopoulos</author>
-	<creationDate>August 2012</creationDate>
-	<copyright>Copyright (C) 2011-2017 AkeebaBackup.com. All rights reserved.</copyright>
-	<license>GNU General Public License version 3 or later</license>
-	<authorEmail>nikosdion@gmail.com</authorEmail>
-	<authorUrl>www.AkeebaBackup.com</authorUrl>
-	<version>1.0</version>
-	<description>PLG_FINDER_DOCIMPORT_XML_DESCRIPTION</description>
-	<files>
-		<file plugin="docimport">docimport.php</file>
-    	<filename>index.html</filename>
-	</files>
-	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.plg_finder_docimport.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.plg_finder_docimport.sys.ini</language>
-	</languages>
+    <name>plg_finder_docimport</name>
+    <author>Nicholas K. Dionysopoulos</author>
+    <creationDate>August 2012</creationDate>
+    <copyright>Copyright (C) 2011-2017 AkeebaBackup.com. All rights reserved.</copyright>
+    <license>GNU General Public License version 3 or later</license>
+    <authorEmail>nikosdion@gmail.com</authorEmail>
+    <authorUrl>www.AkeebaBackup.com</authorUrl>
+    <version>1.0</version>
+    <description>PLG_FINDER_DOCIMPORT_XML_DESCRIPTION</description>
+    <files>
+        <file plugin="docimport">docimport.php</file>
+        <filename>index.html</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_finder_docimport.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_finder_docimport.sys.ini</language>
+    </languages>
+
+    <scriptfile>script.php</scriptfile>
+
 </extension>

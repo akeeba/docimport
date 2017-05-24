@@ -1,9 +1,8 @@
 <?php
 /**
- * @package      akeebasubs
- * @copyright    Copyright (c)2011-2017 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license      GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
- * @version      $Id$
+ *  @package	docimport
+ *  @copyright	Copyright (c)2011-2017 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ *  @license	GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
