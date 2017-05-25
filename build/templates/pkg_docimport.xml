@@ -18,6 +18,8 @@
         <file type="component" id="com_docimport">com_docimport.zip</file>
 
         <!-- Modules -->
+        <file type="module" client="site" id="mod_docimport_search">mod_docimport_categories.zip</file>
+
         <file type="module" client="site" id="mod_docimport_search">mod_docimport_search.zip</file>
 
         <!-- Plugins -->
