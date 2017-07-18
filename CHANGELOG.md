@@ -1,3 +1,7 @@
+# 2.0.6
+
+(placholder)
+
 # 2.0.5
 
 **Bug fixes**
