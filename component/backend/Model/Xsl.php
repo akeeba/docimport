@@ -162,6 +162,24 @@ HTACCESS;
 			//$xmlDoc->documentURI = $file_xml;
 			$xmlDoc->xinclude(LIBXML_DTDATTR | LIBXML_NOENT | LIBXML_NONET | LIBXML_XINCLUDE);
 
+			/**
+			 * Pre-process <imagedata> tags
+			 *
+			 * DocBook XML sources need to have a width attribute set up in <imagedata> tags to specify the optimal size for
+			 * images in print media. When dealing with the web, however, it's best to let Bootstrap figure out how to render
+			 * responsive images.
+			 */
+			$imageDataTags = $xmlDoc->getElementsByTagName('imagedata');
+
+			if ($imageDataTags->length)
+			{
+				/** @var \DOMElement $tag */
+				foreach ($imageDataTags as $tag)
+				{
+					$tag->removeAttribute('width');
+				}
+			}
+
 			$filesprefix = '';
 
 			if ($hasManySourceFiles)
@@ -256,7 +274,7 @@ HTACCESS;
 
 		// Update the database record with the file's/files' timestamp
 		$category->save(array(
-			'last_timestamp' => $timestamp
+			'last_timestamp' => $timestamp,
 		));
 	}
 
@@ -326,7 +344,7 @@ HTACCESS;
 			            $db->quoteName('docimport_article_id') . ' AS ' . $db->quoteName('id'),
 			            $db->quoteName('slug'),
 			            $db->quoteName('last_timestamp'),
-			            $db->quoteName('enabled')
+			            $db->quoteName('enabled'),
 		            ))
 		            ->where($db->quoteName('docimport_category_id') . ' = ' . $db->quote($category_id));
 		$articles = $db->setQuery($query)->loadObjectList('slug');
@@ -403,7 +421,7 @@ HTACCESS;
 						'last_timestamp'        => $filedata->timestamp,
 						'enabled'               => 1,
 						'created_on'            => $jNow->toSql(),
-						'created_by'            => $user_id
+						'created_by'            => $user_id,
 					]);
 				}
 			}
@@ -450,7 +468,7 @@ HTACCESS;
 							'locked_on'      => '0000-00-00 00:00:00',
 							'locked_by'      => 0,
 							'modified_on'    => $jNow->toSql(),
-							'modified_by'    => $user_id
+							'modified_by'    => $user_id,
 						]);
 					}
 					catch (\Exception $e)
@@ -464,7 +482,7 @@ HTACCESS;
 							'locked_on'      => '0000-00-00 00:00:00',
 							'locked_by'      => 0,
 							'modified_on'    => $jNow->toSql(),
-							'modified_by'    => $user_id
+							'modified_by'    => $user_id,
 						]);
 					}
 				}
@@ -477,7 +495,7 @@ HTACCESS;
 		            ->from($db->qn('#__docimport_articles'))
 		            ->select(array(
 			            $db->qn('docimport_article_id', 'id'),
-			            $db->qn('slug')
+			            $db->qn('slug'),
 		            ))
 		            ->where($db->qn('docimport_category_id') . ' = ' . $db->q($category_id))
 		            ->where($db->qn('enabled') . ' = ' . $db->q(1));
@@ -615,7 +633,7 @@ HTACCESS;
 				// Apply changes
 				$article->save(array(
 					'fulltext' => $fulltext,
-					'ordering' => $ordering
+					'ordering' => $ordering,
 				));
 
 				unset($fulltext);
@@ -635,7 +653,7 @@ HTACCESS;
 		            ->from($db->qn('#__docimport_categories'))
 		            ->select(array(
 			            $db->qn('docimport_category_id') . ' AS ' . $db->qn('id'),
-			            $db->qn('slug')
+			            $db->qn('slug'),
 		            ));
 		$categories = $db->setQuery($query)->loadObjectList('slug');
 
@@ -687,7 +705,7 @@ HTACCESS;
 						'title'       => JText::sprintf('COM_DOCIMPORT_XSL_DEFAULT_TITLE', $folder),
 						'slug'        => $folder,
 						'description' => JText::_('COM_DOCIMPORT_XSL_DEFAULT_DESCRIPTION'),
-						'ordering'    => 0
+						'ordering'    => 0,
 					]);
 				}
 			}
@@ -706,7 +724,7 @@ HTACCESS;
 		$ret = (object)array(
 			'title'     => '',
 			'contents'  => '',
-			'timestamp' => 0
+			'timestamp' => 0,
 		);
 
 		$ret->timestamp = @filemtime($filepath);

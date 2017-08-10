@@ -1,6 +1,8 @@
 # 2.0.6
 
-(placholder)
+**Miscellaneous changes**
+
+* Pre-process <imagedata> tags
 
 # 2.0.5
 
