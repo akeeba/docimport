@@ -8,6 +8,10 @@ Akeeba DocImport should be compatible with:
 * Joomla! 3.4, 3.5, 3.6, 3.7
 * PHP 5.4, 5.5, 5.6, 7.0, 7.1.
 
+## Language files
+
+DocImport comes with English (Great Britain) language built-in. Installation packages for other languages are available [on our language download page](https://cdn.akeebabackup.com/language/docimport/index.html).
+
 ## Changelog
 
 **Removed features**
