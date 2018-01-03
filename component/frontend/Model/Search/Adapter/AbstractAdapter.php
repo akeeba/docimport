@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package DocImport
- *  @copyright Copyright (c)2011-2017 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2011-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  *  @license GNU General Public License version 3, or later
  */
 
