@@ -107,7 +107,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	/**
 	 * Renders the post-installation message
 	 */
-	protected function renderPostInstallation($status, $fofInstallationStatus, $strapperInstallationStatus, $parent)
+	protected function renderPostInstallation($parent)
 	{
 		$this->warnAboutJSNPowerAdmin();
 ?>
@@ -121,7 +121,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 		<?php
 	}
 
-	protected function renderPostUninstallation($status, $parent)
+	protected function renderPostUninstallation($parent)
 	{
 ?>
 <h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba DocImport Uninstallation</h2>
