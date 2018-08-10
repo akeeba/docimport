@@ -5,6 +5,7 @@
 * Pre-process <imagedata> tags
 * Warn the user if either FOF or FEF is not installed.
 * Warn the user about incompatible versions of PHP, use of eAccelerator on PHP 5.4 and use of HHVM.
+* Joomla! 3.9 backend Components menu item compatibility
 
 # 2.0.5
 

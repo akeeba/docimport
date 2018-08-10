@@ -7,15 +7,33 @@
 
 namespace Akeeba\DocImport\Admin\Dispatcher;
 
+use FOF30\Container\Container;
+use FOF30\Dispatcher\Mixin\ViewAliases;
+
 defined('_JEXEC') or die;
 
 class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 {
+	use ViewAliases {
+		onBeforeDispatch as onBeforeDispatchViewAliases;
+	}
+
 	/** @var   string  The name of the default view, in case none is specified */
 	public $defaultView = 'Categories';
 
+	public function __construct(Container $container, array $config)
+	{
+		parent::__construct($container, $config);
+
+		$this->viewNameAliases = [
+			'cpanel'             => 'ControlPanel',
+		];
+	}
+
 	public function onBeforeDispatch()
 	{
+		$this->onBeforeDispatchViewAliases();
+
 		if (!$this->container->platform->authorise('core.manage', 'com_docimport'))
 		{
 			throw new \RuntimeException(\JText::_('JERROR_ALERTNOAUTHOR'), 404);

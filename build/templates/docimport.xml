@@ -38,8 +38,7 @@
 
 	<administration>
 		<!-- Administration Menu Section -->
-		<menu view="cpanel"
-			img="../media/com_docimport/images/docimport-16.png">COM_DOCIMPORT</menu>
+		<menu>COM_DOCIMPORT</menu>
 		<files folder="backend">
 			<folder>assets</folder>
 			<folder>Controller</folder>
