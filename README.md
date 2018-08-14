@@ -10,8 +10,6 @@ Akeeba DociMport is a project internal to Akeeba Ltd. We use it as own site's do
 
 We provide _infrequent_ builds available for download from [this repository's Releases section](https://github.com/akeeba/docimport/releases). Please note that these are not released or maintained regularly. We urge developers to build their own packages using the instructions provided below.
 
-DocImport comes with English (Great Britain) language built-in. Installation packages for other languages are available [on our language download page](https://cdn.akeebabackup.com/language/docimport/index.html).
-
 ## Prerequisites
 
 In order to build the installation packages of this component you will need to have the following tools:
