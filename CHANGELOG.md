@@ -1,3 +1,9 @@
+# 2.0.7
+
+**Miscellaneous changes**
+
+* Do not install when the XSL extension is missing
+
 # 2.0.6
 
 **Miscellaneous changes**

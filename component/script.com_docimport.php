@@ -95,6 +95,26 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 		)
 	);
 
+	public function preflight($type, $parent)
+	{
+		if (parent::preflight($type, $parent) === false)
+        {
+            return false;
+        }
+
+        if (!class_exists('XSLTProcessor'))
+        {
+	        $msg = "<p>You need PHP the PHP XSL extension to install this component.</p>";
+
+	        $this->log($msg);
+
+	        return false;
+
+        }
+
+        return true;
+	}
+
 	public function postflight($type, $parent)
 	{
 		// Remove the update sites for this component on installation.
