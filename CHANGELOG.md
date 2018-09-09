@@ -3,6 +3,7 @@
 **Miscellaneous changes**
 
 * Do not install when the XSL extension is missing
+* Do not try to process a category when the XSL extension is missing
 
 # 2.0.6
 

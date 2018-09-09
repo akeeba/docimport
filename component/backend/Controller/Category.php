@@ -17,6 +17,18 @@ class Category extends DataController
 {
 	public function rebuild()
 	{
+		$url = 'index.php?option=com_docimport&view=categories';
+
+		if (!class_exists('XSLTProcessor'))
+		{
+			$messageType = 'error';
+			$message     = \JText::_('COM_DOCIMPORT_XSL_ERROR_NOEXTENSION');
+
+			$this->setRedirect($url, $message, $messageType);
+
+			return;
+		}
+
 		$message     = \JText::_('COM_DOCIMPORT_CATEGORIES_REBUILT');
 		$messageType = null;
 
@@ -35,7 +47,6 @@ class Category extends DataController
 			$message     = $e->getMessage();
 		}
 
-		$url = 'index.php?option=com_docimport&view=categories';
 		$this->setRedirect($url, $message, $messageType);
 	}
 }
