@@ -1,8 +1,8 @@
 <?php
 /**
- *  @package DocImport
- *  @copyright Copyright (c)2011-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
- *  @license GNU General Public License version 3, or later
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\DocImport\Site\Model\Search\Exception;

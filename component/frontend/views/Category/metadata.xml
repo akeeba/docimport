@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * @package   DocImport
- * @copyright Copyright (c)2011-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
- * @license   GNU General Public License version 3, or later
--->
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
 <metadata>
         <view title="COM_DOCIMPORT_VIEW_CATEGORY_TITLE">
 			<message><![CDATA[COM_DOCIMPORT_VIEW_CATEGORY_DESC]]></message>

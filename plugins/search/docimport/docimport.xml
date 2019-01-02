@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <extension version="1.7" type="plugin" group="search" method="upgrade">
     <name>plg_search_docimport</name>
     <author>Nicholas K. Dionysopoulos</author>
     <creationDate>January 2012</creationDate>
-    <copyright>Copyright (C) 2011-2017 AkeebaBackup.com. All rights reserved.</copyright>
+    <copyright>Copyright (C) 2011-2019 AkeebaBackup.com. All rights reserved.</copyright>
     <license>GNU General Public License version 3 or later</license>
     <authorEmail>nikosdion@gmail.com</authorEmail>
     <authorUrl>www.AkeebaBackup.com</authorUrl>

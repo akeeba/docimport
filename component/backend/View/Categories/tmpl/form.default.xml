@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <form type="browse" show_header="1" show_filters="1" show_pagination="1"
       norows_placeholder="COM_DOCIMPORT_COMMON_NORECORDS">
 

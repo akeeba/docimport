@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <extension type="module" version="3.3.0" method="upgrade" client="site">
     <name>MOD_DOCIMPORT_CATEGORIES</name>
     <author>Nicholas K. Dionysopoulos</author>
-    <copyright>Copyright (C) 2011-2017 Nicholas K. Dionysopoulos / AkeebaBackup.com</copyright>
+    <copyright>Copyright (C) 2011-2019 Nicholas K. Dionysopoulos / AkeebaBackup.com</copyright>
     <license>GNU GPLv3 - http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>nicholas@akeebabackup.com</authorEmail>
     <authorUrl>www.akeebabackup.com</authorUrl>
