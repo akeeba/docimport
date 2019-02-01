@@ -18,6 +18,8 @@
     <files>
         <filename plugin="docimport">docimport.php</filename>
         <filename>index.html</filename>
+        <filename>.htaccess</filename>
+        <filename>web.config</filename>
     </files>
     <languages folder="language">
         <language tag="en-GB">en-GB/en-GB.plg_search_docimport.ini</language>

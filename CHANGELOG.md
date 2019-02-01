@@ -2,6 +2,7 @@
 
 **Miscellaneous changes**
 
+* Protection of all component and plugin folders against direct web access
 * Do not install when the XSL extension is missing
 * Do not try to process a category when the XSL extension is missing
 
