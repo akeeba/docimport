@@ -12,8 +12,8 @@
     <license>GNU GPLv3 - http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>nicholas@akeebabackup.com</authorEmail>
     <authorUrl>www.akeebabackup.com</authorUrl>
-    <creationDate>November 2016</creationDate>
-    <version>5.0</version>
+    <creationDate>2019-03-12</creationDate>
+    <version>2.0.7</version>
     <description>MOD_DOCIMPORT_SEARCH_DESCRIPTION</description>
     <files>
         <filename module="mod_docimport_search">mod_docimport_search.php</filename>

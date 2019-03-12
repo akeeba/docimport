@@ -9,8 +9,8 @@
 defined('_JEXEC') or die();
 
 // PHP 5.6 is modern enough. Anything else gets a warning.
-$minPHPVersion = '5.4.0';
-$recommendedPHPVersion = '5.6.0';
+$minPHPVersion = '5.6.0';
+$recommendedPHPVersion = '7.2.0';
 
 if (!version_compare(PHP_VERSION, $minPHPVersion, 'lt'))
 {

@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
 // Minimum PHP version check
 if (!isset($minphp))
 {
-	$minphp = '5.4.0';
+	$minphp = '5.6.0';
 }
 
 if (version_compare(PHP_VERSION, $minphp, 'lt'))
