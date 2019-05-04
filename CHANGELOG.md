@@ -1,3 +1,9 @@
+# 2.1.0
+
+**Miscellaneous changes**
+
+* Converted to use Akeeba FEF styling instead of Bootstrap 2 (gh-24)
+
 # 2.0.7
 
 **Miscellaneous changes**

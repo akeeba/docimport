@@ -36,7 +36,7 @@ $item = $this->getItem();
             </div>
 
             <div class="akeeba-form-group">
-                <label for="slug">@fieldtitle('image')</label>
+                <label for="image">@fieldtitle('image')</label>
 
 			    <?php
 			    /**
@@ -65,13 +65,13 @@ $item = $this->getItem();
             </div>
 
             <div class="akeeba-form-group">
-                <label for="slug">@fieldtitle('process_plugins')</label>
+                <label for="process_plugins">@fieldtitle('process_plugins')</label>
 
                 @jhtml('FEFHelper.select.booleanswitch', 'process_plugins', $item->process_plugins)
             </div>
 
             <div class="akeeba-form-group">
-                <label for="slug">@lang('JPUBLISHED')</label>
+                <label for="enabled">@lang('JPUBLISHED')</label>
 
                 @jhtml('FEFHelper.select.booleanswitch', 'enabled', $item->enabled)
             </div>
@@ -90,8 +90,7 @@ $item = $this->getItem();
 
         </div>
 
-
-        <div class="akeeba-panel--grey">
+        <div class="akeeba-panel--info">
             <header class="akeeba-block-header">
                 <h3>
                     @lang('COM_DOCIMPORT_CATEGORY_DESCRIPTION_TITLE')
