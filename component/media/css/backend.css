@@ -8,29 +8,6 @@
 	background: transparent url(../images/docimport-16.png) no-repeat !important;
 }
 
-fieldset label { float: left; margin-right: 0.2em !important; }
-
-#enabled0, #enabled1, label[for=enabled0], label[for=enabled1]
-	{ float: none; display: inline-block; }
-
-span.docimport-booleangroup { float: left; }
-
-span.docimport-booleangroup label { clear: none;  margin-right: 0.8em;  }
-
-.docimport-clear { clear:both; }
-label.title, input.title { font-weight: bold; font-size: larger; }
-label.main { display: inline-block; width: 45%; background: #e0e0e0; border-bottom: 1px solid gray; padding: 2px; margin-bottom: 2px }
-input.longer { width: 40% }
-
-#categories-basic { display: block; float: left; width: 45%; margin: 0 10px 1em 0; }
-#image-preview { display: block !important; border: thin solid gray !important; border-radius: 5px; margin: 2px 2px 2px 48% !important; width: 80px !important; height: 80px !important; box-shadow: 0px 0px 5px #999; }
-fieldset.docimport-float-left {
-	float: left; width: 48%;
-}
-
-.di3categorypic { float: left; margin-right: 3px; }
-.di3category { float: left; margin-top: 10px; }
-
 /**
  * Joomla! 3.7 made success buttons fixed width.
  */
