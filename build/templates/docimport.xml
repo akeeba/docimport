@@ -18,6 +18,7 @@
 		<folder>Model</folder>
 		<folder>View</folder>
 		<folder>views</folder>
+		<folder>ViewTemplates</folder>
 
 		<filename>docimport.php</filename>
 		<filename>index.html</filename>

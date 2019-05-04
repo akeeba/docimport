@@ -8,14 +8,22 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 ?>
-<div class="docimport-category">
-	<h2 class="docimport-category-title">
-		<?php echo $this->escape($this->item->title) ?>
-	</h2>
+<div class="docimport-category akeeba-panel--info">
+	<header class="akeeba-block-header docimport-category-title">
+		<h3>
+			{{{ $this->item->title }}}
+		</h3>
+	</header>
+
+	@if ($this->item->image)
+		<div class="docimport-category-image">
+			<img src="{{ $this->item->image }}" >
+		</div>
+	@endif
 
 	<div class="docimport-category-description">
 		<div class="docimport-category-description-inner">
-			<?php echo JHtml::_('content.prepare', $this->item->description) ?>
+			@jhtml('content.prepare', $this->item->description)
 		</div>
 	</div>
 </div>

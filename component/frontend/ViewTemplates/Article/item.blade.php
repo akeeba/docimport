@@ -10,13 +10,19 @@ defined('_JEXEC') or die();
 
 ?>
 <div class="docimport docimport-page-article">
-	<?php if ($this->showPageHeading) : ?>
+	@if($this->showPageHeading)
 		<div class="page-header">
-			<h2><?php echo $this->pageHeading; ?></h2>
+			<h2>
+				@lang($this->pageHeading)
+			</h2>
 		</div>
-	<?php endif; ?>
+	@endif
 
-	<?php echo $this->contentPrepare ? \JHtml::_('content.prepare', $this->item->fulltext) : $this->item->fulltext; ?>
+	@if ($this->contentPrepare)
+		@jhtml('content.prepare', $this->item->fulltext)
+	@else
+		{{ $this->item->fulltext }}
+	@endif
 </div>
 
 <script type="text/javascript">

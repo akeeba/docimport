@@ -20,6 +20,7 @@ class Articles extends AdminArticles
 		parent::__construct($container, $config);
 
 		$this->addBehaviour('Enabled');
+		$this->addBehaviour('Filters');
 
 		$this->with(['category']);
 	}

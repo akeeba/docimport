@@ -98,6 +98,16 @@ class Articles extends DataModel
 			);
 		}
 
+		// Slug filter
+		$fltSlug = $this->getState('slug', null, 'string');
+
+		if (!empty($fltSlug))
+		{
+			$query->where(
+				$db->quoteName('slug') . ' = ' . $db->quote($fltSlug)
+			);
+		}
+
 		// Category filter, use "docimport_category_id" or "category" model state
 		$fltCategory = $this->getState('docimport_category_id', null, 'cmd');
 		$fltCategory = $this->getState('category', $fltCategory, 'cmd');
