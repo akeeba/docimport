@@ -47,6 +47,7 @@
 			<folder>sql</folder>
 			<folder>Toolbar</folder>
 			<folder>View</folder>
+			<folder>ViewTemplates</folder>
 
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>

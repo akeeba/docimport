@@ -70,6 +70,8 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_docimport/dispatcher.php',
 			'administrator/components/com_docimport/toolbar.php',
 			'components/com_docimport/dispatcher.php',
+
+			// Upgrade to FEF
 		),
 		'folders' => array(
 			'administrator/components/com_docimport/controllers',
@@ -79,6 +81,10 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_docimport/views/article',
 			'administrator/components/com_docimport/views/categories',
 			'administrator/components/com_docimport/views/category',
+
+			// Upgrade to FEF
+			'administrator/components/com_docimport/View/Articles/tmpl',
+			'administrator/components/com_docimport/View/Categories/tmpl',
 		)
 	);
 

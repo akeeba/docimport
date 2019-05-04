@@ -45,6 +45,18 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 			define('DOCIMPORT_DATE', date('Y-m-d'));
 		}
 
+		// Renderer options (0=none, 1=frontend, 2=backend, 3=both)
+		$useFEF   = $this->container->params->get('load_fef', 3);
+		$fefReset = $this->container->params->get('fef_reset', 3);
+
+		if (!in_array($useFEF, [2,3]))
+		{
+			$this->container->rendererClass = '\\FOF30\\Render\\Joomla3';
+		}
+
+		$this->container->renderer->setOption('load_fef', in_array($useFEF, [2,3]));
+		$this->container->renderer->setOption('fef_reset', in_array($fefReset, [2,3]));
+
 		/** @var \Akeeba\DocImport\Admin\Model\ControlPanel $model */
 		$model = $this->container->factory->model('ControlPanel')->tmpInstance();
 

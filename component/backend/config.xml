@@ -17,6 +17,24 @@
 			   description="COM_DOCIMPORT_CONFIG_MEDIAROOT_DESC"
 		/>
 
+		<field name="load_fef" type="list" default="3"
+			   label="COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF"
+			   description="COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_DESC">
+			<option value="0">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_NEVER</option>
+			<option value="1">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_FRONTEND</option>
+			<option value="2">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_BACKEND</option>
+			<option value="3">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_BOTH</option>
+		</field>
+
+		<field name="fef_reset" type="list" default="3"
+			   label="COM_DOCIMPORT_CONFIG_BACKEND_FEF_RESET"
+			   description="COM_DOCIMPORT_CONFIG_BACKEND_FEF_RESET_DESC">
+			<option value="0">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_NEVER</option>
+			<option value="1">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_FRONTEND</option>
+			<option value="2">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_BACKEND</option>
+			<option value="3">COM_DOCIMPORT_CONFIG_BACKEND_LOAD_FEF_BOTH</option>
+		</field>
+
 		<field name="siteurl" type="hidden" default=""
 			   label="" />
 		<field name="sitepath" type="hidden" default=""
@@ -68,7 +86,7 @@
 				<field
 						name="atscat"
 						type="category"
-						extension="com_ats"
+						extension="COM_DOCIMPORT"
 						multiple="true"
 						size="10"
 						default=""

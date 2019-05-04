@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-/** @var  \Akeeba\DocImport\Admin\View\Categories\Form $this */
+/** @var  \Akeeba\DocImport\Admin\View\Categories\Html $this */
 /** @var  \Akeeba\DocImport\Admin\Model\Categories $model */
 
 $tooltip = JText::_('COM_DOCIMPORT_CATEGORIES_STATUS_' . $model->status);
