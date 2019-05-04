@@ -1,11 +1,5 @@
 /.idea
 
-/build/bin
-/build/buildlang
-/build/epub
-/build/phingext
-/build/tools
-
 /component/docimport.xml
 /component/backend/version.php
 /component/cli/*.xml
@@ -18,3 +12,6 @@ release/
 /component/language/*/en-GB
 /modules/*/*/language/en-GB
 /plugins/*/*/language/en-GB
+
+# Private copy of FEF for auto-completion
+fef.min.css
