@@ -57,6 +57,9 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 		$this->container->renderer->setOption('load_fef', in_array($useFEF, [2,3]));
 		$this->container->renderer->setOption('fef_reset', in_array($fefReset, [2,3]));
 
+		// Render submenus as drop-down navigation bars powered by Bootstrap
+		$this->container->renderer->setOption('linkbar_style', 'classic');
+
 		/** @var \Akeeba\DocImport\Admin\Model\ControlPanel $model */
 		$model = $this->container->factory->model('ControlPanel')->tmpInstance();
 
