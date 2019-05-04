@@ -72,6 +72,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'components/com_docimport/dispatcher.php',
 
 			// Upgrade to FEF
+			'administrator/components/com_docimport/View/eaccelerator.php'
 		),
 		'folders' => array(
 			'administrator/components/com_docimport/controllers',
