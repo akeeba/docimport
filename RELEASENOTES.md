@@ -11,8 +11,14 @@ Akeeba DocImport should be compatible with:
 
 ## Changelog
 
+**Removed features**
+
+* Removing the Search view since it was never really finished and hasn't been touched in 2 years.
+
 **Miscellaneous changes**
 
-* Protection of all component and plugin folders against direct web access
-* Do not install when the XSL extension is missing
-* Do not try to process a category when the XSL extension is missing
+* Converted to use Akeeba FEF styling instead of Bootstrap 2 (gh-24)
+
+**Bug fixes**
+
+* Categories with multiple, separate articles wouldn't show a list of articles
