@@ -74,9 +74,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			// Upgrade to FEF
 			'administrator/components/com_docimport/View/eaccelerator.php',
 
-			'components/com_docimport/Controller/Search.php',
 			'components/com_docimport/Helper/Cli.php',
-			'components/com_docimport/Model/Search.php',
 		),
 		'folders' => array(
 			'administrator/components/com_docimport/controllers',
@@ -92,10 +90,6 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_docimport/View/Categories/tmpl',
 			'components/com_docimport/View/Article/tmpl',
 			'components/com_docimport/View/Categories/tmpl',
-
-			'components/com_docimport/View/Search',
-			'components/com_docimport/views/Search',
-			'components/com_docimport/Model/Search',
 		)
 	);
 
