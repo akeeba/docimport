@@ -36,6 +36,7 @@ abstract class Routing
 		'categories' => [],
 	    'category'   => [],
 	    'article'    => [],
+	    'search'     => [],
 	];
 
 	/**
@@ -74,6 +75,7 @@ abstract class Routing
 				'categories' => [],
 				'category'   => [],
 				'article'    => [],
+				'search'     => [],
 			];
 
 			// Get all of the site's menu items
@@ -123,6 +125,10 @@ abstract class Routing
 					case 'article':
 						self::$docImportMenuIDByType['article'][] = $item->id;
 						break;
+
+					case 'search':
+						self::$docImportMenuIDByType['search'][] = $item->id;
+						break;
 				}
 			}
 		}
@@ -131,7 +137,7 @@ abstract class Routing
 	}
 
 	/**
-	 * @param   string  $type  The menu type: categories, category, article
+	 * @param   string  $type  The menu type: categories, category, article, search
 	 *
 	 * @return  \stdClass[]
 	 */
@@ -146,7 +152,7 @@ abstract class Routing
 		}
 
 		$type = strtolower($type);
-		$type = in_array($type, ['categories', 'category', 'article']) ? $type : 'categories';
+		$type = in_array($type, ['categories', 'category', 'article', 'search']) ? $type : 'categories';
 		$ids  = self::$docImportMenuIDByType[$type];
 
 		if (empty($ids))
@@ -274,7 +280,7 @@ abstract class Routing
 	 *
 	 * @param   int  $itemID  The Joomla! menu item ID
 	 *
-	 * @return  array  'type': categories, category, article. 'id': the category or article ID for category and
+	 * @return  array  'type': categories, category, article, search. 'id': the category or article ID for category and
 	 *                 article menu types respectively. Other types have a null id for obvious reasons.
 	 */
 	public static function getMenuItemInfo($itemID)
