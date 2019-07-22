@@ -11,10 +11,6 @@ Akeeba DocImport should be compatible with:
 
 ## Changelog
 
-**Miscellaneous changes**
-
-* Converted to use Akeeba FEF styling instead of Bootstrap 2 (gh-24)
-
 **Bug fixes**
 
-* Categories with multiple, separate articles wouldn't show a list of articles
+* Partially reverted removal of Search feature, it's used in other features of our site

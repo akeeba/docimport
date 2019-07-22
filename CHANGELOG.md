@@ -1,4 +1,14 @@
+# 2.1.1
+
+**Bug fixes**
+
+* Partially reverted removal of Search feature, it's used in other features of our site
+
 # 2.1.0
+
+**Removed features**
+
+* Removed the Search feature
 
 **Miscellaneous changes**
 

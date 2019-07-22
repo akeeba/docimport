@@ -12,8 +12,8 @@
     <license>GNU GPLv3 - http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>nicholas@akeebabackup.com</authorEmail>
     <authorUrl>www.akeebabackup.com</authorUrl>
-    <creationDate>2019-05-20</creationDate>
-    <version>2.1.0</version>
+    <creationDate>2019-07-22</creationDate>
+    <version>2.1.1</version>
     <description>MOD_DOCIMPORT_CATEGORIES_DESCRIPTION</description>
     <files>
         <filename module="mod_docimport_categories">mod_docimport_categories.php</filename>
