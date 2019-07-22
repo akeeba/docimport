@@ -11,10 +11,6 @@ Akeeba DocImport should be compatible with:
 
 ## Changelog
 
-**Removed features**
-
-* Removing the Search view since it was never really finished and hasn't been touched in 2 years.
-
 **Miscellaneous changes**
 
 * Converted to use Akeeba FEF styling instead of Bootstrap 2 (gh-24)
