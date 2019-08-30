@@ -10,7 +10,7 @@ namespace Akeeba\DocImport\Site\Helper;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use JMenu;
+use Joomla\CMS\Menu\AbstractMenu;
 use Joomla\Registry\Registry;
 
 /**
@@ -79,7 +79,7 @@ abstract class Routing
 			];
 
 			// Get all of the site's menu items
-			$allMenuItems = JMenu::getInstance('site')->getItems([], [], false);
+			$allMenuItems = AbstractMenu::getInstance('site')->getItems([], [], false);
 
 			// Loop menu items to find the DocImport ones
 			foreach ($allMenuItems as $item)

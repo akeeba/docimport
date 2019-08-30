@@ -1,3 +1,9 @@
+# 2.1.2
+
+**Miscellaneous changes**
+
+* Implement Joomla! 4 routing. (gh-23) 
+
 # 2.1.1
 
 **Bug fixes**
