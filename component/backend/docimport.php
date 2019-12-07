@@ -8,10 +8,13 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-if (version_compare(PHP_VERSION, '5.6.0', 'lt'))
-{
-	(include_once __DIR__ . '/View/wrongphp.php') or die('Your PHP version is too old for this component.');
+define('AKEEBA_COMMON_WRONGPHP', 1);
+$minPHPVersion         = '5.6.0';
+$recommendedPHPVersion = '7.3';
+$softwareName          = 'Akeeba DocImport';
 
+if (!require_once(__DIR__ . '/View/wrongphp.php'))
+{
 	return;
 }
 
