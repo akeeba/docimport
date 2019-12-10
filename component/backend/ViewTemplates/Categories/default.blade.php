@@ -10,6 +10,12 @@ defined('_JEXEC') or die();
 /** @var  \Akeeba\DocImport\Admin\View\Categories\Html $this */
 
 ?>
+{{-- Old PHP version reminder --}}
+@include('admin:com_docimport/Common/phpversion_warning', [
+	'softwareName'  => 'Akeeba DocImport',
+	'minPHPVersion' => '5.6.0',
+])
+
 @extends('admin:com_docimport/Common/browse')
 
 @section('browse-filters')

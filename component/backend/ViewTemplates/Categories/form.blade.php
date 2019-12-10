@@ -12,6 +12,12 @@ defined('_JEXEC') or die();
 $item = $this->getItem();
 
 ?>
+{{-- Old PHP version reminder --}}
+@include('admin:com_docimport/Common/phpversion_warning', [
+	'softwareName'  => 'Akeeba DocImport',
+	'minPHPVersion' => '5.6.0',
+])
+
 @extends('admin:com_docimport/Common/edit')
 
 @section('edit-form-body')

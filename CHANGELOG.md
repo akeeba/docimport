@@ -1,5 +1,9 @@
 # 2.1.2
 
+**New features**
+
+* Common PHP version warning scripts
+
 **Miscellaneous changes**
 
 * Implement Joomla! 4 routing. (gh-23) 
