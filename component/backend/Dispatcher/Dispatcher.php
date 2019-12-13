@@ -39,7 +39,9 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 			throw new \RuntimeException(\JText::_('JERROR_ALERTNOAUTHOR'), 404);
 		}
 
-		if (!@include_once(JPATH_ADMINISTRATOR . '/components/com_docimport/version.php'))
+		@include_once(JPATH_ADMINISTRATOR . '/components/com_docimport/version.php');
+
+		if (!defined('DOCIMPORT_VERSION'))
 		{
 			define('DOCIMPORT_VERSION', 'dev');
 			define('DOCIMPORT_DATE', date('Y-m-d'));
