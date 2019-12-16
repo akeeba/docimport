@@ -1,10 +1,10 @@
 <?php
-$hardlink_files = array(
-);
+$hardlink_files = [
+];
 
-$symlink_files = array(
-	'../fef/j-css/style.min.css' => 'fef.min.css',
-);
+$symlink_files = [
+	'../fef/out/css/fef-joomla.min.css' => 'fef.min.css',
+];
 
-$symlink_folders = array(
-);
+$symlink_folders = [
+];
