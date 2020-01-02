@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <extension type="component" method="upgrade" version="2.5.0">
 	<name>DocImport</name>
 	<creationDate>##DATE##</creationDate>

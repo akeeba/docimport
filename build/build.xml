@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <project name="DocImport" description="DocImport for Joomla!" default="all" >
 	<import file="${phing.dir}/../../buildfiles/phing/common.xml" />
 
