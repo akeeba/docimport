@@ -1,0 +1,126 @@
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+.docimport {
+  /**
+   * Structure
+   */
+  color: $light-grey;
+
+  /**
+   * Navigation
+   */
+  .navheader, .navfooter {
+    color: darken($light-grey, 10%);
+
+    a {
+      color: $teal;
+
+      &:hover {
+        color: lighten($teal, 10%);
+      }
+    }
+
+    border-color: lighten($grey, 10%);
+  }
+
+  /**
+   * Admonitions
+   */
+  .warning,
+  .important,
+  .note,
+  .tip {
+    color: $light-grey;
+
+    th {
+      color: $white;
+    }
+  }
+
+  .warning {
+    background-color: darken($orange, 33%);
+  }
+
+  .important {
+    background-color: darken($red, 20%);
+  }
+
+  .note {
+    background-color: darken($green, 20%);
+  }
+
+  .tip {
+    background-color: darken($teal, 20%);
+  }
+
+  /* Fixed width */
+  code {
+    background: lighten($grey, 5%);
+    color: lighten($red, 23%);
+
+    //border: 1px solid darken($light-grey, 10%);
+
+    &.filename {
+      color: $green;
+    }
+  }
+
+  .mediaobject {
+    img {
+      border-color: lighten($grey, 10%);
+    }
+  }
+
+  .guimenu,
+  .guisubmenu,
+  .guilabel,
+  .guibutton {
+    color: $green;
+  }
+
+  .guilabel {
+    color: $teal;
+  }
+
+  .guibutton {
+    border: 1px dashed darken($grey, 5%);
+    background: lighten($grey, 5%);
+  }
+
+  dt {
+    .term {
+      color: $teal;
+    }
+  }
+}
+
+/**
+ * Search results
+ */
+.dius-result {
+  h5.dius-result-title {
+    a {
+      color: $teal;
+
+      &:visited {
+        color: $red;
+      }
+    }
+  }
+}
+
+.dius-result-category {
+  color: lighten($grey, 20%);
+
+  a {
+    color: $green;
+  }
+}
+
+.dius-result-synopsis {
+  color: $light-grey;
+}

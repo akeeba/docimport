@@ -3,6 +3,7 @@
 **New features**
 
 * Common PHP version warning scripts
+* Dark Mode
 
 **Miscellaneous changes**
 

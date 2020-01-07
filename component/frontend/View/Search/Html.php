@@ -68,8 +68,6 @@ JS;
 		$this->addJavascriptFile('media://com_docimport/js/search.js');
 		$this->addJavascriptInline($js);
 
-		$this->addCssFile('media://com_docimport/css/search.css');
-
 		/** @var Search $model */
 		$model = $this->getModel();
 

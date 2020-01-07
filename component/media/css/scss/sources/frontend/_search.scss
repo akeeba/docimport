@@ -1,0 +1,49 @@
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+.dius-result {
+  padding-bottom: 16pt;
+
+  h5.dius-result-title {
+    font-size: 12pt;
+    font-weight: bold;
+    padding-bottom: 3pt;
+    margin-bottom: 0;
+    text-decoration: none;
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #660099;
+    }
+  }
+}
+
+.dius-result-video {
+  margin-bottom: 16pt;
+}
+
+
+.dius-result-category {
+  color: #cccccc;
+  font-size: 10pt;
+
+  a {
+    color: #666633;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.dius-result-synopsis {
+  font-size: 10pt;
+  color: #333333;
+}

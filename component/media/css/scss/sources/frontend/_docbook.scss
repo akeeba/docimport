@@ -1,0 +1,212 @@
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+.docimport {
+  /**
+   * Structure
+   */
+  text-align: justify;
+  color: $grey;
+
+  dl {
+    margin-left: 2em;
+  }
+
+  dd {
+    margin-left: 1em;
+  }
+
+  /**
+   * Navigation
+   */
+  .navheader, .navfooter {
+    color: lighten($grey, 10%);
+    margin-bottom: 1em;
+    padding: 0.5em;
+
+    a {
+      color: darken($teal, 20%);
+      text-decoration: none;
+
+      &:hover {
+        color: darken($teal, 35%);
+        text-decoration: none;
+      }
+    }
+
+    hr {
+      display: none;
+    }
+  }
+
+  .navheader {
+    border-bottom: 1px solid $light-grey;
+  }
+
+  .navfooter {
+    border-top: 1px solid $light-grey;
+  }
+
+  h1.title {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  h2.title {
+    font-weight: bold;
+  }
+
+  h5 {
+    font-weight: bold;
+  }
+
+  table {
+    tr, td {
+      border: none;
+    }
+
+    p {
+      margin-bottom: 6pt;
+    }
+  }
+
+  pre {
+    margin-bottom: 6pt;
+  }
+
+  /**
+   * Admonitions
+   */
+  .warning,
+  .important,
+  .note,
+  .tip {
+    color: $grey;
+    margin-bottom: 10px;
+    padding: 1em;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: small;
+    max-width: none;
+
+    :last-child {
+      margin-bottom: 0;
+    }
+
+    table > tbody > tr:nth-child(1) > td {
+      display: none;
+    }
+
+    th {
+      font-size: larger;
+      margin-bottom: 1em;
+      border-bottom: 1px solid black;
+    }
+  }
+
+  .warning {
+    border-color: $orange;
+    background-color: lighten($orange, 33%);
+
+    th {
+      color: $orange;
+      border-color: $orange;
+    }
+  }
+
+  .important {
+    border-color: $red;
+    background-color: lighten($red, 38%);
+
+    th {
+      color: $red;
+      border-color: $red;
+    }
+  }
+
+  .note {
+    border-color: $green;
+    background-color: lighten($green, 38%);
+
+    th {
+      color: $green;
+      border-color: $green;
+    }
+
+  }
+
+  .tip {
+    border-color: $teal;
+    background-color: lighten($teal, 45%);
+
+    th {
+      color: $teal;
+      border-color: $teal;
+    }
+  }
+
+  /* Fixed width */
+  code {
+    font-family: Consolas, monospace;
+    background: $light-grey;
+    color: $red;
+    border: 1px solid darken($light-grey, 10%);
+    padding: 1px 3px;
+    border-radius: 3px;
+    white-space: normal;
+
+    &.filename {
+      background: none;
+      color: darken($green, 15%);
+      border: none;
+      padding: 0;
+      border-radius: unset;
+    }
+  }
+
+  /* Document elements */
+  .replaceable {
+    font-style: italic;
+  }
+
+  .mediaobject {
+    img {
+      border: 1px solid $light-grey;
+      border-radius: 0.3em;
+      padding: 1em;
+    }
+  }
+
+  .guimenu,
+  .guisubmenu,
+  .guilabel,
+  .guibutton {
+    color: darken($green, 20%);
+    font-weight: bold;
+  }
+
+  .guilabel {
+    color: darken($teal, 20%);
+  }
+
+  .guibutton {
+    border: 1px dashed darken($light-grey, 15%);
+    padding: 0.1em 0.3em;
+    background: lighten($light-grey, 4%);
+    border-radius: 0.3em;
+  }
+
+  dt {
+    .term {
+      font-weight: bold;
+      color: darken($teal, 25%);
+    }
+  }
+
+  .trademark {
+    color: $green;
+  }
+}

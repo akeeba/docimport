@@ -50,10 +50,10 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	 *
 	 * @var   array
 	 */
-	protected $removeFilesAllVersions = array(
-		'files'	=> array(
-            // Obsolete CLI script
-            'cli/docimport-update.php',
+	protected $removeFilesAllVersions = [
+		'files'   => [
+			// Obsolete CLI script
+			'cli/docimport-update.php',
 
 			// Obsolete update information
 			'cache/com_docimport.updates.php',
@@ -74,9 +74,15 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			// Upgrade to FEF
 			'administrator/components/com_docimport/View/eaccelerator.php',
 
+			// CLI helper moved to FOF
 			'components/com_docimport/Helper/Cli.php',
-		),
-		'folders' => array(
+
+			// Obsolete CSS files
+			'media/com_docimport/css/backend.min.css',
+			'media/com_docimport/css/frontend.min.css',
+			'media/com_docimport/css/search.min.css',
+		],
+		'folders' => [
 			'administrator/components/com_docimport/controllers',
 			'administrator/components/com_docimport/models',
 			'administrator/components/com_docimport/helpers',
@@ -90,27 +96,27 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_docimport/View/Categories/tmpl',
 			'components/com_docimport/View/Article/tmpl',
 			'components/com_docimport/View/Categories/tmpl',
-		)
-	);
+		],
+	];
 
 	public function preflight($type, $parent)
 	{
 		if (parent::preflight($type, $parent) === false)
-        {
-            return false;
-        }
+		{
+			return false;
+		}
 
-        if (!class_exists('XSLTProcessor'))
-        {
-	        $msg = "<p>You need PHP the PHP XSL extension to install this component.</p>";
+		if (!class_exists('XSLTProcessor'))
+		{
+			$msg = "<p>You need PHP the PHP XSL extension to install this component.</p>";
 
-	        $this->log($msg);
+			$this->log($msg);
 
-	        return false;
+			return false;
 
-        }
+		}
 
-        return true;
+		return true;
 	}
 
 	public function postflight($type, $parent)
@@ -128,11 +134,13 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	protected function renderPostInstallation($parent)
 	{
 		$this->warnAboutJSNPowerAdmin();
-?>
+		?>
 		<h1>Akeeba DocImport</h1>
 
-		<img src="../media/com_docimport/images/docimport-48.png" width="48" height="48" alt="Akeeba DocImport" align="left" />
-		<h2 style="font-size: 14pt; font-weight: bold; padding: 0; margin: 0 0 0.5em;">&nbsp;Welcome to Akeeba DocImport!</h2>
+		<img src="../media/com_docimport/images/docimport-48.png" width="48" height="48" alt="Akeeba DocImport"
+		     align="left" />
+		<h2 style="font-size: 14pt; font-weight: bold; padding: 0; margin: 0 0 0.5em;">&nbsp;Welcome to Akeeba
+			DocImport!</h2>
 		<span>
 			The easiest way to provide up-to-date documentation
 		</span>
@@ -141,11 +149,66 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 
 	protected function renderPostUninstallation($parent)
 	{
-?>
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba DocImport Uninstallation</h2>
-<p>We are sorry that you decided to uninstall Akeeba DocImport.</p>
+		?>
+		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba DocImport
+			Uninstallation</h2>
+		<p>We are sorry that you decided to uninstall Akeeba DocImport.</p>
 
-<?php
+		<?php
+	}
+
+	/**
+	 * Removes obsolete update sites created for the component (we are no longer providing update; also, we are now
+	 * using the "package" extension type).
+	 *
+	 * @param   JInstallerAdapterComponent  $parent  The parent installer
+	 */
+	protected function removeObsoleteUpdateSites($parent)
+	{
+		$db = $parent->getParent()->getDbo();
+
+		$query = $db->getQuery(true)
+			->select($db->qn('extension_id'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('name') . ' = ' . $db->q($this->componentName));
+		$db->setQuery($query);
+		$extensionId = $db->loadResult();
+
+		if (!$extensionId)
+		{
+			return;
+		}
+
+		$query = $db->getQuery(true)
+			->select($db->qn('update_site_id'))
+			->from($db->qn('#__update_sites_extensions'))
+			->where($db->qn('extension_id') . ' = ' . $db->q($extensionId));
+		$db->setQuery($query);
+
+		$ids = $db->loadColumn(0);
+
+		if (!is_array($ids) && empty($ids))
+		{
+			return;
+		}
+
+		foreach ($ids as $id)
+		{
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__update_sites'))
+				->where($db->qn('update_site_id') . ' = ' . $db->q($id));
+			$db->setQuery($query);
+
+			try
+			{
+				$db->execute();
+			}
+			catch (\Exception $e)
+			{
+				// Do not fail in this case
+			}
+		}
 	}
 
 	/**
@@ -154,8 +217,8 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	 */
 	private function warnAboutJSNPowerAdmin()
 	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true)
+		$db            = JFactory::getDbo();
+		$query         = $db->getQuery(true)
 			->select('COUNT(*)')
 			->from($db->qn('#__extensions'))
 			->where($db->qn('type') . ' = ' . $db->q('component'))
@@ -168,13 +231,13 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			return;
 		}
 
-		$query = $db->getQuery(true)
-					->select('manifest_cache')
-					->from($db->qn('#__extensions'))
-					->where($db->qn('type') . ' = ' . $db->q('component'))
-					->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
-					->where($db->qn('enabled') . ' = ' . $db->q('1'));
-		$paramsJson = $db->setQuery($query)->loadResult();
+		$query         = $db->getQuery(true)
+			->select('manifest_cache')
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
+			->where($db->qn('enabled') . ' = ' . $db->q('1'));
+		$paramsJson    = $db->setQuery($query)->loadResult();
 		$jsnPAManifest = new JRegistry();
 		$jsnPAManifest->loadString($paramsJson, 'JSON');
 		$version = $jsnPAManifest->get('version', '0.0.0');
@@ -200,60 +263,6 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 
 HTML;
 
-	}
-
-	/**
-	 * Removes obsolete update sites created for the component (we are no longer providing update; also, we are now
-	 * using the "package" extension type).
-	 *
-	 * @param   JInstallerAdapterComponent  $parent  The parent installer
-	 */
-	protected function removeObsoleteUpdateSites($parent)
-	{
-		$db = $parent->getParent()->getDbo();
-
-		$query = $db->getQuery(true)
-					->select($db->qn('extension_id'))
-					->from($db->qn('#__extensions'))
-					->where($db->qn('type') . ' = ' . $db->q('component'))
-					->where($db->qn('name') . ' = ' . $db->q($this->componentName));
-		$db->setQuery($query);
-		$extensionId = $db->loadResult();
-
-		if (!$extensionId)
-		{
-			return;
-		}
-
-		$query = $db->getQuery(true)
-					->select($db->qn('update_site_id'))
-					->from($db->qn('#__update_sites_extensions'))
-					->where($db->qn('extension_id') . ' = ' . $db->q($extensionId));
-		$db->setQuery($query);
-
-		$ids = $db->loadColumn(0);
-
-		if (!is_array($ids) && empty($ids))
-		{
-			return;
-		}
-
-		foreach ($ids as $id)
-		{
-			$query = $db->getQuery(true)
-						->delete($db->qn('#__update_sites'))
-						->where($db->qn('update_site_id') . ' = ' . $db->q($id));
-			$db->setQuery($query);
-
-			try
-			{
-				$db->execute();
-			}
-			catch (\Exception $e)
-			{
-				// Do not fail in this case
-			}
-		}
 	}
 
 }
