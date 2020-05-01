@@ -4,6 +4,7 @@
 
 * Common PHP version warning scripts
 * Dark Mode
+* Joomla 4 compatibility
 
 **Miscellaneous changes**
 

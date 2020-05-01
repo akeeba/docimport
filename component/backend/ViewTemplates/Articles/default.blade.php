@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 /** @var  \Akeeba\DocImport\Admin\View\Articles\Html $this */
 
 ?>
-@extends('admin:com_docimport/Common/browse')
+@extends('any:lib_fof30/Common/browse')
 
 @section('browse-filters')
     {{-- Title --}}
