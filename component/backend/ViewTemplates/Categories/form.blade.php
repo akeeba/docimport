@@ -18,7 +18,7 @@ $item = $this->getItem();
 	'minPHPVersion' => '5.6.0',
 ])
 
-@extends('admin:com_docimport/Common/edit')
+@extends('any:lib_fof30/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-container--33-66">

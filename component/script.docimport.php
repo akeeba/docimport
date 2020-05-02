@@ -36,7 +36,7 @@ class Pkg_DocimportInstallerScript
 	 *
 	 * @var   string
 	 */
-	protected $maximumJoomlaVersion = '3.9.99';
+	protected $maximumJoomlaVersion = '4.0.99';
 
 	/**
 	 * A list of extensions (modules, plugins) to enable after installation. Each item has four values, in this order:

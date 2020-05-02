@@ -98,12 +98,12 @@ defined('_JEXEC') or die();
                     @endif
                 </span>
                 &nbsp;
-                <button
-                        onclick="window.location='index.php?option=com_docimport&view=Categories&task=rebuild&id={{ (int)$row->getId() }}';return false;"
-                        class="btn {{ ($row->status == 'modified') ? 'btn-primary btn-mini' : 'btn-inverse btn-mini' }}"
-                        title="<?php echo JText::_('COM_DOCIMPORT_CATEGORIES_REBUILD') ?>">
-                    <span class="icon-white icon-refresh"></span>
-                </button>
+                <a href="index.php?option=com_docimport&view=Categories&task=rebuild&id={{ (int)$row->getId() }}"
+                   class="akeeba-btn--mini--{{ ($row->status == 'modified' ? 'teal' : 'dark') }}"
+                   title="@lang('COM_DOCIMPORT_CATEGORIES_REBUILD')"
+                >
+                    <span class="akion-refresh"></span>
+                </a>
             </td>
             <td>
                 @jhtml('FEFHelper.browse.published', $row->enabled, $i)

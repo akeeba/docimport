@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 $item = $this->getItem();
 
 ?>
-@extends('admin:com_docimport/Common/edit')
+@extends('any:lib_fof30/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-panel--teal">

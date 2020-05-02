@@ -81,6 +81,9 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 			'media/com_docimport/css/backend.min.css',
 			'media/com_docimport/css/frontend.min.css',
 			'media/com_docimport/css/search.min.css',
+
+			'administrator/components/com_docimport/ViewTemplates/Common/browse.blade.php',
+			'administrator/components/com_docimport/ViewTemplates/Common/form.blade.php',
 		],
 		'folders' => [
 			'administrator/components/com_docimport/controllers',
