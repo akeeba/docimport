@@ -57,7 +57,7 @@ CREATE TABLE `#__docimport_categories` (
   `process_plugins` tinyint(3) NOT NULL DEFAULT '0',
   `last_timestamp` bigint(20) unsigned NOT NULL DEFAULT '0',
   `enabled` tinyint(3) NOT NULL DEFAULT '1',
-  `ordering` int(11) NOT NULL,
+  `ordering` int(11) NOT NULL DEFAULT 0,
   `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(11) NOT NULL DEFAULT '0',
   `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -68,6 +68,16 @@ CREATE TABLE `#__docimport_categories` (
   `access` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`docimport_category_id`)
 ) ENGINE=MyISAM DEFAULT COLLATE utf8_general_ci;
+            ]]></query>
+        </action>
+
+        <action table="#__docimport_categories" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+                SELECT COUNT(*) FROM `information_schema`.`COLUMNS` WHERE `TABLE_SCHEMA` = DATABASE() AND `TABLE_NAME` = '#__docimport_categories' AND `COLUMN_NAME` = 'ordering' AND `COLUMN_DEFAULT` IS NOT NULL
+            ]]></condition>
+
+            <query><![CDATA[
+ALTER TABLE #__docimport_categories MODIFY `ordering` int(11) NOT NULL DEFAULT 0;
             ]]></query>
         </action>
 

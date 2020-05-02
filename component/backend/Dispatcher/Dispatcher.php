@@ -8,13 +8,15 @@
 namespace Akeeba\DocImport\Admin\Dispatcher;
 
 use FOF30\Container\Container;
+use FOF30\Database\Installer;
 use FOF30\Dispatcher\Mixin\ViewAliases;
 
 defined('_JEXEC') or die;
 
 class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 {
-	use ViewAliases {
+	use ViewAliases
+	{
 		onBeforeDispatch as onBeforeDispatchViewAliases;
 	}
 
@@ -26,12 +28,13 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 		parent::__construct($container, $config);
 
 		$this->viewNameAliases = [
-			'cpanel'             => 'ControlPanel',
+			'cpanel' => 'ControlPanel',
 		];
 	}
 
 	public function onBeforeDispatch()
 	{
+		$this->checkAndFixDatabase();
 		$this->onBeforeDispatchViewAliases();
 
 		if (!$this->container->platform->authorise('core.manage', 'com_docimport'))
@@ -96,5 +99,24 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 
 		// Load common CSS and JavaScript
 		\JHtml::_('jquery.framework');
+	}
+
+	/**
+	 * Checks the database for missing / outdated tables and runs the appropriate SQL scripts if necessary.
+	 *
+	 * @return  void
+	 */
+	private function checkAndFixDatabase()
+	{
+		$db          = $this->container->platform->getDbo();
+		$dbInstaller = new Installer($db, JPATH_ADMINISTRATOR . '/components/' . $this->container->componentName . '/sql/xml');
+
+		try
+		{
+			$dbInstaller->updateSchema();
+		}
+		catch (\Exception $e)
+		{
+		}
 	}
 }
