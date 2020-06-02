@@ -33,6 +33,36 @@ Container::getInstance('com_docimport');
 class DocimportRouter extends RouterBase
 {
 	/**
+	 * Precondition the query.
+	 *
+	 * This adds an Itemid if one is not already specified.
+	 *
+	 * @param   array  $query
+	 *
+	 * @return  array
+	 *
+	 * @throws  Exception
+	 * @since   3.3.1
+	 */
+	public function preprocess($query)
+	{
+		// First, try to find a suitable Itemid using our legacy route building method
+		$temp = array_merge($query);
+		$this->build($temp);
+
+		$itemid = isset($temp['Itemid']) ? $temp['Itemid'] : null;
+
+		// If I've found an Itemid adjust the query
+		if ($itemid)
+		{
+			$query['Itemid'] = $itemid;
+		}
+
+		return $query;
+	}
+
+
+	/**
 	 * Build method for URLs
 	 * This method is meant to transform the query parameters into a more human
 	 * readable form. It is only executed when SEF mode is switched on.
