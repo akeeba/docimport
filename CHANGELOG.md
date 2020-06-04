@@ -10,6 +10,10 @@
 
 * Implement Joomla! 4 routing. (gh-23) 
 
+**Bug fixes**
+
+* Smart Search plugin broken under Joomla 4
+
 # 2.1.1
 
 **Bug fixes**

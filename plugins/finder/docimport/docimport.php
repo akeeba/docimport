@@ -8,8 +8,8 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-JLoader::import('joomla.plugin.plugin');
-JLoader::import('joomla.application.component.helper');
+use Joomla\CMS\Router\Router;
+use Joomla\CMS\Uri\Uri;
 
 // Load the base adapter.
 require_once JPATH_ADMINISTRATOR . '/components/com_finder/helpers/indexer/adapter.php';
@@ -195,7 +195,7 @@ class plgFinderDocimport extends FinderIndexerAdapter
 		// Build the necessary route and path information.
 		$item->url   = 'index.php?option=com_docimport&view=Article&id=' . $item->id;
 		$item->route = $item->url;
-		$item->path  = FinderIndexerHelper::getContentPath($item->route);
+		$item->path  = $this->getContentPath($item->route);
 
 		// Translate the state. Articles should only be published if the category is published.
 		$item->state = $this->translateState($item->enabled, $item->cat_state);
@@ -330,5 +330,35 @@ class plgFinderDocimport extends FinderIndexerAdapter
 		$item->layout = $this->layout;
 
 		return $item;
+	}
+
+	/**
+	 * Method to get the path (SEF route) for a content item.
+	 *
+	 * @param   string  $url  The non-SEF route to the content item.
+	 *
+	 * @return  string  The path for the content item.
+	 */
+	private function getContentPath($url)
+	{
+		static $router;
+
+		if (method_exists(FinderIndexerHelper::class, 'getContentPath'))
+		{
+			return FinderIndexerHelper::getContentPath($url);
+		}
+
+		// Only get the router once.
+		if (!($router instanceof Router))
+		{
+			$router = Router::getInstance('site');
+		}
+
+		// Build the relative route.
+		$uri   = $router->build($url);
+		$route = $uri->toString(['path', 'query', 'fragment']);
+		$route = str_replace(Uri::base(true) . '/', '', $route);
+
+		return $route;
 	}
 }
