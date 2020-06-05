@@ -13,6 +13,7 @@
 **Bug fixes**
 
 * Smart Search plugin broken under Joomla 4
+* Unhandled exception page was incompatible with Joomla 4
 
 # 2.1.1
 
