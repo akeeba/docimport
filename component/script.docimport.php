@@ -18,18 +18,25 @@ class Pkg_DocimportInstallerScript
 	protected $packageName = 'pkg_docimport';
 
 	/**
+	 * The name of our component, e.g. com_example. Used for dependency tracking.
+	 *
+	 * @var  string
+	 */
+	protected $componentName = 'com_docimport';
+
+	/**
 	 * The minimum PHP version required to install this extension
 	 *
 	 * @var   string
 	 */
-	protected $minimumPHPVersion = '5.6.0';
+	protected $minimumPHPVersion = '7.1.0';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
 	 *
 	 * @var   string
 	 */
-	protected $minimumJoomlaVersion = '3.8.0';
+	protected $minimumJoomlaVersion = '3.9.0';
 
 	/**
 	 * The maximum Joomla! version this extension can be installed on
@@ -46,6 +53,16 @@ class Pkg_DocimportInstallerScript
 	 */
 	protected $extensionsToEnable = array(
     );
+
+	/**
+	 * Like above, but enable these extensions on installation OR update. Use this sparingly. It overrides the
+	 * preferences of the user. Ideally, this should only be used for installer plugins.
+	 *
+	 * @var array
+	 */
+	protected $extensionsToAlwaysEnable = [
+		// ['plugin', 'foobar', 1, 'installer'],
+	];
 
 	/**
 	 * =================================================================================================================
@@ -95,11 +112,22 @@ class Pkg_DocimportInstallerScript
 			return false;
 		}
 
-		// Try to install FOF. We need to do this in preflight to make sure that FOF is available when we install our
-		// component. The reason being that the component's installation script extends FOF's InstallScript class.
-		// We can't use a <file> tag in our package manifest because FOF's package is *supposed* to fail to install if
-		// a newer version is already installed. This would unfortunately cancel the installation of the entire package,
-		// so we have to get a bit tricky.
+		// HHVM made sense in 2013, now PHP 7 is a way better solution than an hybrid PHP interpreter
+		if (defined('HHVM_VERSION'))
+		{
+			$msg = "<p>We have detected that you are running HHVM instead of PHP. This software WILL NOT WORK properly on HHVM. Please switch to PHP 7 instead.</p>";
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		/**
+		 * Try to install FOF. We need to do this in preflight to make sure that FOF is available when we install our
+		 * component. The reason being that the component's installation script extends FOF's InstallScript class.
+		 * We can't use a <file> tag in our package manifest because FOF's package is *supposed* to fail to install if
+		 * a newer version is already installed. This would unfortunately cancel the installation of the entire package,
+		 * so we have to get a bit tricky.
+		 */
 		$this->installOrUpdateFOF($parent);
 
 		return true;
@@ -110,19 +138,46 @@ class Pkg_DocimportInstallerScript
 	 * or updating your component. This is the last chance you've got to perform any additional installations, clean-up,
 	 * database updates and similar housekeeping functions.
 	 *
-	 * @param   string                       $type   install, update or discover_update
-	 * @param   \JInstallerAdapterComponent  $parent Parent object
+	 * @param   string                       $type    install, update or discover_update
+	 * @param   \JInstallerAdapterComponent  $parent  Parent object
 	 */
 	public function postflight($type, $parent)
 	{
+		// Always enable these extensions
+		if (isset($this->extensionsToAlwaysEnable) && !empty($this->extensionsToAlwaysEnable))
+		{
+			$this->enableExtensions($this->extensionsToAlwaysEnable);
+		}
+
+		/**
+		 * Try to install FEF. We only need to do this in postflight. A failure, while detrimental to the display of the
+		 * extension, is non-fatal to the installation and can be rectified by manual installation of the FEF package.
+		 * We can't use a <file> tag in our package manifest because FEF's package is *supposed* to fail to install if
+		 * a newer version is already installed. This would unfortunately cancel the installation of the entire package,
+		 * so we have to get a bit tricky.
+		 */
+		$this->installOrUpdateFEF($parent);
+
+		/**
+		 * Clean up the obsolete package update sites.
+		 *
+		 * If you specify a new update site location in the XML manifest Joomla will install it in the #__update_sites
+		 * table but it will NOT remove the previous update site. This method removes the old update sites which are
+		 * left behind by Joomla.
+		 */
+		if ($type !== 'install')
+		{
+			$this->removeObsoleteUpdateSites();
+		}
+
 		/**
 		 * Clean the cache after installing the package.
 		 *
 		 * See bug report https://github.com/joomla/joomla-cms/issues/16147
 		 */
-		$conf = \JFactory::getConfig();
-		$clearGroups = array('_system', 'com_modules', 'mod_menu', 'com_plugins', 'com_modules');
-		$cacheClients = array(0, 1);
+		$conf         = \JFactory::getConfig();
+		$clearGroups  = ['_system', 'com_modules', 'mod_menu', 'com_plugins', 'com_modules'];
+		$cacheClients = [0, 1];
 
 		foreach ($clearGroups as $group)
 		{
@@ -130,10 +185,10 @@ class Pkg_DocimportInstallerScript
 			{
 				try
 				{
-					$options = array(
+					$options = [
 						'defaultgroup' => $group,
-						'cachebase' => ($client_id) ? JPATH_ADMINISTRATOR . '/cache' : $conf->get('cache_path', JPATH_SITE . '/cache')
-					);
+						'cachebase'    => ($client_id) ? JPATH_ADMINISTRATOR . '/cache' : $conf->get('cache_path', JPATH_SITE . '/cache'),
+					];
 
 					/** @var JCache $cache */
 					$cache = \JCache::getInstance('callback', $options);
@@ -158,7 +213,7 @@ class Pkg_DocimportInstallerScript
 	}
 
 	/**
-	 * Tuns on installation (but not on upgrade). This happens in install and discover_install installation routes.
+	 * Runs on installation (but not on upgrade). This happens in install and discover_install installation routes.
 	 *
 	 * @param   \JInstallerAdapterPackage  $parent  Parent object
 	 *
@@ -191,6 +246,24 @@ class Pkg_DocimportInstallerScript
 		class_exists('FOF30\\Utils\\InstallScript', true);
 		class_exists('FOF30\\Database\\Installer', true);
 
+		/**
+		 * uninstall() is called before the component is uninstalled. Therefore there is a dependency to FOF 3 which
+		 * prevents FOF 3 from being removed at this point. Therefore we have to remove the dependency before removing
+		 * the component and hope nothing goes wrong.
+		 */
+		$this->removeDependency('fof30', $this->componentName);
+
+		/**
+		 * uninstall() is called before the component is uninstalled. Therefore there is a dependency to FEF which
+		 * prevents FEF from being removed at this point. Therefore we have to remove the dependency before removing
+		 * the component and hope nothing goes wrong.
+		 */
+		$this->removeDependency('file_fef', $this->componentName);
+
+		// The try to uninstall FEF. The uninstallation might fail if there are other extensions depending
+		// on it. That would cause the entire package uninstallation to fail, hence the need for special handling.
+		$this->uninstallFEF($parent);
+
 		// Then try to uninstall the FOF library. The uninstallation might fail if there are other extensions depending
 		// on it. That would cause the entire package uninstallation to fail, hence the need for special handling.
 		$this->uninstallFOF($parent);
@@ -209,13 +282,13 @@ class Pkg_DocimportInstallerScript
 	private function installOrUpdateFOF($parent)
 	{
 		// Get the path to the FOF package
-		$sourcePath = $parent->getParent()->getPath('source');
+		$sourcePath    = $parent->getParent()->getPath('source');
 		$sourcePackage = $sourcePath . '/lib_fof30.zip';
 
 		// Extract and install the package
-		$package = JInstallerHelper::unpack($sourcePackage);
-		$tmpInstaller  = new JInstaller;
-		$error = null;
+		$package      = JInstallerHelper::unpack($sourcePackage);
+		$tmpInstaller = new JInstaller;
+		$error        = null;
 
 		try
 		{
@@ -224,7 +297,7 @@ class Pkg_DocimportInstallerScript
 		catch (\Exception $e)
 		{
 			$installResult = false;
-			$error = $e->getMessage();
+			$error         = $e->getMessage();
 		}
 
 		// Try to include FOF. If that fails then the FOF package isn't installed because its installation failed, not
@@ -270,10 +343,10 @@ class Pkg_DocimportInstallerScript
 		$db = $parent->getParent()->getDbo();
 
 		$query = $db->getQuery(true)
-		            ->select('extension_id')
-		            ->from('#__extensions')
-		            ->where('type = ' . $db->quote('library'))
-		            ->where('element = ' . $db->quote('lib_fof30'));
+			->select('extension_id')
+			->from('#__extensions')
+			->where('type = ' . $db->quote('library'))
+			->where('element = ' . $db->quote('lib_fof30'));
 
 		$db->setQuery($query);
 		$id = $db->loadResult();
@@ -294,13 +367,93 @@ class Pkg_DocimportInstallerScript
 	}
 
 	/**
+	 * Tries to install or update FEF. The FEF files package installation can fail if there's a newer version
+	 * installed.
+	 *
+	 * @param   \JInstallerAdapterPackage  $parent
+	 */
+	private function installOrUpdateFEF($parent)
+	{
+		// Get the path to the FOF package
+		$sourcePath    = $parent->getParent()->getPath('source');
+		$sourcePackage = $sourcePath . '/file_fef.zip';
+
+		// Extract and install the package
+		$package      = JInstallerHelper::unpack($sourcePackage);
+		$tmpInstaller = new JInstaller;
+		$error        = null;
+
+		try
+		{
+			$installResult = $tmpInstaller->install($package['dir']);
+		}
+		catch (\Exception $e)
+		{
+			$installResult = false;
+			$error         = $e->getMessage();
+		}
+	}
+
+	/**
+	 * Try to uninstall the FEF package. We don't go through the Joomla! package uninstallation since we can expect the
+	 * uninstallation of the FEF library to fail if other software depends on it.
+	 *
+	 * @param   JInstallerAdapterPackage  $parent
+	 */
+	private function uninstallFEF($parent)
+	{
+		// Check dependencies on FOF
+		$dependencyCount = count($this->getDependencies('file_fef'));
+
+		if ($dependencyCount)
+		{
+			$msg = "<p>You have $dependencyCount extension(s) depending on this version of Akeeba FEF. The package cannot be uninstalled unless these extensions are uninstalled first.</p>";
+
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return;
+		}
+
+		$tmpInstaller = new JInstaller;
+
+		$db = $parent->getParent()->getDbo();
+
+		$query = $db->getQuery(true)
+			->select('extension_id')
+			->from('#__extensions')
+			->where('type = ' . $db->quote('file'))
+			->where('element = ' . $db->quote('file_fef'));
+
+		$db->setQuery($query);
+		$id = $db->loadResult();
+
+		if (!$id)
+		{
+			return;
+		}
+
+		try
+		{
+			$tmpInstaller->uninstall('file', $id, 0);
+		}
+		catch (\Exception $e)
+		{
+			// We can expect the uninstallation to fail if there are other extensions depending on the FOF library.
+		}
+	}
+
+
+	/**
 	 * Enable modules and plugins after installing them
 	 */
-	private function enableExtensions()
+	private function enableExtensions($extensions = [])
 	{
-		$db = JFactory::getDbo();
+		if (empty($extensions))
+		{
+			$extensions = $this->extensionsToEnable;
+		}
 
-		foreach ($this->extensionsToEnable as $ext)
+		foreach ($extensions as $ext)
 		{
 			$this->enableExtension($ext[0], $ext[1], $ext[2], $ext[3]);
 		}
@@ -316,13 +469,20 @@ class Pkg_DocimportInstallerScript
 	 */
 	private function enableExtension($type, $name, $client = 1, $group = null)
 	{
-		$db = JFactory::getDbo();
+		try
+		{
+			$db    = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->update('#__extensions')
+				->set($db->qn('enabled') . ' = ' . $db->q(1))
+				->where('type = ' . $db->quote($type))
+				->where('element = ' . $db->quote($name));
+		}
+		catch (\Exception $e)
+		{
+			return;
+		}
 
-		$query = $db->getQuery(true)
-					->update('#__extensions')
-					->set($db->qn('enabled') . ' = ' . $db->q(1))
-		            ->where('type = ' . $db->quote($type))
-		            ->where('element = ' . $db->quote($name));
 
 		switch ($type)
 		{
@@ -348,10 +508,9 @@ class Pkg_DocimportInstallerScript
 				break;
 		}
 
-		$db->setQuery($query);
-
 		try
 		{
+			$db->setQuery($query);
 			$db->execute();
 		}
 		catch (\Exception $e)
@@ -366,14 +525,14 @@ class Pkg_DocimportInstallerScript
 	 *
 	 * @return  array  The dependencies
 	 */
-	protected function getDependencies($package)
+	private function getDependencies($package)
 	{
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true)
-		            ->select($db->qn('value'))
-		            ->from($db->qn('#__akeeba_common'))
-		            ->where($db->qn('key') . ' = ' . $db->q($package));
+			->select($db->qn('value'))
+			->from($db->qn('#__akeeba_common'))
+			->where($db->qn('key') . ' = ' . $db->q($package));
 
 		try
 		{
@@ -382,12 +541,12 @@ class Pkg_DocimportInstallerScript
 
 			if (empty($dependencies))
 			{
-				$dependencies = array();
+				$dependencies = [];
 			}
 		}
 		catch (Exception $e)
 		{
-			$dependencies = array();
+			$dependencies = [];
 		}
 
 		return $dependencies;
@@ -399,13 +558,13 @@ class Pkg_DocimportInstallerScript
 	 * @param   string  $package       The package
 	 * @param   array   $dependencies  The dependencies list
 	 */
-	protected function setDependencies($package, array $dependencies)
+	private function setDependencies($package, array $dependencies)
 	{
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true)
-		            ->delete('#__akeeba_common')
-		            ->where($db->qn('key') . ' = ' . $db->q($package));
+			->delete('#__akeeba_common')
+			->where($db->qn('key') . ' = ' . $db->q($package));
 
 		try
 		{
@@ -416,10 +575,10 @@ class Pkg_DocimportInstallerScript
 			// Do nothing if the old key wasn't found
 		}
 
-		$object = (object)array(
-			'key' => $package,
-			'value' => json_encode($dependencies)
-		);
+		$object = (object) [
+			'key'   => $package,
+			'value' => json_encode($dependencies),
+		];
 
 		try
 		{
@@ -437,7 +596,7 @@ class Pkg_DocimportInstallerScript
 	 * @param   string  $package     The package
 	 * @param   string  $dependency  The dependency to add
 	 */
-	protected function addDependency($package, $dependency)
+	private function addDependency($package, $dependency)
 	{
 		$dependencies = $this->getDependencies($package);
 
@@ -455,7 +614,7 @@ class Pkg_DocimportInstallerScript
 	 * @param   string  $package     The package
 	 * @param   string  $dependency  The dependency to remove
 	 */
-	protected function removeDependency($package, $dependency)
+	private function removeDependency($package, $dependency)
 	{
 		$dependencies = $this->getDependencies($package);
 
@@ -476,10 +635,146 @@ class Pkg_DocimportInstallerScript
 	 *
 	 * @return bool
 	 */
-	protected function hasDependency($package, $dependency)
+	private function hasDependency($package, $dependency)
 	{
 		$dependencies = $this->getDependencies($package);
 
 		return in_array($dependency, $dependencies);
 	}
+
+	/**
+	 * Removes the obsolete update sites for the component, since now we're dealing with a package.
+	 *
+	 * Controlled by componentName, packageName and obsoleteUpdateSiteLocations
+	 *
+	 * Depends on getExtensionId, getUpdateSitesFor
+	 *
+	 * @return  void
+	 */
+	private function removeObsoleteUpdateSites()
+	{
+		// Initialize
+		$deleteIDs = [];
+
+		// Get package ID
+		$packageID = $this->findPackageExtensionID($this->packageName);
+
+		if (!$packageID)
+		{
+			return;
+		}
+
+		// All update sites for the packgae
+		$deleteIDs = $this->getUpdateSitesFor($packageID);
+
+		if (empty($deleteIDs))
+		{
+			$deleteIDs = [];
+		}
+
+		if (count($deleteIDs) <= 1)
+		{
+			return;
+		}
+
+		$deleteIDs = array_unique($deleteIDs);
+
+		// Remove the latest update site, the one we just installed
+		array_pop($deleteIDs);
+
+		$db = \Joomla\CMS\Factory::getDbo();
+
+		if (empty($deleteIDs) || !count($deleteIDs))
+		{
+			return;
+		}
+
+		// Delete the remaining update sites
+		$deleteIDs = array_map([$db, 'q'], $deleteIDs);
+
+		$query = $db->getQuery(true)
+			->delete($db->qn('#__update_sites'))
+			->where($db->qn('update_site_id') . ' IN(' . implode(',', $deleteIDs) . ')');
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// Do nothing.
+		}
+
+		$query = $db->getQuery(true)
+			->delete($db->qn('#__update_sites_extensions'))
+			->where($db->qn('update_site_id') . ' IN(' . implode(',', $deleteIDs) . ')');
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// Do nothing.
+		}
+	}
+
+	/**
+	 * Gets the ID of an extension
+	 *
+	 * @param   string  $element  Package extension element, e.g. pkg_foo
+	 *
+	 * @return  int  Extension ID or 0 on failure
+	 */
+	private function findPackageExtensionID($element)
+	{
+		$db    = \Joomla\CMS\Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select($db->qn('extension_id'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('element') . ' = ' . $db->q($element))
+			->where($db->qn('type') . ' = ' . $db->q('package'));
+
+		try
+		{
+			$id = $db->setQuery($query, 0, 1)->loadResult();
+		}
+		catch (Exception $e)
+		{
+			return 0;
+		}
+
+		return empty($id) ? 0 : (int) $id;
+	}
+
+	/**
+	 * Returns the update site IDs for the specified Joomla Extension ID.
+	 *
+	 * @param   int  $eid  Extension ID for which to retrieve update sites
+	 *
+	 * @return  array  The IDs of the update sites
+	 */
+	private function getUpdateSitesFor($eid = null)
+	{
+		$db    = \Joomla\CMS\Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select($db->qn('s.update_site_id'))
+			->from($db->qn('#__update_sites', 's'))
+			->innerJoin($db->qn('#__update_sites_extensions', 'e') . 'ON(' . $db->qn('e.update_site_id') .
+				' = ' . $db->qn('s.update_site_id') . ')'
+			)
+			->where($db->qn('e.extension_id') . ' = ' . $db->q($eid));
+
+		try
+		{
+			$ret = $db->setQuery($query)->loadColumn();
+		}
+		catch (Exception $e)
+		{
+			return [];
+		}
+
+		return empty($ret) ? [] : $ret;
+	}
+
 }

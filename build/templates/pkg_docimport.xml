@@ -39,6 +39,6 @@
 
     <!-- Update servers -->
     <updateservers>
-        <server type="extension" priority="1" name="Akeeba DocImport Updates">https://raw.githubusercontent.com/akeeba/docimport/main/update/pkg_docimport_updates.xml</server>
+        <server type="extension" priority="1" name="Akeeba DocImport Updates">https://cdn.akeebabackup.com/updates/pkgdocimport.xml</server>
     </updateservers>
 </extension>
