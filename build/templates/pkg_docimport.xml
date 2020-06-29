@@ -11,10 +11,10 @@
     <creationDate>##DATE##</creationDate>
     <packagename>docimport</packagename>
     <version>##VERSION##</version>
-    <url>https://www.akeebabackup.com</url>
+    <url>https://www.akeeba.com</url>
     <packager>Akeeba Ltd</packager>
-    <packagerurl>https://www.akeebabackup.com</packagerurl>
-    <copyright>Copyright (c)2011-2019 Nicholas K. Dionysopoulos</copyright>
+    <packagerurl>https://www.akeeba.com</packagerurl>
+    <copyright>Copyright (c)2011-2020 Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
     <description>Akeeba DocImport installation package v.##VERSION##</description>
 

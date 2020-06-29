@@ -4,7 +4,7 @@ COPYRIGHT AND DISCLAIMER
 ================================================================================
 
 Akeeba DocImport3 - DocBook XML to HTML easy publishing
-Copyright (C) 2011-2019  Nicholas K. Dionysopoulos / AkeebaBackup.com
+Copyright (C) 2011-2020  Nicholas K. Dionysopoulos / Akeeba Ltd
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@ our ZIP packages.
 CONTACT AND SUPPORT
 ================================================================================
 
-NO SUPPORT – THIS IS AN INTERNAL PROJECT FOR AKEEBABACKUP.COM
+NO SUPPORT – THIS IS AN INTERNAL PROJECT FOR AKEEBA.COM
 
 ================================================================================
 DOCUMENTATION AND DOWNLOADS
 ================================================================================
 
-NO DOCUMENTATION – THIS IS AN INTERNAL PROJECT FOR AKEEBABACKUP.COM
+NO DOCUMENTATION – THIS IS AN INTERNAL PROJECT FOR AKEEBA.COM
 
 You can build your installable packages following the instructions in our GitHub
 repository, https://github.com/akeeba/docimport

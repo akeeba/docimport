@@ -9,10 +9,10 @@
     <name>plg_search_docimport</name>
     <author>Nicholas K. Dionysopoulos</author>
     <creationDate>2020-06-23</creationDate>
-    <copyright>Copyright (C) 2011-2019 AkeebaBackup.com. All rights reserved.</copyright>
+    <copyright>Copyright (C) 2011-2020 Akeeba Ltd. All rights reserved.</copyright>
     <license>GNU General Public License version 3 or later</license>
     <authorEmail>nikosdion@gmail.com</authorEmail>
-    <authorUrl>www.AkeebaBackup.com</authorUrl>
+    <authorUrl>www.akeeba.com</authorUrl>
     <version>2.1.2</version>
     <description>PLG_SEARCH_DOCIMPORT_XML_DESCRIPTION</description>
     <files>

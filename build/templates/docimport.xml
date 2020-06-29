@@ -9,9 +9,9 @@
 	<name>DocImport</name>
 	<creationDate>##DATE##</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
-	<authorEmail>nicholas@akeebabackup.com</authorEmail>
-	<authorUrl>http://www.akeebabackup.com</authorUrl>
-	<copyright>Copyright (c)2011-2019 Nicholas K. Dionysopoulos</copyright>
+	<authorEmail>nicholas@akeeba.com</authorEmail>
+	<authorUrl>https://www.akeeba.com</authorUrl>
+	<copyright>Copyright (c)2011-2020 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU/GPL v3 or later</license>
 	<version>##VERSION##</version>
 	<description>Akeeba DocImport3 v.##VERSION##</description>
