@@ -1,3 +1,12 @@
+# 2.1.3
+
+**Miscellaneous changes**
+
+* Update URLs to point to akeeba.com
+* Update CDN URL
+* PHP version warning can now handle "too new" PHP versions
+* Improved unhandled PHP exception error page
+
 # 2.1.2
 
 **New features**
