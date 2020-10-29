@@ -2,6 +2,7 @@
 
 **Miscellaneous changes**
 
+* Replace zero datetime with nullable datetime (gh-26)
 * Update URLs to point to akeeba.com
 * Update CDN URL
 * PHP version warning can now handle "too new" PHP versions

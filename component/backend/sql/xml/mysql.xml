@@ -31,11 +31,11 @@ CREATE TABLE `#__docimport_articles` (
   `meta_tags` varchar(2048) DEFAULT NULL,
   `last_timestamp` int(11) DEFAULT NULL,
   `enabled` tinyint(3) NOT NULL DEFAULT '1',
-  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_on` datetime NULL DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT '0',
-  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_on` datetime NULL DEFAULT NULL,
   `modified_by` int(11) NOT NULL DEFAULT '0',
-  `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_on` datetime NULL DEFAULT NULL,
   `locked_by` int(11) NOT NULL DEFAULT '0',
    `ordering` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`docimport_article_id`),
@@ -58,11 +58,11 @@ CREATE TABLE `#__docimport_categories` (
   `last_timestamp` bigint(20) unsigned NOT NULL DEFAULT '0',
   `enabled` tinyint(3) NOT NULL DEFAULT '1',
   `ordering` int(11) NOT NULL DEFAULT 0,
-  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_on` datetime NULL DEFAULT NULL,
   `created_by` int(11) NOT NULL DEFAULT '0',
-  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_on` datetime NULL DEFAULT NULL,
   `modified_by` int(11) NOT NULL DEFAULT '0',
-  `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `locked_on` datetime NULL DEFAULT NULL,
   `locked_by` int(11) NOT NULL DEFAULT '0',
   `language` varchar(255) NOT NULL DEFAULT '*',
   `access` int(11) NOT NULL DEFAULT '0',
@@ -109,6 +109,67 @@ ALTER TABLE #__categories ADD FULLTEXT INDEX `#__idx_categories_search_descripti
             <query><![CDATA[
 ALTER TABLE #__categories ADD FULLTEXT INDEX `#__idx_categories_search_title` (`title`);
             ]]></query>
+        </action>
+
+        <!-- Replace zero datetime with nullable datetime -->
+        <action table="#__docimport_articles" canfail="1">
+            <condition type="nullable" value="created_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_articles` MODIFY `created_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_articles` SET `created_on` = NULL WHERE `created_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__docimport_articles" canfail="1">
+            <condition type="nullable" value="modified_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_articles` MODIFY `modified_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_articles` SET `modified_on` = NULL WHERE `modified_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__docimport_articles" canfail="1">
+            <condition type="nullable" value="locked_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_articles` MODIFY `locked_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_articles` SET `locked_on` = NULL WHERE `locked_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__docimport_categories" canfail="1">
+            <condition type="nullable" value="created_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_categories` MODIFY `created_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_categories` SET `created_on` = NULL WHERE `created_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__docimport_categories" canfail="1">
+            <condition type="nullable" value="modified_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_categories` MODIFY `modified_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_categories` SET `modified_on` = NULL WHERE `modified_on` = '0000-00-00 00:00:00';
+      ]]></query>
+        </action>
+
+        <action table="#__docimport_categories" canfail="1">
+            <condition type="nullable" value="locked_on" operator="not"/>
+            <query><![CDATA[
+      ALTER TABLE `#__docimport_categories` MODIFY `locked_on` DATETIME NULL DEFAULT NULL;
+      ]]></query>
+            <query><![CDATA[
+      UPDATE `#__docimport_categories` SET `locked_on` = NULL WHERE `locked_on` = '0000-00-00 00:00:00';
+      ]]></query>
         </action>
     </sql>
 </schema>
