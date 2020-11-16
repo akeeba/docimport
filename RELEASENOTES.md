@@ -7,21 +7,16 @@ We are developing, testing and using Akeeba DocImport using the latest version o
 
 Akeeba DocImport should be compatible with:
 * Joomla! 3.9, 4.0
-* PHP 7.1, 7.2, 7.3, 7.4.
+* PHP 7.1, 7.2, 7.3, 7.4, 8.0.
+
+At the time of this writing PHP 8.0 has not been released yet. As a result support for it is considered tentative.
 
 ## Changelog
 
-**New features**
-
-* Common PHP version warning scripts
-* Dark Mode
-* Joomla 4 compatibility
-
 **Miscellaneous changes**
 
-* Implement Joomla! 4 routing. (gh-23) 
-
-**Bug fixes**
-
-* Smart Search plugin broken under Joomla 4
-* Unhandled exception page was incompatible with Joomla 4
+* Replace zero datetime with nullable datetime (gh-26)
+* Update URLs to point to akeeba.com
+* Update CDN URL
+* PHP version warning can now handle "too new" PHP versions
+* Improved unhandled PHP exception error page
