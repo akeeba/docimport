@@ -1,3 +1,9 @@
+# 2.1.4
+
+**Bug fixes**
+
+* Joomla 4 beta 6 changed how sessions work, breaking everything
+
 # 2.1.3
 
 **Miscellaneous changes**
