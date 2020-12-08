@@ -1,5 +1,9 @@
 # 2.1.4
 
+**Miscellaneous changes**
+
+* Add PHP 8.0 in the list of known PHP versions, recommend PHP 7.4 or later
+
 **Bug fixes**
 
 * Joomla 4 beta 6 changed how sessions work, breaking everything
