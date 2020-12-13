@@ -1,7 +1,8 @@
 DocImport 2.1.4
 ================================================================================
 ~ Add PHP 8.0 in the list of known PHP versions, recommend PHP 7.4 or later
-# Joomla 4 beta 6 changed how sessions work, breaking everything
+# [HIGH] Joomla 4 beta 6 changed how sessions work, breaking everything
+# [HIGH] FEF is missing from the installation package
 
 DocImport  2.1.3
 ================================================================================
