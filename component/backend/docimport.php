@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 define('AKEEBA_COMMON_WRONGPHP', 1);
-$minPHPVersion         = '5.6.0';
+$minPHPVersion         = '7.2.0';
 $recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba DocImport';
 

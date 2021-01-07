@@ -13,7 +13,7 @@ defined('_JEXEC') or die();
 {{-- Old PHP version reminder --}}
 @include('admin:com_docimport/Common/phpversion_warning', [
 	'softwareName'  => 'Akeeba DocImport',
-	'minPHPVersion' => '5.6.0',
+	'minPHPVersion' => '7.2.0',
 ])
 
 @extends('any:lib_fof30/Common/browse')
