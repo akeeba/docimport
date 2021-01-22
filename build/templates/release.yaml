@@ -37,7 +37,7 @@ connections:
 # Release source files configuration.
 files:
   -
-    title: 'Admin Tools Core'
+    title: 'DocImport'
     connection: s3
     source: '%%RELEASEDIR%%/pkg_*.zip'
     access: 1
@@ -45,7 +45,7 @@ files:
 # Update sources
 updates:
   -
-    title: 'Admin Tools Core updates'
+    title: 'DocImport Updates'
     connection: s3
     directory: '/updates'
     stream: 16
