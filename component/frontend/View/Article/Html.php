@@ -10,7 +10,7 @@ namespace Akeeba\DocImport\Site\View\Article;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use FOF30\View\DataView\Html as BaseView;
+use FOF40\View\DataView\Html as BaseView;
 
 class Html extends BaseView
 {

@@ -7,8 +7,8 @@
 
 namespace Akeeba\DocImport\Admin\Model;
 
-use FOF30\Container\Container;
-use FOF30\Model\DataModel;
+use FOF40\Container\Container;
+use FOF40\Model\DataModel;
 use JLoader, JFolder;
 
 defined('_JEXEC') or die();
@@ -33,9 +33,9 @@ defined('_JEXEC') or die();
  * @method  $this  docimport_article_id()   docimport_article_id(int $v)
  * @method  $this  docimport_category_id()  docimport_category_id(int $v)
  * @method  $this  category()               category(int $v)
- * @method  $this  slug()                   slug(string $v)
- * @method  $this  title()                  title(string $v)
- * @method  $this  search()                 search(string $v)
+ * @method  $this  slug()                   slug(string|array $v)
+ * @method  $this  title()                  title(string|array $v)
+ * @method  $this  search()                 search(string|array $v)
  * @method  $this  language()               language(array $v)
  *
  * Relations:

@@ -11,7 +11,7 @@ namespace Akeeba\DocImport\Site\Model;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Admin\Model\Categories as AdminCategories;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 class Categories extends AdminCategories
 {

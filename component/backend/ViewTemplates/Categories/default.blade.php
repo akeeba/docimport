@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 	'minPHPVersion' => '7.2.0',
 ])
 
-@extends('any:lib_fof30/Common/browse')
+@extends('any:lib_fof40/Common/browse')
 
 @section('browse-filters')
     {{-- Title --}}
@@ -26,17 +26,17 @@ defined('_JEXEC') or die();
 
     {{-- Published --}}
     <div class="akeeba-filter-element akeeba-form-group">
-        {{ \FOF30\Utils\FEFHelper\BrowseView::publishedFilter('enabled', 'JENABLED') }}
+        {{ \FOF40\Html\FEFHelper\BrowseView::publishedFilter('enabled', 'JENABLED') }}
     </div>
 
     {{-- Language --}}
     <div class="akeeba-filter-element akeeba-form-group">
-        @selectfilter('language', \FOF30\Utils\SelectOptions::getOptions('languages'))
+        @selectfilter('language', \FOF40\Html\SelectOptions::getOptions('languages'))
     </div>
 
     {{-- Access --}}
     <div class="akeeba-filter-element akeeba-form-group">
-        @selectfilter('access', \FOF30\Utils\SelectOptions::getOptions('access'))
+        @selectfilter('access', \FOF40\Html\SelectOptions::getOptions('access'))
     </div>
 @stop
 
@@ -46,7 +46,7 @@ defined('_JEXEC') or die();
             @sortgrid('ordering', '<i class="icon-menu-2"></i>')
         </td>
         <th width="20px">
-            @jhtml('FEFHelper.browse.checkall')
+            @jhtml('FEFHelp.browse.checkall')
         </th>
         <th>
             @sortgrid('title')
@@ -71,13 +71,13 @@ defined('_JEXEC') or die();
     @foreach($this->items as $row)
         <tr>
             <td>
-                @jhtml('FEFHelper.browse.order', 'ordering', $row->ordering)
+                @jhtml('FEFHelp.browse.order', 'ordering', $row->ordering)
             </td>
             <td>
-                @jhtml('FEFHelper.browse.id', ++$i, $row->getId())
+                @jhtml('FEFHelp.browse.id', ++$i, $row->getId())
             </td>
             <td>
-                <a href="@route(\FOF30\Utils\FEFHelper\BrowseView::parseFieldTags('index.php?option=com_docimport&view=Categories&task=edit&id=[ITEM:ID]', $row))">
+                <a href="@route(\FOF40\Html\FEFHelper\BrowseView::parseFieldTags('index.php?option=com_docimport&view=Categories&task=edit&id=[ITEM:ID]', $row))">
                     {{{ $row->title }}}
                 </a>
             </td>
@@ -106,12 +106,12 @@ defined('_JEXEC') or die();
                 </a>
             </td>
             <td>
-                @jhtml('FEFHelper.browse.published', $row->enabled, $i)
+                @jhtml('FEFHelp.browse.published', $row->enabled, $i)
             </td>
             <td>
-                {{{ \FOF30\Utils\FEFHelper\BrowseView::getOptionName($row->language, \FOF30\Utils\SelectOptions::getOptions('languages', ['none' => 'COM_DOCIMPORT_COMMON_FIELD_LANGUAGE_ALL'])) }}}
+                {{{ \FOF40\Html\FEFHelper\BrowseView::getOptionName($row->language, \FOF40\Html\SelectOptions::getOptions('languages', ['none' => 'COM_DOCIMPORT_COMMON_FIELD_LANGUAGE_ALL'])) }}}
             </td>            <td>
-                {{{ \FOF30\Utils\FEFHelper\BrowseView::getOptionName($row->access, \FOF30\Utils\SelectOptions::getOptions('access')) }}}
+                {{{ \FOF40\Html\FEFHelper\BrowseView::getOptionName($row->access, \FOF40\Html\SelectOptions::getOptions('access')) }}}
             </td>
         </tr>
     @endforeach

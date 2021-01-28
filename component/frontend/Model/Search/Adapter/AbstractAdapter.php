@@ -11,8 +11,9 @@ namespace Akeeba\DocImport\Site\Model\Search\Adapter;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Search\Result\ResultInterface;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 use JDatabaseQuery;
+use Joomla\Database\DatabaseQuery;
 
 /**
  * Abstract search adapter class
@@ -124,7 +125,7 @@ abstract class AbstractAdapter implements AdapterInterface
 		// Search the database
 		try
 		{
-			return (int)($db->setQuery($query)->loadResult());
+			return (int) ($db->setQuery($query)->loadResult());
 		}
 		catch (\Exception $e)
 		{
@@ -145,8 +146,9 @@ abstract class AbstractAdapter implements AdapterInterface
 	/**
 	 * Filters a query by front-end language
 	 *
-	 * @param   \JDatabaseQuery  $query          The query to filter
-	 * @param   string           $languageField  The name of the language field in the query, default is "language"
+	 * @param   \JDatabaseQuery|DatabaseQuery  $query          The query to filter
+	 * @param   string                         $languageField  The name of the language field in the query, default is
+	 *                                                         "language"
 	 *
 	 * @return  void  The $query object is modified directly
 	 *
@@ -187,7 +189,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
 		$lang_filter_params = new \JRegistry($lang_filter_plugin->params);
 
-		$languages = array('*');
+		$languages = ['*'];
 
 		if ($lang_filter_params->get('remove_default_prefix'))
 		{
@@ -206,7 +208,7 @@ abstract class AbstractAdapter implements AdapterInterface
 		$languages = array_unique($languages);
 
 		// And filter the query output by these languages
-		$languages = array_map(array($query, 'quote'), $languages);
+		$languages = array_map([$query, 'quote'], $languages);
 		$query->where($query->qn($languageField) . ' IN(' . implode(',', $languages) . ')');
 	}
 

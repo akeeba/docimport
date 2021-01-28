@@ -9,8 +9,8 @@ namespace Akeeba\DocImport\Admin\Model;
 
 defined('_JEXEC') or die;
 
-use FOF30\Database\Installer;
-use FOF30\Model\Model;
+use FOF40\Database\Installer;
+use FOF40\Model\Model;
 use JRegistry;
 use JFactory;
 

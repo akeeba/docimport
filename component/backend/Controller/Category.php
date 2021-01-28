@@ -11,7 +11,7 @@ namespace Akeeba\DocImport\Admin\Controller;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Admin\Model\Xsl;
-use FOF30\Controller\DataController;
+use FOF40\Controller\DataController;
 
 class Category extends DataController
 {

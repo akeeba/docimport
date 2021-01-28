@@ -7,8 +7,8 @@
 
 namespace Akeeba\DocImport\Admin\Model;
 
-use FOF30\Container\Container;
-use FOF30\Model\DataModel;
+use FOF40\Container\Container;
+use FOF40\Model\DataModel;
 
 defined('_JEXEC') or die();
 

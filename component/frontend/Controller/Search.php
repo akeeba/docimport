@@ -10,7 +10,7 @@ namespace Akeeba\DocImport\Site\Controller;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use FOF30\Controller\Controller;
+use FOF40\Controller\Controller;
 
 class Search extends Controller
 {

@@ -14,7 +14,7 @@ use Akeeba\DocImport\Site\Model\Search\Adapter\AdapterInterface;
 use Akeeba\DocImport\Site\Model\Search\CategoriesConfiguration as CatConfig;
 use Akeeba\DocImport\Site\Model\Search\Exception\SearchSectionNotFound;
 use Akeeba\DocImport\Site\Model\Search\Result\ResultInterface;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 /**
  * Handles a singe search section (e.g. Joomla! articles)

@@ -11,7 +11,7 @@ namespace Akeeba\DocImport\Site\View\Search;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Search;
-use FOF30\View\View as BaseView;
+use FOF40\View\View as BaseView;
 use JHtml;
 use JPagination;
 use JText;

@@ -6,7 +6,7 @@
  */
 
 // Protect from unauthorized access
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 defined('_JEXEC') or die();
 

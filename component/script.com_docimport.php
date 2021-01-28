@@ -6,22 +6,24 @@
  */
 
 // no direct access
+use Joomla\CMS\Installer\Adapter\ComponentAdapter;
+
 defined('_JEXEC') or die();
 
 // Load FOF if not already loaded
-if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 {
 	throw new RuntimeException('This component requires FOF 3.0.');
 }
 
-class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
+class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 {
 	/**
 	 * The component's name
 	 *
 	 * @var   string
 	 */
-	protected $componentName = 'com_docimport';
+	public $componentName = 'com_docimport';
 
 	/**
 	 * The title of the component (printed on installation and uninstallation messages)
@@ -102,7 +104,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 		],
 	];
 
-	public function preflight($type, $parent)
+	public function preflight(string $type, ComponentAdapter $parent): bool
 	{
 		if (parent::preflight($type, $parent) === false)
 		{
@@ -122,7 +124,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 		return true;
 	}
 
-	public function postflight($type, $parent)
+	public function postflight(string $type, ComponentAdapter $parent): void
 	{
 		// Remove the update sites for this component on installation.
 		$this->removeObsoleteUpdateSites($parent);
@@ -134,7 +136,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 	/**
 	 * Renders the post-installation message
 	 */
-	protected function renderPostInstallation($parent)
+	protected function renderPostInstallation(ComponentAdapter $parent): void
 	{
 		$this->warnAboutJSNPowerAdmin();
 		?>
@@ -150,7 +152,7 @@ class Com_DocimportInstallerScript extends \FOF30\Utils\InstallScript
 		<?php
 	}
 
-	protected function renderPostUninstallation($parent)
+	protected function renderPostUninstallation(ComponentAdapter $parent): void
 	{
 		?>
 		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba DocImport

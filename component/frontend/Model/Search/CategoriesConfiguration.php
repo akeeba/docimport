@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Search\Exception\SearchAreaNotFound;
 use Akeeba\DocImport\Site\Model\Search\Exception\SearchSectionNotFound;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 class CategoriesConfiguration
 {

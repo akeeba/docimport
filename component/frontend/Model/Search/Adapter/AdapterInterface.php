@@ -11,7 +11,7 @@ namespace Akeeba\DocImport\Site\Model\Search\Adapter;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Search\Result\ResultInterface;
-use FOF30\Container\Container;
+use FOF40\Container\Container;
 
 /**
  * Search adapter interface

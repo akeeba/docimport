@@ -10,7 +10,7 @@ namespace Akeeba\DocImport\Admin\Controller;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use FOF30\Controller\DataController;
+use FOF40\Controller\DataController;
 
 class Article extends DataController
 {

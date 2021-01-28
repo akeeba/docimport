@@ -47,9 +47,7 @@
 
 defined('_JEXEC') or die();
 
-use FOF30\Utils\FEFHelper\Html as FEFHtml;
-
-/** @var  FOF30\View\DataView\Html  $this */
+/** @var  FOF40\View\DataView\Html  $this */
 
 ?>
 
@@ -108,8 +106,8 @@ use FOF30\Utils\FEFHelper\Html as FEFHtml;
             @yield('browse-filters')
         </div>
 		<div class="akeeba-filter-bar akeeba-filter-bar--right">
-			@jhtml('FEFHelper.browse.orderjs', $this->lists->order)
-			@jhtml('FEFHelper.browse.orderheader', $this)
+			@jhtml('FEFHelp.browse.orderjs', $this->lists->order)
+			@jhtml('FEFHelp.browse.orderheader', $this)
 		</div>
 	</section>
 

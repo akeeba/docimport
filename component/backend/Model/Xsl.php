@@ -7,8 +7,8 @@
 
 namespace Akeeba\DocImport\Admin\Model;
 
-use FOF30\Date\Date;
-use FOF30\Model\Model;
+use FOF40\Date\Date;
+use FOF40\Model\Model;
 use JText, JLoader, JFolder, JFile, JFactory, JApplicationHelper;
 use DOMDocument, XSLTProcessor;
 

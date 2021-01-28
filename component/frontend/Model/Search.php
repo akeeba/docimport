@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Search\CategoriesConfiguration;
 use Akeeba\DocImport\Site\Model\Search\SearchSection;
-use FOF30\Model\Model;
+use FOF40\Model\Model;
 use JApplicationCms;
 use JPagination;
 

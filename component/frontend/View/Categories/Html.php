@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Site\Model\Categories;
 use Akeeba\DocImport\Site\Model\Articles;
-use FOF30\View\DataView\Html as BaseView;
+use FOF40\View\DataView\Html as BaseView;
 use JFactory;
 
 class Html extends BaseView

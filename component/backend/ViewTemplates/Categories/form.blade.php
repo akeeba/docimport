@@ -18,7 +18,7 @@ $item = $this->getItem();
 	'minPHPVersion' => '7.2.0',
 ])
 
-@extends('any:lib_fof30/Common/edit')
+@extends('any:lib_fof40/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-container--33-66">
@@ -73,25 +73,25 @@ $item = $this->getItem();
             <div class="akeeba-form-group">
                 <label for="process_plugins">@fieldtitle('process_plugins')</label>
 
-                @jhtml('FEFHelper.select.booleanswitch', 'process_plugins', $item->process_plugins)
+                @jhtml('FEFHelp.select.booleanswitch', 'process_plugins', $item->process_plugins)
             </div>
 
             <div class="akeeba-form-group">
                 <label for="enabled">@lang('JPUBLISHED')</label>
 
-                @jhtml('FEFHelper.select.booleanswitch', 'enabled', $item->enabled)
+                @jhtml('FEFHelp.select.booleanswitch', 'enabled', $item->enabled)
             </div>
 
             <div class="akeeba-form-group">
                 <label for="language">@fieldtitle('language')</label>
 
-                {{ \FOF30\Utils\FEFHelper\BrowseView::genericSelect('language', \FOF30\Utils\SelectOptions::getOptions('languages', ['none' => 'COM_DOCIMPORT_COMMON_FIELD_LANGUAGE_ALL']), $this->getItem()->language, ['fof.autosubmit' => false, 'translate' => false]) }}
+                {{ \FOF40\Html\FEFHelper\BrowseView::genericSelect('language', \FOF40\Html\SelectOptions::getOptions('languages', ['none' => 'COM_DOCIMPORT_COMMON_FIELD_LANGUAGE_ALL']), $this->getItem()->language, ['fof.autosubmit' => false, 'translate' => false]) }}
             </div>
 
             <div class="akeeba-form-group">
                 <label for="access">@fieldtitle('access')</label>
 
-                {{ \FOF30\Utils\FEFHelper\BrowseView::genericSelect('access', \FOF30\Utils\SelectOptions::getOptions('access'), $this->getItem()->access, ['fof.autosubmit' => false, 'translate' => false]) }}
+                {{ \FOF40\Html\FEFHelper\BrowseView::genericSelect('access', \FOF40\Html\SelectOptions::getOptions('access'), $this->getItem()->access, ['fof.autosubmit' => false, 'translate' => false]) }}
             </div>
 
         </div>
@@ -104,7 +104,7 @@ $item = $this->getItem();
             </header>
 
             <div class="akeeba-noreset">
-                @jhtml('FEFHelper.edit.editor', 'description', $this->getItem()->description)
+                @jhtml('FEFHelp.edit.editor', 'description', $this->getItem()->description)
             </div>
 
         </div>

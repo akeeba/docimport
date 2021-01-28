@@ -296,7 +296,7 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 *
 	 * @param   integer $id The id of the content item.
 	 *
-	 * @return  FinderIndexerResult  A FinderIndexerResult object.
+	 * @return  FinderIndexerResult|\Joomla\Component\Finder\Administrator\Indexer\Result  A FinderIndexerResult object.
 	 *
 	 * @since   2.5
 	 * @throws  Exception on database error.

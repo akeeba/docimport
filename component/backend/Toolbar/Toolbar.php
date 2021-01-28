@@ -8,13 +8,13 @@
 namespace Akeeba\DocImport\Admin\Toolbar;
 
 use Akeeba\DocImport\Admin\Model\Articles;
-use FOF30\Model\DataModel;
+use FOF40\Model\DataModel;
 use JToolBarHelper;
 use JText;
 
 defined('_JEXEC') or die;
 
-class Toolbar extends \FOF30\Toolbar\Toolbar
+class Toolbar extends \FOF40\Toolbar\Toolbar
 {
 	public function onCategoriesBrowse()
 	{

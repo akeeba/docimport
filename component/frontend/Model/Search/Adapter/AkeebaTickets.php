@@ -11,6 +11,7 @@ namespace Akeeba\DocImport\Site\Model\Search\Adapter;
 defined('_JEXEC') or die();
 
 use JDatabaseQuery;
+use Joomla\Database\DatabaseQuery;
 
 /**
  * Akeeba Ticket System posts search adapter class
@@ -26,7 +27,7 @@ class AkeebaTickets extends AbstractAdapter
 	 * @param   string  $search     The search terms
 	 * @param   bool    $onlyCount  If try, return a COUNT(*) query instead of a results selection query
 	 *
-	 * @return  JDatabaseQuery  The query to execute
+	 * @return  JDatabaseQuery|DatabaseQuery  The query to execute
 	 */
 	protected function getQuery($search, $onlyCount)
 	{

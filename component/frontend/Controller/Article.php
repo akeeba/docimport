@@ -11,8 +11,8 @@ namespace Akeeba\DocImport\Site\Controller;
 defined('_JEXEC') or die();
 
 use Akeeba\DocImport\Admin\Model\Articles;
-use FOF30\Controller\DataController;
-use FOF30\Controller\Exception\ItemNotFound;
+use FOF40\Controller\DataController;
+use FOF40\Controller\Exception\ItemNotFound;
 
 class Article extends DataController
 {
@@ -44,7 +44,7 @@ class Article extends DataController
 		return in_array($article->category->access, $views);
 	}
 
-	protected function getCrudTask()
+	protected function getCrudTask(): string
 	{
 		$task = parent::getCrudTask();
 

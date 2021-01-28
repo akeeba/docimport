@@ -8,7 +8,7 @@
 // no direct access
 defined('_JEXEC') or die;
 
-if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
 {
 	throw new RuntimeException('FOF 3.0 is not installed', 500);
 }
@@ -29,7 +29,7 @@ if (!empty($troubleshooter))
 	$troubleshooterLinks = explode("\n", $troubleshooter);
 }
 
-$container = FOF30\Container\Container::getInstance('com_docimport', [
+$container = FOF40\Container\Container::getInstance('com_docimport', [
 	'tempInstance' => true,
 	'input'        => [
 		'savestate' => 0,

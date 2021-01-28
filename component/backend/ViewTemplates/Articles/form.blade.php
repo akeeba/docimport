@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 $item = $this->getItem();
 
 ?>
-@extends('any:lib_fof30/Common/edit')
+@extends('any:lib_fof40/Common/edit')
 
 @section('edit-form-body')
     <div class="akeeba-panel--teal">
@@ -37,13 +37,13 @@ $item = $this->getItem();
         <div class="akeeba-form-group">
             <label for="docimport_category_id">@lang('COM_DOCIMPORT_ARTICLES_FIELD_CATEGORY')</label>
 
-            {{ \FOF30\Utils\FEFHelper\BrowseView::modelSelect('docimport_category_id', 'Categories', $item->docimport_category_id, ['fof.autosubmit' => false, 'translate' => false]) }}
+            {{ \FOF40\Html\FEFHelper\BrowseView::modelSelect('docimport_category_id', 'Categories', $item->docimport_category_id, ['fof.autosubmit' => false, 'translate' => false]) }}
         </div>
 
         <div class="akeeba-form-group">
             <label for="enabled">@lang('JPUBLISHED')</label>
 
-            @jhtml('FEFHelper.select.booleanswitch', 'enabled', $item->enabled)
+            @jhtml('FEFHelp.select.booleanswitch', 'enabled', $item->enabled)
         </div>
     </div>
 
@@ -56,7 +56,7 @@ $item = $this->getItem();
         </header>
 
         <div class="akeeba-noreset">
-            @jhtml('FEFHelper.edit.editor', 'fulltext', $this->getItem()->fulltext)
+            @jhtml('FEFHelp.edit.editor', 'fulltext', $this->getItem()->fulltext)
         </div>
 
     </div>
