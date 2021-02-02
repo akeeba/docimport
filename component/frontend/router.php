@@ -280,46 +280,6 @@ class DocimportRouter extends RouterBase
 					'id'     => $aId
 				];
 				break;
-
-			case 'search':
-				// Do I have a menu item pointing to Search?
-				if ($itemID)
-				{
-					$info = Routing::getMenuItemInfo($itemID);
-
-					if (($info['type'] == 'search'))
-					{
-						$query = [
-							'option' => $option,
-							'Itemid' => $itemID
-						];
-
-						return $segments;
-					}
-				}
-
-				// No? Get a search menu item
-				$searchMenuItems = Routing::getDocImportMenuItemsByType('search');
-
-				if (!empty($searchMenuItems))
-				{
-					$item  = array_shift($searchMenuItems);
-
-					$query = [
-						'option' => $option,
-						'Itemid' => $item->id
-					];
-
-					return $segments;
-				}
-
-				// Nope, there's no routable menu item for this category
-				$query = [
-					'option' => 'com_docimport',
-					'view'   => 'Search',
-				];
-
-				break;
 		}
 
 		return $segments;
@@ -361,7 +321,7 @@ class DocimportRouter extends RouterBase
 		}
 
 		// Is this a menu item which results in no parsable segments?
-		if (in_array($info['type'], ['categories', 'search', 'article']))
+		if (in_array($info['type'], ['categories', 'article']))
 		{
 			$query['view'] = ucfirst($info['type']);
 

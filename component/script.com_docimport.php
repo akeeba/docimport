@@ -37,7 +37,7 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 	 *
 	 * @var   string
 	 */
-	protected $minimumPHPVersion = '5.6.0';
+	protected $minimumPHPVersion = '7.2.0';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
@@ -86,6 +86,13 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 
 			'administrator/components/com_docimport/ViewTemplates/Common/browse.blade.php',
 			'administrator/components/com_docimport/ViewTemplates/Common/form.blade.php',
+
+			// Removing Unified Search
+			'components/com_docimport/Controller/Search.php',
+			'components/com_docimport/Model/Search.php',
+
+			'media/com_docimport/js/search.js',
+			'media/com_docimport/js/search.min.js',
 		],
 		'folders' => [
 			'administrator/components/com_docimport/controllers',
@@ -101,8 +108,34 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'administrator/components/com_docimport/View/Categories/tmpl',
 			'components/com_docimport/View/Article/tmpl',
 			'components/com_docimport/View/Categories/tmpl',
+
+			// Removing Unified Search
+			'components/com_docimport/Model/Search',
+			'components/com_docimport/View/Search',
+			'components/com_docimport/ViewTemplates/Search',
+			'components/com_docimport/views/Search',
 		],
 	];
+
+	/**
+	 * The list of obsolete extra modules and plugins to uninstall on component upgrade / installation.
+	 *
+	 * @var array
+	 */
+	protected $uninstallation_queue = [
+		// modules => { (folder) => { (module) }* }*
+		'modules' => [
+			// 'admin' => [],
+			'site' => [
+				'mod_docimport_search',
+			],
+		],
+		// plugins => { (folder) => { (element) }* }*
+		'plugins' => [
+			// 'system' => [],
+		],
+	];
+
 
 	public function preflight(string $type, ComponentAdapter $parent): bool
 	{
