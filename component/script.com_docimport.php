@@ -60,12 +60,8 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			// Obsolete update information
 			'cache/com_docimport.updates.php',
 			'cache/com_docimport.updates.ini',
-			'administrator/components/com_docimport/controllers/urls.php',
-			'administrator/components/com_docimport/helpers/jsonlib.php',
-			'administrator/components/com_docimport/models/urls.php',
 			'administrator/cache/com_docimport.updates.php',
 			'administrator/cache/com_docimport.updates.ini',
-			'components/com_docimport/controllers/article.php',
 
 			// Upgrade to FOF 3
 			'cli/docimport-upgrade.php',
@@ -83,9 +79,6 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'media/com_docimport/css/backend.min.css',
 			'media/com_docimport/css/frontend.min.css',
 			'media/com_docimport/css/search.min.css',
-
-			'administrator/components/com_docimport/ViewTemplates/Common/browse.blade.php',
-			'administrator/components/com_docimport/ViewTemplates/Common/form.blade.php',
 
 			// Removing Unified Search
 			'components/com_docimport/Controller/Search.php',
@@ -114,6 +107,10 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'components/com_docimport/View/Search',
 			'components/com_docimport/ViewTemplates/Search',
 			'components/com_docimport/views/Search',
+
+			// Migrating to FOF 4
+			'administrator/components/com_docimport/ViewTemplates',
+			'components/com_docimport/ViewTemplates',
 		],
 	];
 

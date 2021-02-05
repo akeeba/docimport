@@ -10,6 +10,8 @@ namespace Akeeba\DocImport\Admin\Dispatcher;
 use FOF40\Container\Container;
 use FOF40\Database\Installer;
 use FOF40\Dispatcher\Mixin\ViewAliases;
+use FOF40\Utils\ViewManifestMigration;
+use FOF40\View\ViewTemplateFinder;
 
 defined('_JEXEC') or die;
 
@@ -89,10 +91,12 @@ class Dispatcher extends \FOF40\Dispatcher\Dispatcher
 			$this->container->platform->setSessionVar('magicParamsUpdateVersion', DOCIMPORT_VERSION, 'com_docimport');
 		}
 
+		ViewManifestMigration::migrateJoomla4MenuXMLFiles($this->container);
+		ViewManifestMigration::removeJoomla3LegacyViews($this->container);
+
 		// Update magic parameters if necessary
 		$model
 			->updateMagicParameters();
-
 
 		// Render submenus as drop-down navigation bars powered by Bootstrap
 		//$this->container->renderer->setOption('linkbar_style', 'classic');

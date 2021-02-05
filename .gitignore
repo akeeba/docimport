@@ -2,7 +2,9 @@
 
 /component/docimport.xml
 /component/backend/version.php
+/component/backend/views
 /component/cli/*.xml
+/component/frontend/views
 
 /documentation/*.xml~
 

@@ -22,9 +22,8 @@
 		<folder>Dispatcher</folder>
 		<folder>Helper</folder>
 		<folder>Model</folder>
+		<folder>tmpl</folder>
 		<folder>View</folder>
-		<folder>views</folder>
-		<folder>ViewTemplates</folder>
 
 		<filename>docimport.php</filename>
 		<filename>index.html</filename>
@@ -52,9 +51,8 @@
 			<folder>Dispatcher</folder>
 			<folder>Model</folder>
 			<folder>sql</folder>
+			<folder>tmpl</folder>
 			<folder>Toolbar</folder>
-			<folder>View</folder>
-			<folder>ViewTemplates</folder>
 
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>

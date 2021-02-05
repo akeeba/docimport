@@ -13,7 +13,7 @@ $minPHPVersion         = '7.2.0';
 $recommendedPHPVersion = '7.4';
 $softwareName          = 'Akeeba DocImport';
 
-if (!require_once(JPATH_COMPONENT_ADMINISTRATOR . '/View/wrongphp.php'))
+if (!require_once(JPATH_COMPONENT_ADMINISTRATOR . '/tmpl/ErrorPages/wrongphp.php'))
 {
 	return;
 }
