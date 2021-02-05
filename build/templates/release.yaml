@@ -47,7 +47,7 @@ updates:
   -
     title: 'DocImport Updates'
     connection: s3
-    directory: '/updates'
+    directory: 'updates'
     stream: 16
     base_name: 'pkgdocimport'
     formats:
