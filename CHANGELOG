@@ -1,7 +1,6 @@
 DocImport 3.0.0
 ================================================================================
 + Rewritten with FOF 4
-- Remove Unified Search
 + Renamed ViewTemplates to tmpl (Joomla 4 convention, with fallback code for Joomla 3)
 
 DocImport 2.1.4

@@ -50,5 +50,9 @@ class Dispatcher extends \FOF40\Dispatcher\Dispatcher
 			// Render submenus as drop-down navigation bars powered by Bootstrap
 			'linkbar_style' => 'classic',
 		]);
+
+
+		// Load common CSS and JavaScript
+		\JHtml::_('jquery.framework');
 	}
 }

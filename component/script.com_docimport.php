@@ -80,12 +80,8 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'media/com_docimport/css/frontend.min.css',
 			'media/com_docimport/css/search.min.css',
 
-			// Removing Unified Search
-			'components/com_docimport/Controller/Search.php',
-			'components/com_docimport/Model/Search.php',
-
-			'media/com_docimport/js/search.js',
-			'media/com_docimport/js/search.min.js',
+			'administrator/components/com_docimport/ViewTemplates/Common/browse.blade.php',
+			'administrator/components/com_docimport/ViewTemplates/Common/form.blade.php',
 		],
 		'folders' => [
 			'administrator/components/com_docimport/controllers',
@@ -102,37 +98,11 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'components/com_docimport/View/Article/tmpl',
 			'components/com_docimport/View/Categories/tmpl',
 
-			// Removing Unified Search
-			'components/com_docimport/Model/Search',
-			'components/com_docimport/View/Search',
-			'components/com_docimport/ViewTemplates/Search',
-			'components/com_docimport/views/Search',
-
 			// Migrating to FOF 4
 			'administrator/components/com_docimport/ViewTemplates',
 			'components/com_docimport/ViewTemplates',
 		],
 	];
-
-	/**
-	 * The list of obsolete extra modules and plugins to uninstall on component upgrade / installation.
-	 *
-	 * @var array
-	 */
-	protected $uninstallation_queue = [
-		// modules => { (folder) => { (module) }* }*
-		'modules' => [
-			// 'admin' => [],
-			'site' => [
-				'mod_docimport_search',
-			],
-		],
-		// plugins => { (folder) => { (element) }* }*
-		'plugins' => [
-			// 'system' => [],
-		],
-	];
-
 
 	public function preflight(string $type, ComponentAdapter $parent): bool
 	{
