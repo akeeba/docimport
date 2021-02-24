@@ -2,6 +2,7 @@ DocImport 3.0.0
 ================================================================================
 + Rewritten with FOF 4
 + Renamed ViewTemplates to tmpl (Joomla 4 convention, with fallback code for Joomla 3)
++ Yes/No options in the component and plugin options now work correctly under Joomla 4.0 beta 7 and later
 
 DocImport 2.1.4
 ================================================================================
