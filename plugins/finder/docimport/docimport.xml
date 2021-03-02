@@ -8,12 +8,12 @@
 <extension version="2.5" type="plugin" group="finder" method="upgrade">
     <name>plg_finder_docimport</name>
     <author>Nicholas K. Dionysopoulos</author>
-    <creationDate>2020-12-14</creationDate>
+    <creationDate>2021-03-02</creationDate>
     <copyright>Copyright (C) 2011-2020 Akeeba Ltd. All rights reserved.</copyright>
     <license>GNU General Public License version 3 or later</license>
     <authorEmail>nikosdion@gmail.com</authorEmail>
     <authorUrl>www.akeeba.com</authorUrl>
-    <version>2.1.4</version>
+    <version>3.0.0</version>
     <description>PLG_FINDER_DOCIMPORT_XML_DESCRIPTION</description>
     <files>
         <filename plugin="docimport">docimport.php</filename>
