@@ -85,9 +85,6 @@ ALTER TABLE #__docimport_categories MODIFY `ordering` int(11) NOT NULL DEFAULT 0
         <action table="#__content" canfail="1">
             <condition type="index" value="#__idx_content_search_introtext" operator="not" />
             <query><![CDATA[
-ALTER TABLE #__content ENGINE=MyISAM;
-            ]]></query>
-            <query><![CDATA[
 ALTER TABLE #__content ADD FULLTEXT INDEX `#__idx_content_search_introtext` (`introtext`);
             ]]></query>
             <query><![CDATA[
@@ -100,9 +97,6 @@ ALTER TABLE #__content ADD FULLTEXT INDEX `#__idx_content_search_title` (`title`
 
         <action table="#__categories" canfail="1">
             <condition type="index" value="#__idx_categories_search_description" operator="not" />
-            <query><![CDATA[
-ALTER TABLE #__categories ENGINE=MyISAM;
-            ]]></query>
             <query><![CDATA[
 ALTER TABLE #__categories ADD FULLTEXT INDEX `#__idx_categories_search_description` (`description`);
             ]]></query>
@@ -171,5 +165,43 @@ ALTER TABLE #__categories ADD FULLTEXT INDEX `#__idx_categories_search_title` (`
       UPDATE `#__docimport_categories` SET `locked_on` = NULL WHERE `locked_on` = '0000-00-00 00:00:00';
       ]]></query>
         </action>
+
+        <!-- Convert tables to InnoDB -->
+        <action table="#__docimport_articles" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__docimport_articles') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__docimport_articles` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
+        <action table="#__docimport_categories" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__docimport_categories') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__docimport_categories` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
+        <action table="#__content" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__content') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__content` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
+        <action table="#__categories" canfail="1">
+            <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE (`TABLE_NAME` = '#__categories') AND (`TABLE_SCHEMA` = DATABASE()) AND (`ENGINE` = 'InnoDB');
+            ]]></condition>
+            <query><![CDATA[
+ALTER TABLE `#__categories` ENGINE InnoDB;
+            ]]></query>
+        </action>
+
     </sql>
 </schema>
