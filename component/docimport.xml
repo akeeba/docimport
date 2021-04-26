@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
+<extension type="component" method="upgrade" version="4.0.0">
+	<name>DocImport</name>
+	<creationDate>2021-03-02</creationDate>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@akeeba.com</authorEmail>
+	<authorUrl>https://www.akeeba.com</authorUrl>
+	<copyright>Copyright (c)2011-2021 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU/GPL v3 or later</license>
+	<version>3.0.0</version>
+	<description>Akeeba DocImport3 v.3.0.0</description>
+	<namespace path="src">Akeeba\Component\DocImport</namespace>
+
+	<!-- Public front end files -->
+	<files folder="frontend">
+		<folder>forms</folder>
+		<folder>language</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+
+		<filename>.htaccess</filename>
+		<filename>web.config</filename>
+	</files>
+
+	<languages folder="frontend/language">
+		<language tag="en-GB">en-GB/com_docimport.ini</language>
+	</languages>
+
+	<administration>
+		<!-- Administration Menu Section -->
+		<menu>COM_DOCIMPORT</menu>
+
+		<files folder="backend">
+			<folder>assets</folder>
+			<folder>forms</folder>
+			<folder>language</folder>
+			<folder>services</folder>
+			<folder>sql</folder>
+			<folder>src</folder>
+			<folder>tmpl</folder>
+
+			<filename>.htaccess</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>web.config</filename>
+		</files>
+
+		<languages folder="backend/language">
+			<language tag="en-GB">en-GB/com_docimport.ini</language>
+			<language tag="en-GB">en-GB/com_docimport.sys.ini</language>
+		</languages>
+	</administration>
+
+	<media destination="com_docimport" folder="media">
+		<folder>admonition</folder>
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+
+	<!-- Installation / uninstallation PHP scripts -->
+	<scriptfile>script.com_docimport.php</scriptfile>
+
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+</extension>

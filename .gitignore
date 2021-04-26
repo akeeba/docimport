@@ -1,19 +1,1 @@
-/.idea
-
-/component/docimport.xml
-/component/backend/version.php
-/component/backend/views
-/component/cli/*.xml
-/component/frontend/views
-
-/documentation/*.xml~
-
 release/
-
-# Internal language symlinks
-/component/language/*/en-GB
-/modules/*/*/language/en-GB
-/plugins/*/*/language/en-GB
-
-# Private copy of FEF for auto-completion
-fef.min.css

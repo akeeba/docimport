@@ -6,45 +6,20 @@
  */
 
 // no direct access
-use Joomla\CMS\Installer\Adapter\ComponentAdapter;
-
 defined('_JEXEC') or die();
 
-// Load FOF if not already loaded
-if (!defined('FOF40_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof40/include.php'))
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Log\Log;
+
+class Com_DocimportInstallerScript
 {
-	throw new RuntimeException('FOF 4.0 is not installed');
-}
-
-class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
-{
-	/**
-	 * The component's name
-	 *
-	 * @var   string
-	 */
-	public $componentName = 'com_docimport';
-
-	/**
-	 * The title of the component (printed on installation and uninstallation messages)
-	 *
-	 * @var string
-	 */
-	protected $componentTitle = 'DocImport<sup>3</sup>';
-
-	/**
-	 * The minimum PHP version required to install this extension
-	 *
-	 * @var   string
-	 */
 	protected $minimumPHPVersion = '7.2.0';
 
-	/**
-	 * The minimum Joomla! version required to install this extension
-	 *
-	 * @var   string
-	 */
-	protected $minimumJoomlaVersion = '3.8.0';
+	protected $minimumJoomlaVersion = '4.0.0.b1';
+
+	protected $maximumJoomlaVersion = '4.0.999';
 
 	/**
 	 * Obsolete files and folders to remove from both paid and free releases. This is used when you refactor code and
@@ -52,7 +27,7 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 	 *
 	 * @var   array
 	 */
-	protected $removeFilesAllVersions = [
+	protected $removeFiles = [
 		'files'   => [
 			// Obsolete CLI script
 			'cli/docimport-update.php',
@@ -63,211 +38,205 @@ class Com_DocimportInstallerScript extends \FOF40\InstallScript\Component
 			'administrator/cache/com_docimport.updates.php',
 			'administrator/cache/com_docimport.updates.ini',
 
-			// Upgrade to FOF 3
-			'cli/docimport-upgrade.php',
-			'administrator/components/com_docimport/dispatcher.php',
-			'administrator/components/com_docimport/toolbar.php',
-			'components/com_docimport/dispatcher.php',
-
-			// Upgrade to FEF
-			'administrator/components/com_docimport/View/eaccelerator.php',
-
-			// CLI helper moved to FOF
-			'components/com_docimport/Helper/Cli.php',
-
 			// Obsolete CSS files
 			'media/com_docimport/css/backend.min.css',
 			'media/com_docimport/css/frontend.min.css',
 			'media/com_docimport/css/search.min.css',
-
-			'administrator/components/com_docimport/ViewTemplates/Common/browse.blade.php',
-			'administrator/components/com_docimport/ViewTemplates/Common/form.blade.php',
 		],
 		'folders' => [
-			'administrator/components/com_docimport/controllers',
-			'administrator/components/com_docimport/models',
-			'administrator/components/com_docimport/helpers',
-			'administrator/components/com_docimport/tables',
-			'administrator/components/com_docimport/views/article',
-			'administrator/components/com_docimport/views/categories',
-			'administrator/components/com_docimport/views/category',
-
-			// Upgrade to FEF
-			'administrator/components/com_docimport/View/Articles/tmpl',
-			'administrator/components/com_docimport/View/Categories/tmpl',
-			'components/com_docimport/View/Article/tmpl',
-			'components/com_docimport/View/Categories/tmpl',
-
-			// Migrating to FOF 4
-			'administrator/components/com_docimport/ViewTemplates',
-			'components/com_docimport/ViewTemplates',
 		],
 	];
 
-	public function preflight(string $type, ComponentAdapter $parent): bool
+	private $tableIndices = [
+		'#__content'    => [
+			'introtext',
+			'fulltext',
+			'title',
+		],
+		'#__categories' => [
+			'description',
+			'title',
+		],
+	];
+
+	/**
+	 * Joomla! pre-flight event. This runs before Joomla! installs or updates the component. This is our last chance to
+	 * tell Joomla! if it should abort the installation.
+	 *
+	 * @param   string                      $type    Installation type (install, update, discover_install)
+	 * @param   JInstallerAdapterComponent  $parent  Parent object
+	 *
+	 * @return  boolean  True to let the installation proceed, false to halt the installation
+	 */
+	public function preflight($type, $parent)
 	{
-		if (parent::preflight($type, $parent) === false)
+		// Check the minimum PHP version
+		if (!version_compare(PHP_VERSION, $this->minimumPHPVersion, 'ge'))
 		{
+			$msg = "<p>You need PHP $this->minimumPHPVersion or later to install this component</p>";
+
+			Log::add($msg, Log::WARNING, 'jerror');
+
 			return false;
 		}
 
-		if (!class_exists('XSLTProcessor'))
+		// Check the minimum Joomla! version
+		if (!version_compare(JVERSION, $this->minimumJoomlaVersion, 'ge'))
 		{
-			$msg = "<p>You need PHP the PHP XSL extension to install this component.</p>";
+			$msg = "<p>You need Joomla! $this->minimumJoomlaVersion or later to install this component</p>";
 
-			$this->log($msg);
+			Log::add($msg, Log::WARNING, 'jerror');
 
 			return false;
+		}
 
+		// Check the maximum Joomla! version
+		if (!version_compare(JVERSION, $this->maximumJoomlaVersion, 'le'))
+		{
+			$msg = "<p>You need Joomla! $this->maximumJoomlaVersion or earlier to install this component</p>";
+
+			Log::add($msg, Log::WARNING, 'jerror');
+
+			return false;
 		}
 
 		return true;
 	}
 
-	public function postflight(string $type, ComponentAdapter $parent): void
-	{
-		// Remove the update sites for this component on installation.
-		$this->removeObsoleteUpdateSites($parent);
-
-		// Call the parent method
-		parent::postflight($type, $parent);
-	}
-
 	/**
-	 * Renders the post-installation message
-	 */
-	protected function renderPostInstallation(ComponentAdapter $parent): void
-	{
-		$this->warnAboutJSNPowerAdmin();
-		?>
-		<h1>Akeeba DocImport</h1>
-
-		<img src="../media/com_docimport/images/docimport-48.png" width="48" height="48" alt="Akeeba DocImport"
-		     align="left" />
-		<h2 style="font-size: 14pt; font-weight: bold; padding: 0; margin: 0 0 0.5em;">&nbsp;Welcome to Akeeba
-			DocImport!</h2>
-		<span>
-			The easiest way to provide up-to-date documentation
-		</span>
-		<?php
-	}
-
-	protected function renderPostUninstallation(ComponentAdapter $parent): void
-	{
-		?>
-		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba DocImport
-			Uninstallation</h2>
-		<p>We are sorry that you decided to uninstall Akeeba DocImport.</p>
-
-		<?php
-	}
-
-	/**
-	 * Removes obsolete update sites created for the component (we are no longer providing update; also, we are now
-	 * using the "package" extension type).
+	 * Runs after install, update or discover_update. In other words, it executes after Joomla! has finished installing
+	 * or updating your component. This is the last chance you've got to perform any additional installations, clean-up,
+	 * database updates and similar housekeeping functions.
 	 *
-	 * @param   JInstallerAdapterComponent  $parent  The parent installer
+	 * @param   string                      $type    install, update or discover_update
+	 * @param   JInstallerAdapterComponent  $parent  Parent object
 	 */
-	protected function removeObsoleteUpdateSites($parent)
+	function postflight($type, $parent)
 	{
-		$db = $parent->getParent()->getDbo();
+		// Add custom com_content indices
+		$this->addComContentIndices();
 
-		$query = $db->getQuery(true)
-			->select($db->qn('extension_id'))
-			->from($db->qn('#__extensions'))
-			->where($db->qn('type') . ' = ' . $db->q('component'))
-			->where($db->qn('name') . ' = ' . $db->q($this->componentName));
-		$db->setQuery($query);
-		$extensionId = $db->loadResult();
+		// Remove obsolete files and folders
+		$this->removeFilesAndFolders($this->removeFiles);
 
-		if (!$extensionId)
+		// Always reset the OPcache if it's enabled. Otherwise there's a good chance the server will not know we are
+		// replacing .php scripts. This is a major concern since PHP 5.5 included and enabled OPcache by default.
+		if (function_exists('opcache_reset'))
 		{
-			return;
+			opcache_reset();
 		}
+	}
 
-		$query = $db->getQuery(true)
-			->select($db->qn('update_site_id'))
-			->from($db->qn('#__update_sites_extensions'))
-			->where($db->qn('extension_id') . ' = ' . $db->q($extensionId));
-		$db->setQuery($query);
-
-		$ids = $db->loadColumn(0);
-
-		if (!is_array($ids) && empty($ids))
-		{
-			return;
-		}
-
-		foreach ($ids as $id)
-		{
-			$query = $db->getQuery(true)
-				->delete($db->qn('#__update_sites'))
-				->where($db->qn('update_site_id') . ' = ' . $db->q($id));
-			$db->setQuery($query);
-
-			try
-			{
-				$db->execute();
-			}
-			catch (\Exception $e)
-			{
-				// Do not fail in this case
-			}
-		}
+	function uninstall($type)
+	{
+		// Remove custom com_content indices
+		$this->removeComContentIndices();
 	}
 
 	/**
-	 * The PowerAdmin extension makes menu items disappear. People assume it's our fault. JSN PowerAdmin authors don't
-	 * own up to their software's issue. I have no choice but to warn our users about the faulty third party software.
+	 * Removes obsolete files and folders
+	 *
+	 * @param   array  $removeList  The files and directories to remove
 	 */
-	private function warnAboutJSNPowerAdmin()
+	private function removeFilesAndFolders($removeList)
 	{
-		$db            = JFactory::getDbo();
-		$query         = $db->getQuery(true)
-			->select('COUNT(*)')
-			->from($db->qn('#__extensions'))
-			->where($db->qn('type') . ' = ' . $db->q('component'))
-			->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
-			->where($db->qn('enabled') . ' = ' . $db->q('1'));
-		$hasPowerAdmin = $db->setQuery($query)->loadResult();
-
-		if (!$hasPowerAdmin)
+		foreach ($removeList['files'] ?? [] as $file)
 		{
-			return;
+			$f = JPATH_ROOT . '/' . $file;
+
+			@is_file($f) && File::delete($f);
 		}
 
-		$query         = $db->getQuery(true)
-			->select('manifest_cache')
-			->from($db->qn('#__extensions'))
-			->where($db->qn('type') . ' = ' . $db->q('component'))
-			->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
-			->where($db->qn('enabled') . ' = ' . $db->q('1'));
-		$paramsJson    = $db->setQuery($query)->loadResult();
-		$jsnPAManifest = new JRegistry();
-		$jsnPAManifest->loadString($paramsJson, 'JSON');
-		$version = $jsnPAManifest->get('version', '0.0.0');
-
-		if (version_compare($version, '2.1.2', 'ge'))
+		foreach ($removeList['folders'] ?? [] as $folder)
 		{
-			return;
+			$f = JPATH_ROOT . '/' . $folder;
+
+			@is_dir($f) && Folder::delete($f);
 		}
-
-		echo <<< HTML
-<div class="well" style="margin: 2em 0;">
-<h1 style="font-size: 32pt; line-height: 120%; color: red; margin-bottom: 1em">WARNING: Menu items for {$this->componentName} might not be displayed on your site.</h1>
-<p style="font-size: 18pt; line-height: 150%; margin-bottom: 1.5em">
-	We have detected that you are using JSN PowerAdmin on your site. This software ignores Joomla! standards and
-	<b>hides</b> the Component menu items to {$this->componentName} in the administrator backend of your site. Unfortunately we
-	can't provide support for third party software. Please contact the developers of JSN PowerAdmin for support
-	regarding this issue.
-</p>
-<p style="font-size: 18pt; line-height: 120%; color: green;">
-	Tip: You can disable JSN PowerAdmin to see the menu items to {$this->componentName}.
-</p>
-</div>
-
-HTML;
-
 	}
 
+	private function addComContentIndices()
+	{
+		$db = Factory::getDbo();
+
+		foreach ($this->tableIndices as $table => $columns)
+		{
+			foreach ($columns as $column)
+			{
+				try
+				{
+					$query    = $db->getQuery(true)
+						->select('COUNT(*)')
+						->from($db->quoteName('INFORMATION_SCHEMA.STATISTICS'))
+						->where($db->quoteName('table_schema') . ' = DATABASE()')
+						->where($db->quoteName('table_name') . ' = :table')
+						->where($db->quoteName('column_name') . ' = :column')
+						->where($db->quoteName('index_type') . ' = ' . $db->quote('FULLTEXT'))
+						->bind(':table', $table)
+						->bind(':column', $column);
+					$hasIndex = (int) ($db->setQuery($query)->loadResult() ?: 0);
+					if ($hasIndex > 0)
+					{
+						continue;
+					}
+
+					// e.g. #__idx_content_search_introtext
+					$indexName = $db->quoteName(str_replace('#__', '#__idx_', $table) . '_search_' . $column);
+					$table     = $db->quoteName($table);
+					$column    = $db->quoteName($column);
+					$query     = <<< SQL
+ALTER TABLE $table ADD FULLTEXT INDEX $indexName ($column)
+SQL;
+					$db->setQuery($query)->execute();
+				}
+				catch (Exception $e)
+				{
+					continue;
+				}
+			}
+		}
+	}
+
+	private function removeComContentIndices()
+	{
+		$db = Factory::getDbo();
+
+		foreach ($this->tableIndices as $table => $columns)
+		{
+			foreach ($columns as $column)
+			{
+				try
+				{
+					$indexName = str_replace('#__', '#__idx_', $table) . '_search_' . $column;
+
+					$query    = $db->getQuery(true)
+						->select('COUNT(*)')
+						->from($db->quoteName('INFORMATION_SCHEMA.STATISTICS'))
+						->where($db->quoteName('table_schema') . ' = DATABASE()')
+						->where($db->quoteName('table_name') . ' = :table')
+						->where($db->quoteName('index_name') . ' = :index')
+						->bind(':table', $table)
+						->bind(':index', $indexName);
+
+					$hasIndex = (int) ($db->setQuery($query)->loadResult() ?: 0);
+
+					if ($hasIndex < 1)
+					{
+						continue;
+					}
+
+					$indexName = $db->quoteName($indexName);
+					$table     = $db->quoteName($table);
+					$query     = <<< SQL
+ALTER TABLE $table DROP INDEX $indexName;
+SQL;
+					$db->setQuery($query)->execute();
+				}
+				catch (Exception $e)
+				{
+					continue;
+				}
+			}
+		}
+	}
 }
