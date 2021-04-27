@@ -19,13 +19,14 @@
 		<include name="frontend**" />
 		<include name="media/**" />
 		<include name="language**" />
+
 		<include name="*.xml" />
 		<include name="*.php" />
 		<include name="LICENSE.txt" />
 		<include name="README.php" />
 
-		<exclude name="backend/views/**" />
-		<exclude name="frontend/views/**" />
+		<!-- Used for development, the canonical file for the package is one folder level above -->
+		<exclude name="backend/docimport.xml" />
 
 	</fileset>
 

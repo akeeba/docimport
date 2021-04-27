@@ -9,6 +9,7 @@ namespace Akeeba\Component\DocImport\Administrator\Model;
 
 defined('_JEXEC') || die;
 
+use Akeeba\Component\DocImport\Administrator\Table\CategoryTable;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -20,7 +21,7 @@ class CategoriesModel extends ListModel
 {
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
-		$config['filter_fields'] = $config['filter_fields'] ?: [
+		$config['filter_fields'] = ($config['filter_fields'] ?? []) ?: [
 			// Used for filtering and/or sorting in the GUI
 			'search',
 			'process_plugins',
@@ -166,7 +167,7 @@ class CategoriesModel extends ListModel
 		}
 
 		// List ordering clause
-		$orderCol  = $this->state->get('list.ordering', 'contactus_category_id');
+		$orderCol  = $this->state->get('list.ordering', 'docimport_category_id');
 		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 
@@ -176,5 +177,21 @@ class CategoriesModel extends ListModel
 		return $query;
 	}
 
+	protected function _getList($query, $limitstart = 0, $limit = 0)
+	{
+		if (\is_string($query))
+		{
+			$query = $this->getDbo()->getQuery(true)->setQuery($query);
+		}
+
+		$query->setLimit($limit, $limitstart);
+		$this->getDbo()->setQuery($query);
+
+		return array_map(function ($data) {
+			$data->status = CategoryTable::getStatusFor($data);
+
+			return $data;
+		}, $this->getDbo()->loadObjectList() ?? []);
+	}
 
 }

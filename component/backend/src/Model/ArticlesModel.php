@@ -20,7 +20,7 @@ class ArticlesModel extends ListModel
 {
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
-		$config['filter_fields'] = $config['filter_fields'] ?: [
+		$config['filter_fields'] = ($config['filter_fields'] ?? []) ?: [
 			// Used for filtering and/or sorting in the GUI
 			'search',
 			'enabled',
@@ -165,7 +165,7 @@ class ArticlesModel extends ListModel
 		}
 
 		// List ordering clause
-		$orderCol  = $this->state->get('list.ordering', 'contactus_category_id');
+		$orderCol  = $this->state->get('list.ordering', 'docimport_category_id');
 		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 

@@ -5,21 +5,20 @@
  * @license   GNU General Public License version 3, or later
  */
 
-namespace Akeeba\Component\DocImport\Administrator\Table;
+namespace Akeeba\Component\DocImport\Administrator\Model;
 
 defined('_JEXEC') || die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\AdminModel;
 
-class ArticleModel extends AdminModel
+class CategoryModel extends AdminModel
 {
 	public function getForm($data = [], $loadData = true)
 	{
 		return $this->loadForm(
-			'com_docimport.article',
-			'article',
+			'com_docimport.category',
+			'category',
 			[
 				'control'   => 'jform',
 				'load_data' => $loadData,
@@ -30,14 +29,14 @@ class ArticleModel extends AdminModel
 	protected function loadFormData()
 	{
 		$app  = Factory::getApplication();
-		$data = $app->getUserState('com_docimport.edit.article.data', []);
+		$data = $app->getUserState('com_docimport.edit.category.data', []);
 
 		if (empty($data))
 		{
 			$data = $this->getItem();
 		}
 
-		$this->preprocessData('com_docimport.article', $data);
+		$this->preprocessData('com_docimport.category', $data);
 
 		return $data;
 	}

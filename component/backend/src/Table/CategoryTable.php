@@ -92,7 +92,6 @@ class CategoryTable extends Table
 		}
 	}
 
-
 	public function reset()
 	{
 		parent::reset();
@@ -100,27 +99,23 @@ class CategoryTable extends Table
 		$this->state = self::UNMODIFIED;
 	}
 
-	public function load($keys = null, $reset = true)
+	public function bind($src, $ignore = [])
 	{
-		$this->state = self::UNMODIFIED;
-		$loadState   = parent::load($keys, $reset);
+		parent::bind($src, $ignore);
 
-		if ($loadState)
-		{
-			$this->state = self::getStatusFor($this);
-		}
+		$this->state = self::getStatusFor($this);
 
-		return $loadState;
+		return true;
 	}
 
 	/**
 	 * Determine the status for a given item.
 	 *
-	 * @param   CategoryTable  $item
+	 * @param   object  $item
 	 *
 	 * @return  string 'missing', 'modified' or 'unmodified'
 	 */
-	public static function getStatusFor(CategoryTable $item)
+	public static function getStatusFor($item)
 	{
 		$status = self::MISSING;
 
@@ -208,7 +203,7 @@ class CategoryTable extends Table
 			->select('COUNT(*)')
 			->from($this->getTableName())
 			->where($db->quoteName('slug') . ' = :slug')
-			->$this->bind(':slug', $this->slug);
+			->bind(':slug', $this->slug);
 
 		if ($pk > 0)
 		{

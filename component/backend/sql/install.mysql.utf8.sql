@@ -1,3 +1,9 @@
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
 CREATE TABLE `#__docimport_categories`
 (
     `docimport_category_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

@@ -1,3 +1,15 @@
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @license   GNU General Public License version 3, or later
+ */
+
 ALTER TABLE `#__docimport_categories` MODIFY `ordering` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__docimport_articles` MODIFY `created_on` DATETIME NULL DEFAULT NULL;
 UPDATE `#__docimport_articles` SET `created_on` = NULL WHERE `created_on` = '0000-00-00 00:00:00';

@@ -1,8 +1,7 @@
 <?php
-/**
- * PHP Exception Handler
- *
- * @copyright Copyright (c) 2018-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+/*
+ * @package   DocImport
+ * @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
