@@ -68,6 +68,9 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null): void
 	{
+		$this->document->getWebAssetManager()
+			->useStyle('com_docimport.backend');
+
 		/** @var CategoriesModel $model */
 		$model               = $this->getModel();
 		$this->items         = $model->getItems();
@@ -94,7 +97,7 @@ class HtmlView extends BaseHtmlView
 		// Get the toolbar object instance
 		$toolbar = Toolbar::getInstance('toolbar');
 
-		ToolbarHelper::title(sprintf(Text::_('COM_DOCIMPORT_TITLE_CATEGORIES')), 'fa fa-list-alt');
+		ToolbarHelper::title(Text::_('COM_DOCIMPORT_TITLE_CATEGORIES'), 'docimport');
 
 		$canCreate    = $user->authorise('core.create', 'com_docimport');
 		$canDelete    = $user->authorise('core.delete', 'com_docimport');
@@ -142,7 +145,7 @@ class HtmlView extends BaseHtmlView
 		ToolbarHelper::link(
 			Route::_('index.php?option=com_docimport&view=articles'),
 			'COM_DOCIMPORT_TITLE_ARTICLES',
-			'article'
+			'copy'
 		);
 	}
 }

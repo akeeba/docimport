@@ -1,0 +1,33 @@
+{
+	"$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+	"name": "com_docimport",
+	"version": "4.0.0",
+	"description": "Akeeba DocImport",
+	"license": "GPL-3.0-or-later",
+	"assets": [
+		{
+			"name": "com_docimport.backend",
+			"description": "Backend CSS",
+			"type": "style",
+			"uri": "com_docimport/backend.css"
+		},
+		{
+			"name": "com_docimport.frontend",
+			"description": "Frontend CSS",
+			"type": "style",
+			"uri": "com_docimport/frontend.css"
+		},
+		{
+			"name": "com_docimport.search",
+			"description": "Search page JavaScript",
+			"type": "script",
+			"uri": "com_docimport/search.min.js",
+			"dependencies": [
+				"core"
+			],
+			"attributes": {
+				"defer": true
+			}
+		}
+	]
+}

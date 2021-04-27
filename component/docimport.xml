@@ -62,6 +62,8 @@
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
+
+		<filename>joomla.asset.json</filename>
 	</media>
 
 	<!-- Installation / uninstallation PHP scripts -->
