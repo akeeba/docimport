@@ -27,6 +27,7 @@ class ArticlesModel extends ListModel
 			'cat_enabled',
 			'access',
 			'language',
+			'catid',
 			// Only used for sorting in the GUI
 			'ordering',
 			'title',
@@ -45,6 +46,7 @@ class ArticlesModel extends ListModel
 			'search'      => ['string', ''],
 			'enabled'     => ['int', ''],
 			'cat_enabled' => ['int', ''],
+			'catid'       => ['int', ''],
 		];
 
 		foreach ($filters as $filterName => $options)
@@ -72,6 +74,8 @@ class ArticlesModel extends ListModel
 		$id .= ':' . implode(':', [
 				$this->getState('filter.search'),
 				$this->getState('filter.enabled'),
+				$this->getState('filter.cat_enabled'),
+				$this->getState('filter.catid'),
 			]);
 
 		return parent::getStoreId($id);
@@ -114,7 +118,7 @@ class ArticlesModel extends ListModel
 					'(' .
 					$db->qn('title') . ' LIKE :search1 OR ' .
 					$db->qn('fulltext') . ' LIKE :search2 OR ' .
-					$db->qn('slug') . ' LIKE :search3'
+					$db->qn('slug   ') . ' LIKE :search3'
 					. ')'
 				)
 					->bind(':search1', $search)
@@ -128,8 +132,17 @@ class ArticlesModel extends ListModel
 
 		if (is_numeric($enabled))
 		{
-			$query->where($db->quoteName('enabled') . ' = :enabled')
+			$query->where($db->quoteName('a.enabled') . ' = :enabled')
 				->bind(':enabled', $enabled);
+		}
+
+		// Category ID filter
+		$catid = $this->getState('filter.catid');
+
+		if (is_numeric($catid))
+		{
+			$query->where($db->quoteName('c.docimport_category_id') . ' = :catid')
+				->bind(':catid', $catid);
 		}
 
 		// Category enabled filter
@@ -137,7 +150,7 @@ class ArticlesModel extends ListModel
 
 		if (is_numeric($cat_enabled))
 		{
-			$query->where($db->quoteName('cat_enabled') . ' = :cat_enabled')
+			$query->where($db->quoteName('c.enabled') . ' = :cat_enabled')
 				->bind(':cat_enabled', $cat_enabled);
 		}
 
@@ -165,7 +178,7 @@ class ArticlesModel extends ListModel
 		}
 
 		// List ordering clause
-		$orderCol  = $this->state->get('list.ordering', 'docimport_category_id');
+		$orderCol  = $this->state->get('list.ordering', 'ordering');
 		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 

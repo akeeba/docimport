@@ -231,6 +231,12 @@ class CategoryTable extends Table
 		return true;
 	}
 
+	public function store($updateNulls = false)
+	{
+		$this->onBeforeStore();
+
+		return parent::store($updateNulls);
+	}
 
 	/**
 	 * Cascades the deleting of articles when a category is deleted.
@@ -258,7 +264,7 @@ class CategoryTable extends Table
 			->select($db->quoteName('docimport_article_id'))
 			->from($db->quoteName('#__docimport_articles'))
 			->where($db->quoteName('docimport_category_id') . ' = :pk')
-			->bind(':pk', $pk);
+			->bind(':pk', $pk['docimport_category_id']);
 		$articleIDs = $db->setQuery($query)->loadColumn();
 
 		if (empty($articleIDs))

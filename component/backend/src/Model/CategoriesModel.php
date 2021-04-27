@@ -167,7 +167,7 @@ class CategoriesModel extends ListModel
 		}
 
 		// List ordering clause
-		$orderCol  = $this->state->get('list.ordering', 'docimport_category_id');
+		$orderCol  = $this->state->get('list.ordering', 'ordering');
 		$orderDirn = $this->state->get('list.direction', 'ASC');
 		$ordering  = $db->escape($orderCol) . ' ' . $db->escape($orderDirn);
 

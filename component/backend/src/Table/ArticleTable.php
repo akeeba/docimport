@@ -40,9 +40,9 @@ class ArticleTable extends Table
 
 	public function __construct(DatabaseDriver $db)
 	{
-		parent::__construct('#__docimport_categories', 'docimport_category_id', $db);
+		parent::__construct('#__docimport_articles', 'docimport_article_id', $db);
 
-		$this->setColumnAlias('id', 'docimport_category_id');
+		$this->setColumnAlias('id', 'docimport_article_id');
 		$this->setColumnAlias('alias', 'slug');
 		$this->setColumnAlias('published', 'enabled');
 		$this->setColumnAlias('checked_out', 'locked_by');
@@ -81,5 +81,12 @@ class ArticleTable extends Table
 		 */
 
 		return true;
+	}
+
+	public function store($updateNulls = false)
+	{
+		$this->onBeforeStore();
+
+		return parent::store($updateNulls);
 	}
 }

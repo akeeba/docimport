@@ -147,5 +147,11 @@ class HtmlView extends BaseHtmlView
 			'COM_DOCIMPORT_TITLE_ARTICLES',
 			'copy'
 		);
+
+		ToolbarHelper::link(
+			Route::_('index.php?option=com_docimport&task=categories.scan'),
+			'COM_DOCIMPORT_CATEGORY_SCAN',
+			'search'
+		);
 	}
 }

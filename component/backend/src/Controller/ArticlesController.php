@@ -15,7 +15,7 @@ class ArticlesController extends AdminController
 {
 	protected $text_prefix = 'COM_DOCIMPORT_ARTICLES';
 
-	public function getModel($name = 'Category', $prefix = 'Administrator', $config = ['ignore_request' => true])
+	public function getModel($name = 'Article', $prefix = 'Administrator', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

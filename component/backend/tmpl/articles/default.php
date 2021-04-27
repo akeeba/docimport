@@ -7,8 +7,7 @@
 
 defined('_JEXEC') || die;
 
-use Akeeba\Component\DocImport\Administrator\Table\CategoryTable;
-use Akeeba\Component\DocImport\Administrator\View\Categories\HtmlView;
+use Akeeba\Component\DocImport\Administrator\View\Articles\HtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Multilanguage;
@@ -30,7 +29,7 @@ $nullDate  = Factory::getDbo()->getNullDate();
 
 if ($saveOrder && !empty($this->items))
 {
-	$saveOrderingUrl = 'index.php?option=com_docimport&task=categories.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
+	$saveOrderingUrl = 'index.php?option=com_docimport&task=articles.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
 	HTMLHelper::_('draggablelist.draggable');
 }
 
@@ -43,7 +42,7 @@ echo $this->loadAnyTemplate('common/phpversion_warning', false, [
 
 $i = 0;
 ?>
-<form action="<?= Route::_('index.php?option=com_docimport&view=Categories'); ?>"
+<form action="<?= Route::_('index.php?option=com_docimport&view=articles'); ?>"
       method="post" name="adminForm" id="adminForm">
 	<div class="row">
 		<div class="col-md-12">
@@ -57,7 +56,7 @@ $i = 0;
 				<?php else : ?>
 					<table class="table" id="articleList">
 						<caption class="visually-hidden">
-							<?= Text::_('COM_DOCIMPORT_CATEGORIES_TABLE_CAPTION'); ?>,
+							<?= Text::_('COM_DOCIMPORT_ARTICLES_TABLE_CAPTION'); ?>,
 							<span id="orderedBy"><?= Text::_('JGLOBAL_SORTED_BY'); ?> </span>,
 							<span id="filteredBy"><?= Text::_('JGLOBAL_FILTERED_BY'); ?></span>
 						</caption>
@@ -70,10 +69,10 @@ $i = 0;
 								<?php echo HTMLHelper::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-sort'); ?>
 							</th>
 							<th scope="col">
-								<?= HTMLHelper::_('searchtools.sort', 'COM_DOCIMPORT_CATEGORIES_FIELD_TITLE', 'title', $listDirn, $listOrder); ?>
+								<?= HTMLHelper::_('searchtools.sort', 'COM_DOCIMPORT_ARTICLES_FIELD_TITLE', 'title', $listDirn, $listOrder); ?>
 							</th>
 							<th scope="col">
-								<?= Text::_('COM_DOCIMPORT_CATEGORIES_FIELD_STATUS') ?>
+								<?= Text::_('COM_DOCIMPORT_ARTICLES_FIELD_CATEGORY') ?>
 							</th>
 							<th scope="col">
 								<?= HTMLHelper::_('searchtools.sort', 'JFIELD_ACCESS_LABEL', 'access', $listDirn, $listOrder); ?>
@@ -87,7 +86,7 @@ $i = 0;
 								<?= Text::_('JPUBLISHED') ?>
 							</th>
 							<th scope="col" class="w-1 d-none d-md-table-cell">
-								<?= HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'docimport_category_id', $listDirn, $listOrder); ?>
+								<?= HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'docimport_article_id', $listDirn, $listOrder); ?>
 							</th>
 						</tr>
 						</thead>
@@ -101,7 +100,7 @@ $i = 0;
 							?>
 							<tr class="row<?= $i++ % 2; ?>" data-draggable-group="0">
 								<td class="text-center">
-									<?= HTMLHelper::_('grid.id', $i, $item->docimport_category_id, !(empty($item->locked_on) || ($item->locked_on === $nullDate)), 'cid', 'cb', $item->title); ?>
+									<?= HTMLHelper::_('grid.id', $i, $item->docimport_article_id, !(empty($item->locked_on) || ($item->locked_on === $nullDate)), 'cid', 'cb', $item->title); ?>
 								</td>
 
 								<td class="text-center d-none d-md-table-cell">
@@ -126,7 +125,7 @@ $i = 0;
 								</td>
 								<td>
 									<?php if ($user->authorise('core.edit', 'com_docimport')): ?>
-										<a href="<?= Route::_('index.php?option=com_docimport&task=category.edit&docimport_category_id=' . (int) $item->docimport_category_id); ?>"
+										<a href="<?= Route::_('index.php?option=com_docimport&task=article.edit&docimport_article_id=' . (int) $item->docimport_article_id); ?>"
 										   title="<?= Text::_('JACTION_EDIT'); ?><?= $this->escape($item->title); ?>">
 											<?= $this->escape($item->title); ?>
 										</a>
@@ -136,34 +135,8 @@ $i = 0;
 									<br/>
 									<small><?= $this->escape($item->slug) ?></small>
 								</td>
-
 								<td>
-									<?php switch ($item->status) {
-										case CategoryTable::MISSING:
-											$labelClass = 'badge bg-danger';
-											$iconClass = 'fa fa-times-circle';
-											break;
-
-										case CategoryTable::MODIFIED:
-											$labelClass = 'badge bg-warning';
-											$iconClass = 'fa fa-exclamation-triangle';
-											break;
-
-										default:
-											$labelClass = 'badge bg-success';
-											$iconClass = 'fa fa-check-circle';
-											break;
-									} ?>
-									<span class="hasTooltip <?= $labelClass ?>" title="<?= Text::_('COM_DOCIMPORT_CATEGORIES_STATUS_' . $item->status) ?>">
-										<span class="<?= $iconClass ?>"></span>
-									</span>
-									&nbsp;
-									<a href="<?= Route::_('index.php?option=com_docimport&task=category.rebuild&docimport_category_id=' . (int)$item->docimport_category_id) ?>"
-									   class="btn btn-sm btn-<?= ($item->status == CategoryTable::MODIFIED ? 'primary' : 'outline-dark') ?>"
-									   title="<?= Text::_('COM_DOCIMPORT_CATEGORIES_REBUILD') ?>"
-									>
-										<span class="fa fa-sync-alt"></span>
-									</a>
+									<?= $this->escape($item->cat_title) ?>
 								</td>
 
 								<td>
@@ -177,11 +150,11 @@ $i = 0;
 								<?php endif; ?>
 
 								<td class="text-center">
-									<?= HTMLHelper::_('jgrid.published', $item->enabled, $i, 'Categories.', $user->authorise('core.edit.state', 'com_docimport'), 'cb'); ?>
+									<?= HTMLHelper::_('jgrid.published', $item->enabled, $i, 'articles.', $user->authorise('core.edit.state', 'com_docimport'), 'cb'); ?>
 								</td>
 
 								<td class="w-1 d-none d-md-table-cell">
-									<?= $item->docimport_category_id ?>
+									<?= $item->docimport_article_id ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>
