@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-/** @var  \Akeeba\DocImport\Site\Model\Search\Result\AkeebaTicket[]  $items */
+/** @var  \Akeeba\Component\DocImport\Site\Model\Search\Result\AkeebaTicket[]  $items */
 /** @var  int $count */
 
 if (empty($items)):

@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-/** @var  \Akeeba\DocImport\Site\Model\Search\Result\JoomlaArticle[]  $items */
+/** @var  \Akeeba\Component\DocImport\Site\Model\Search\Result\JoomlaArticle[]  $items */
 /** @var  int $count */
 /** @var \Akeeba\DocImport\Site\View\Search\Html $this */
 

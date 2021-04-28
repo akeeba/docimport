@@ -16,7 +16,7 @@ class Search extends Controller
 {
 	public function main()
 	{
-		/** @var \Akeeba\DocImport\Site\Model\Search $model */
+		/** @var \Akeeba\Component\DocImport\Site\Model\SearchModel $model */
 		$model = $this->getModel()->savestate(1)->setIgnoreRequest(false);
 
 		// Get the limit start from the GET query. If it's defined we have hit a pagination link which does NOT submit

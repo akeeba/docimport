@@ -10,8 +10,8 @@ namespace Akeeba\DocImport\Site\View\Categories;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use Akeeba\DocImport\Site\Model\Categories;
-use Akeeba\DocImport\Site\Model\Articles;
+use Akeeba\Component\DocImport\Site\Model\Articles;
+use Akeeba\Component\DocImport\Site\Model\Categories;
 use FOF40\View\DataView\Html as BaseView;
 use JFactory;
 

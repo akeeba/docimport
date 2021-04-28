@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 /** @var \Akeeba\DocImport\Site\View\Categories\Html $this */
-/** @var \Akeeba\DocImport\Site\Model\Categories $item */
+/** @var \Akeeba\Component\DocImport\Site\Model\Categories $item */
 
 ?>
 <div class="docimport docimport-page-categories">

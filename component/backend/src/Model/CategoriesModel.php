@@ -19,6 +19,14 @@ use Joomla\Utilities\ArrayHelper;
 
 class CategoriesModel extends ListModel
 {
+	protected $populateFilters = [
+		'search'          => ['string', ''],
+		'process_plugins' => ['int', ''],
+		'enabled'         => ['int', ''],
+		'access'          => ['int', ''],
+		'language'        => ['string', ''],
+	];
+
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
 		$config['filter_fields'] = ($config['filter_fields'] ?? []) ?: [
@@ -42,15 +50,8 @@ class CategoriesModel extends ListModel
 	{
 		/** @var CMSApplication $app */
 		$app     = Factory::getApplication();
-		$filters = [
-			'search'          => ['string', ''],
-			'process_plugins' => ['int', ''],
-			'enabled'         => ['int', ''],
-			'access'          => ['int', ''],
-			'language'        => ['string', ''],
-		];
 
-		foreach ($filters as $filterName => $options)
+		foreach ($this->populateFilters as $filterName => $options)
 		{
 			[$type, $default] = $options;
 			$value = $app->getUserStateFromRequest($this->context . 'filter.' . $filterName, 'filter_' . $filterName, $default, 'string');
@@ -66,6 +67,7 @@ class CategoriesModel extends ListModel
 					break;
 			}
 		}
+
 
 		parent::populateState($ordering, $direction);
 	}
@@ -162,8 +164,15 @@ class CategoriesModel extends ListModel
 
 		if (!empty($language))
 		{
-			$query->where($db->quoteName('language') . ' = :language')
-				->bind(':language', $language);
+			if (is_string($language))
+			{
+				$query->where($db->quoteName('language') . ' = :language')
+					->bind(':language', $language);
+			}
+			elseif (is_array($language))
+			{
+				$query->whereIn($db->quoteName('language'), $language, ParameterType::STRING);
+			}
 		}
 
 		// List ordering clause

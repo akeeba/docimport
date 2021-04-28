@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   DocImport
+  ~ @copyright Copyright (c)2011-2021 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+<metadata>
+	<layout title="COM_DOCIMPORT_VIEW_CATEGORIES_DEFAULT_TITLE">
+		<message>
+				<![CDATA[COM_DOCIMPORT_VIEW_CATEGORIES_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>COM_DOCIMPORT_VIEW_CATEGORIES_DEFAULT_TITLE</name>
+		<description>COM_DOCIMPORT_VIEW_CATEGORIES_DEFAULT_DESC</description>
+	</state>
+</metadata>

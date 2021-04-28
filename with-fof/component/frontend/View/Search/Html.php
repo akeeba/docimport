@@ -10,7 +10,7 @@ namespace Akeeba\DocImport\Site\View\Search;
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use Akeeba\DocImport\Site\Model\Search;
+use Akeeba\Component\DocImport\Site\Model\SearchModel;
 use FOF40\View\View as BaseView;
 use JHtml;
 use JPagination;
@@ -68,7 +68,7 @@ JS;
 		$this->addJavascriptFile('media://com_docimport/js/search.js');
 		$this->addJavascriptInline($js);
 
-		/** @var Search $model */
+		/** @var SearchModel $model */
 		$model = $this->getModel();
 
 		// Get all possible support search sections in JHtml-compatible format.

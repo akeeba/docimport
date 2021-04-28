@@ -18,6 +18,15 @@ use Joomla\Utilities\ArrayHelper;
 
 class ArticlesModel extends ListModel
 {
+	protected $populateFilters = [
+		'search'      => ['string', ''],
+		'enabled'     => ['int', ''],
+		'cat_enabled' => ['int', ''],
+		'catid'       => ['int', ''],
+		'access'      => ['int', ''],
+		'language'    => ['string', ''],
+	];
+
 	public function __construct($config = [], MVCFactoryInterface $factory = null)
 	{
 		$config['filter_fields'] = ($config['filter_fields'] ?? []) ?: [
@@ -41,15 +50,9 @@ class ArticlesModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		/** @var CMSApplication $app */
-		$app     = Factory::getApplication();
-		$filters = [
-			'search'      => ['string', ''],
-			'enabled'     => ['int', ''],
-			'cat_enabled' => ['int', ''],
-			'catid'       => ['int', ''],
-		];
+		$app = Factory::getApplication();
 
-		foreach ($filters as $filterName => $options)
+		foreach ($this->populateFilters as $filterName => $options)
 		{
 			[$type, $default] = $options;
 			$value = $app->getUserStateFromRequest($this->context . 'filter.' . $filterName, 'filter_' . $filterName, $default, 'string');
@@ -76,6 +79,8 @@ class ArticlesModel extends ListModel
 				$this->getState('filter.enabled'),
 				$this->getState('filter.cat_enabled'),
 				$this->getState('filter.catid'),
+				$this->getState('filter.access'),
+				$this->getState('filter.language'),
 			]);
 
 		return parent::getStoreId($id);
@@ -173,8 +178,15 @@ class ArticlesModel extends ListModel
 
 		if (!empty($language))
 		{
-			$query->where($db->quoteName('c.language') . ' = :language')
-				->bind(':language', $language);
+			if (is_string($language))
+			{
+				$query->where($db->quoteName('c.language') . ' = :language')
+					->bind(':language', $language);
+			}
+			elseif (is_array($language))
+			{
+				$query->whereIn($db->quoteName('c.language'), $language, ParameterType::STRING);
+			}
 		}
 
 		// List ordering clause
