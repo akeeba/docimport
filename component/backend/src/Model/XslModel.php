@@ -602,12 +602,12 @@ HTACCESS;
 
 					if ($slug == 'index')
 					{
-						$url = 'index.php?option=com_docimport&view=category&id=' . $category_id;
+						$url = sprintf("index.php?option=com_docimport&view=category&id=%d", $category_id);
 					}
 					else
 					{
 						$id  = $mapSlugID[$slug];
-						$url = 'index.php?option=com_docimport&view=article&id=' . $id;
+						$url = sprintf("index.php?option=com_docimport&view=article&catid=%d&id=%d", $category_id, $id);
 					}
 
 					// With .html, without leading slash

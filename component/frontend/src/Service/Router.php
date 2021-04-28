@@ -18,6 +18,7 @@ use Joomla\CMS\Component\Router\Rules\MenuRules;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
 use Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\Menu\MenuItem;
 use Joomla\CMS\MVC\Factory\MVCFactory;
 use Joomla\CMS\MVC\Factory\MVCFactoryAwareTrait;
 use Joomla\CMS\MVC\Model\DatabaseAwareTrait;
@@ -47,11 +48,13 @@ class Router extends RouterView
 		$this->registerView($categories);
 
 		$category = new RouterViewConfiguration('category');
-		$category->setKey('id')->setParent($categories);
+		$category->setKey('id');
+		$category->setParent($categories);
 		$this->registerView($category);
 
 		$article = new RouterViewConfiguration('article');
-		$article->setKey('id')->setParent($category, 'catid');
+		$article->setKey('id')
+			->setParent($category, 'catid');
 		$this->registerView($article);
 
 		parent::__construct($app, $menu);
@@ -91,34 +94,18 @@ class Router extends RouterView
 		}
 
 		// Lowercase the menu item's view, if defined; addresses Formal case views in the previous versions.
-		$item = $this->menu->getItem($query['Itemid'] ?? null);
-
-		if (
-			!empty($item) &&
-			($item->component === 'com_' . $this->getName()) &&
-			isset($item->query['view'])
-		) {
-			// Lowercase the view name
-			$item->query['view'] = strtolower($item->query['view']);
-
-			// For the purposes of the router, the "articles" view is parsed as "category"
-			if ($item->query['view'] === 'articles')
-			{
-				$item->query['view'] = 'category';
-			}
-
-			// Migration: "Category" view used to set catid instead of id
-			if ($item->query['view'] === 'category')
-			{
-				$item->query['id'] = $item->query['id'] ?? ($item->query['catid'] ?? 0);
-			}
-		}
+		$item = $this->menu->getItem($query['Itemid'] ?? null) ?: null;
+		$this->migrateMenuItem($item);
 
 		return parent::build($query);
 	}
 
 	public function parse(&$segments)
 	{
+		// Lowercase the active menu item's view, if defined; addresses Formal case views in the previous versions.
+		$active = $this->menu->getActive() ?: null;
+		$this->migrateMenuItem($active);
+
 		$query = parent::parse($segments);
 
 		if (isset($query['view']))
@@ -133,7 +120,6 @@ class Router extends RouterView
 
 		return $query;
 	}
-
 
 	public function getCategorySegment($id, $query)
 	{
@@ -170,7 +156,7 @@ class Router extends RouterView
 
 	public function getCategoryId($segment, $query)
 	{
-		$db = $this->getDbo();
+		$db    = $this->getDbo();
 		$query = $db->getQuery(true)
 			->select($db->quoteName('docimport_category_id'))
 			->from($db->quoteName('#__docimport_categories'))
@@ -187,7 +173,7 @@ class Router extends RouterView
 
 	public function getArticleId($segment, $query)
 	{
-		$db = $this->getDbo();
+		$db    = $this->getDbo();
 		$query = $db->getQuery(true)
 			->select($db->quoteName('docimport_article_id'))
 			->from($db->quoteName('#__docimport_articles'))
@@ -197,5 +183,48 @@ class Router extends RouterView
 			->bind(':catid', $query['id'], ParameterType::INTEGER);
 
 		return $db->setQuery($query)->loadResult() ?: false;
+	}
+
+	/**
+	 * Backwards compatibility for older versions of the component.
+	 *
+	 * 1. Older versions had Formal case views (e.g. Categories instead of categories) which cause the Joomla View
+	 *    Router to choke and die when building and parsing routes. This fixes that problem.
+	 *
+	 * 2. Older versions used a 'Category' or 'category' view to display the articles of a category. Due to the way
+	 *    the Joomla View Router is meant to be used it makes far more sense to use the view name 'articles' instead.
+	 *    This will transparently convert the view name of existing Category/category menu items to articles.
+	 *
+	 * This method must be used TWICE in a router:
+	 * a. Building a route, if there is a detected menu item; and
+	 * b. Parsing a route, if there is an active menu item.
+	 *
+	 * @param   MenuItem|null  $item  The menu item to address or null if there's no menu item.
+	 */
+	private function migrateMenuItem(?MenuItem $item)
+	{
+		if (
+			empty($item)
+			|| ($item->component !== 'com_' . $this->getName())
+			|| empty($item->query['view'] ?? '')
+		)
+		{
+			return;
+		}
+
+		// Lowercase the view name
+		$item->query['view'] = strtolower($item->query['view']);
+
+		// For the purposes of the router, the "articles" view is parsed as "category"
+		if ($item->query['view'] === 'articles')
+		{
+			$item->query['view'] = 'category';
+		}
+
+		// Migration: "Category" view used to set catid instead of id
+		if ($item->query['view'] === 'category')
+		{
+			$item->query['id'] = $item->query['id'] ?? ($item->query['catid'] ?? 0);
+		}
 	}
 }
