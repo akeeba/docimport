@@ -26,18 +26,7 @@ class CategoriesConfiguration
 	 */
 	public function __construct($config = null)
 	{
-		if (is_null($config))
-		{
-			$this->loadFromComponent();
-		}
-		elseif (is_string($config))
-		{
-			$this->loadFromRawJson($config);
-		}
-		else
-		{
-			$this->config = $config;
-		}
+		$this->loadFromComponent();
 	}
 
 	/**
@@ -58,7 +47,7 @@ class CategoriesConfiguration
 			foreach (array_keys($this->config) as $area)
 			{
 				$moreResults = $this->getCategoriesFor($area, $section);
-				$result = array_merge($result, $moreResults);
+				$result      = array_merge($result, $moreResults);
 			}
 
 			return $result;
@@ -71,7 +60,7 @@ class CategoriesConfiguration
 
 		if (!is_null($section))
 		{
-			$sectionMap = SearchSection::getMap($section);
+			$sectionMap    = SearchSection::getMap($section);
 			$configSection = $sectionMap['config'];
 
 			if (!isset($this->config[$searchArea][$configSection]))
@@ -108,49 +97,12 @@ class CategoriesConfiguration
 		{
 			$title = isset($item['title']) ? $item['title'] : $slug;
 			$ret[] = [
-				'text' => $title,
-				'value' => $slug
+				'text'  => $title,
+				'value' => $slug,
 			];
 		}
 
 		return $ret;
-	}
-
-	/**
-	 * Load the configuration from a raw JSON string. This method expects to get the bass ackwards JSON produced by
-	 * Joomla's "repeatable" field. Instead of creating one array per row it creates one array per column. This is an
-	 * array format that is directly usable in EXACTLY ZERO PROGRAMMING LANGUAGES, so we have to waste CPU time to
-	 * normalize it. Sigh.
-	 *
-	 * @param   string  $json  The JSON string
-	 *
-	 * @return  void
-	 */
-	private function loadFromRawJson($json)
-	{
-		$this->config = [];
-
-		$rawConfig = json_decode($json, true);
-
-		if (!is_array($rawConfig) || !count($rawConfig))
-		{
-			return;
-		}
-
-		$totalItems = count($rawConfig['title']);
-		$keys       = array_keys($rawConfig);
-
-		for ($i = 0; $i < $totalItems; $i++)
-		{
-			$newEntry = [];
-
-			foreach ($keys as $key)
-			{
-				$newEntry[ $key ] = $rawConfig[ $key ][ $i ];
-			}
-
-			$this->config[ $rawConfig['slug'][ $i ] ] = $newEntry;
-		}
 	}
 
 	/**
@@ -160,8 +112,18 @@ class CategoriesConfiguration
 	 */
 	private function loadFromComponent()
 	{
-		$cParams = ComponentHelper::getParams('com_docimport');
+		$cParams      = ComponentHelper::getParams('com_docimport');
+		$searchAreas  = (array) $cParams->get('search_areas', []);
+		$this->config = [];
 
-		$this->loadFromRawJson($cParams->get('search_areas', '{}'));
+		foreach ($searchAreas as $area)
+		{
+			$this->config[$area->slug] = [
+				'title'  => $area->title ?? '',
+				'jcat'   => $area->jcat ?? [],
+				'dicat'  => $area->dicat ?? [],
+				'atscat' => $area->atscat ?? [],
+			];
+		}
 	}
 }

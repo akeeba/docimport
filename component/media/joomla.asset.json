@@ -23,7 +23,8 @@
 			"type": "script",
 			"uri": "com_docimport/search.min.js",
 			"dependencies": [
-				"core"
+				"core",
+				"bootstrap.collapse"
 			],
 			"attributes": {
 				"defer": true

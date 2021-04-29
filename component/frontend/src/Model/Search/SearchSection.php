@@ -89,7 +89,7 @@ class SearchSection
 		$categories = array_unique($categories);
 
 		// Create the adapter
-		$adapterClass = 'Akeeba\\DocImport\\Site\\Model\\Search\\Adapter\\' . $map['adapter'];
+		$adapterClass = 'Akeeba\\Component\\DocImport\\Site\\Model\\Search\\Adapter\\' . $map['adapter'];
 		$this->adapter = new $adapterClass($categories);
 	}
 

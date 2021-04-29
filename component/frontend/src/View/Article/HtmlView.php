@@ -27,6 +27,9 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null)
 	{
+		$this->document->getWebAssetManager()
+			->useStyle('com_docimport.frontend');
+
 		$this->item = $this->get('item');
 
 		$app = Factory::getApplication();

@@ -12,7 +12,9 @@ defined('_JEXEC') or die();
 
 use Akeeba\Component\DocImport\Site\Model\Search\CategoriesConfiguration;
 use Akeeba\Component\DocImport\Site\Model\Search\SearchSection;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Application\CMSApplication as JApplicationCms;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Pagination\Pagination as JPagination;
 
@@ -32,6 +34,28 @@ class SearchModel extends BaseDatabaseModel
 	 * @var  CategoriesConfiguration
 	 */
 	private $categoriesConfiguration = null;
+
+	protected function populateState()
+	{
+		/** @var CMSApplication $app */
+		$app = Factory::getApplication();
+		$this->setState('search', $app->getUserStateFromRequest(
+			'com_docimport.search', 'search', '', 'string'
+		));
+		$this->setState('areas', $app->getUserStateFromRequest(
+			'com_docimport.areas', 'areas', '', 'array'
+		));
+		$this->setState('start', $app->getUserStateFromRequest(
+			'com_docimport.start', 'start', 0, 'int'
+		));
+		$this->setState('limitstart', $app->getUserStateFromRequest(
+			'com_docimport.limitstart', 'limitstart', 0, 'int'
+		));
+		$this->setState('limit', $app->getUserStateFromRequest(
+			'com_docimport.limit', 'limit', $app->get('list_limit', 20), 'int'
+		));
+	}
+
 
 	/**
 	 * Returns the cached support areas configuration for this model, creating it if it doesn't exist
@@ -65,7 +89,7 @@ class SearchModel extends BaseDatabaseModel
 		$query      = $this->getState('search', '');
 		$areas      = $this->getState('areas', []) ?: [];
 		$limitStart = (int) $this->getState('start', 0);
-		$limit      = (int) $this->getState('limit', 10);
+		$limit      = (int) $this->getState('limit', 10) ?: Factory::getApplication()->get('list_limit', 20);
 
 		$this->searchResults = [];
 

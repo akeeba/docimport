@@ -45,6 +45,9 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null): void
 	{
+		$this->document->getWebAssetManager()
+			->useStyle('com_docimport.backend');
+
 		/** @var ArticleModel $model */
 		$model       = $this->getModel();
 		$this->form  = $model->getForm();

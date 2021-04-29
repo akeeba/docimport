@@ -28,6 +28,9 @@ class HtmlView extends BaseHtmlView
 
 	public function display($tpl = null)
 	{
+		$this->document->getWebAssetManager()
+			->useStyle('com_docimport.frontend');
+
 		$this->category = $this->get('category');
 		$this->index    = $this->get('index');
 		$this->items    = empty($this->index) ? $this->get('Items') : [];

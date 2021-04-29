@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 
 use Akeeba\Component\DocImport\Site\Model\Search\Result\JoomlaArticle;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\DatabaseQuery;
 
@@ -43,17 +44,7 @@ class JoomlaFulltext extends AbstractAdapter
 
 			foreach ($results as $result)
 			{
-				// Currently we are working only vs the introtext, since it's the only text displayed in search results.
-				// Otherwise we would have to trigger the same event twice, impacting the performance
-				$fake_article = (object) [
-					'text' => $result->introtext,
-				];
-
-				Factory::getApplication()->triggerEvent('onContentPrepare', [
-					'com_docimport.search.joomlafulltext', &$fake_article,
-				]);
-
-				$result->introtext = $fake_article->text;
+				$result->introtext = HTMLHelper::_('content.prepare', $result->introtext);
 			}
 		}
 

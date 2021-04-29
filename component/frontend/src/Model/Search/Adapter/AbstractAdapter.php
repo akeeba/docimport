@@ -86,7 +86,24 @@ abstract class AbstractAdapter implements AdapterInterface
 		// Search the database
 		try
 		{
-			$ret = $db->setQuery($query, $limitstart, $limit)->loadObjectList('', $this->resultClass);
+			/**
+			 * Joomla 4 is buggy and won't be fixed, see https://github.com/joomla/joomla-cms/issues/24857
+			 *
+			 * Even though our custom class DOES NOT have a constructor (contrary to what was said in the ticket) we
+			 * still get the same obscure error when using a class other than stdClass. The Joomla project is blissfully
+			 * unaware of the problem since they do not use any other class name in the core code.
+			 */
+			$ret = $db->setQuery($query, $limitstart, $limit)->loadAssocList() ?: [];
+			$ret = array_map(function (array $arr) {
+				$o = new $this->resultClass;
+
+				foreach ($arr as $k => $v)
+				{
+					$o->{$k} = $v;
+				}
+
+				return $o;
+			}, $ret);
 
 			return empty($ret) ? [] : $ret;
 		}

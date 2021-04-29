@@ -153,5 +153,7 @@ class HtmlView extends BaseHtmlView
 			'COM_DOCIMPORT_CATEGORY_SCAN',
 			'search'
 		);
+
+		ToolbarHelper::preferences('com_docimport');
 	}
 }
