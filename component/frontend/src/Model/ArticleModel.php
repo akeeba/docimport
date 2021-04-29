@@ -44,7 +44,8 @@ class ArticleModel extends ItemModel
 			$db    = $this->getDbo();
 			$query = $db->getQuery(true)
 				->select([
-					$db->quoteName('a.*'),
+					$db->quoteName('a') . '.*',
+					$db->quoteName('c.process_plugins'),
 				])
 				->from($db->quoteName('#__docimport_articles', 'a'))
 				->join('LEFT', $db->quoteName('#__docimport_categories', 'c'), $db->quoteName('c.docimport_category_id') . ' = ' . $db->quoteName('a.docimport_category_id'))
