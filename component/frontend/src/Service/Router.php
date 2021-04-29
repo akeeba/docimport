@@ -30,6 +30,8 @@ class Router extends RouterView
 	use MVCFactoryAwareTrait;
 	use DatabaseAwareTrait;
 
+	private static $articleToCategory;
+
 	/**
 	 * The db
 	 *
@@ -96,6 +98,12 @@ class Router extends RouterView
 		// Lowercase the menu item's view, if defined; addresses Formal case views in the previous versions.
 		$item = $this->menu->getItem($query['Itemid'] ?? null) ?: null;
 		$this->migrateMenuItem($item);
+
+		// Article view without catid
+		if ((($query['view'] ?? '') === 'article') && !empty($query['id'] ?? '') && empty($query['catid'] ?? ''))
+		{
+			$query['catid'] = $this->getArticleCategoryId($query['id']);
+		}
 
 		return parent::build($query);
 	}
@@ -226,5 +234,27 @@ class Router extends RouterView
 		{
 			$item->query['id'] = $item->query['id'] ?? ($item->query['catid'] ?? 0);
 		}
+	}
+
+	private function getArticleCategoryId($id): ?int
+	{
+		if (empty(self::$articleToCategory))
+		{
+			self::$articleToCategory = $this->getArticleToCategoryMap();
+		}
+
+		return self::$articleToCategory[$id] ?? null;
+	}
+
+	private function getArticleToCategoryMap(): array
+	{
+		$db    = $this->getDbo();
+		$query = $db->getQuery(true)
+			->select([
+				$db->quoteName('docimport_article_id', 'id'),
+				$db->quoteName('docimport_category_id', 'catid'),
+			]);
+
+		return $db->setQuery($query)->loadAssocList('id', 'catid') ?? [];
 	}
 }
