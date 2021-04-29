@@ -8,16 +8,21 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\Router\Router;
 use Joomla\CMS\Uri\Uri;
-
-// Load the base adapter.
-require_once JPATH_ADMINISTRATOR . '/components/com_finder/helpers/indexer/adapter.php';
+use Joomla\Component\Finder\Administrator\Indexer\Adapter;
+use Joomla\Component\Finder\Administrator\Indexer\Result;
+use Joomla\Database\DatabaseQuery;
+use Joomla\Database\QueryInterface;
+use Joomla\Utilities\ArrayHelper;
 
 /**
  * DocImport Smart Search plugin
  */
-class plgFinderDocimport extends FinderIndexerAdapter
+class plgFinderDocimport extends Adapter
 {
 	/**
 	 * The plugin identifier.
@@ -64,8 +69,8 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	/**
 	 * Constructor
 	 *
-	 * @param   object &$subject The object to observe
-	 * @param   array  $config   An array that holds the plugin configuration
+	 * @param   object &$subject  The object to observe
+	 * @param   array   $config   An array that holds the plugin configuration
 	 */
 	public function __construct(&$subject, $config)
 	{
@@ -79,9 +84,9 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 * changed. This is fired when the item category is published or unpublished
 	 * from the list view.
 	 *
-	 * @param   string  $extension The extension whose category has been updated.
-	 * @param   array   $pks       A list of primary key ids of the content that has changed state.
-	 * @param   integer $value     The value of the state that the content has been changed to.
+	 * @param   string   $extension  The extension whose category has been updated.
+	 * @param   array    $pks        A list of primary key ids of the content that has changed state.
+	 * @param   integer  $value      The value of the state that the content has been changed to.
 	 *
 	 * @return  void
 	 */
@@ -97,13 +102,13 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	/**
 	 * Method to remove the link information for items that have been deleted.
 	 *
-	 * @param   string $context The context of the action being performed.
-	 * @param   JTable $table   A JTable object containing the record to be deleted
+	 * @param   string  $context  The context of the action being performed.
+	 * @param   JTable  $table    A JTable object containing the record to be deleted
 	 *
 	 * @return  boolean  True on success.
 	 *
-	 * @since   2.5
 	 * @throws  Exception on database error.
+	 * @since   2.5
 	 */
 	public function onFinderAfterDelete($context, $table)
 	{
@@ -127,14 +132,14 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	/**
 	 * Method to determine if the access level of an item changed.
 	 *
-	 * @param   string  $context The context of the content passed to the plugin.
-	 * @param   JTable  $row     A JTable object
-	 * @param   boolean $isNew   If the content has just been created
+	 * @param   string   $context  The context of the content passed to the plugin.
+	 * @param   JTable   $row      A JTable object
+	 * @param   boolean  $isNew    If the content has just been created
 	 *
 	 * @return  boolean  True on success.
 	 *
-	 * @since   2.5
 	 * @throws  Exception on database error.
+	 * @since   2.5
 	 */
 	public function onFinderAfterSave($context, $row, $isNew)
 	{
@@ -152,9 +157,9 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 * from outside the edit screen. This is fired when the item is published,
 	 * unpublished, archived, or unarchived from the list view.
 	 *
-	 * @param   string  $context The context for the content passed to the plugin.
-	 * @param   array   $pks     A list of primary key ids of the content that has changed state.
-	 * @param   integer $value   The value of the state that the content has been changed to.
+	 * @param   string   $context  The context for the content passed to the plugin.
+	 * @param   array    $pks      A list of primary key ids of the content that has changed state.
+	 * @param   integer  $value    The value of the state that the content has been changed to.
 	 *
 	 * @return  void
 	 *
@@ -177,23 +182,22 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	/**
 	 * Method to index an item. The item must be a FinderIndexerResult object.
 	 *
-	 * @param   FinderIndexerResult  $item    The item to index as an FinderIndexerResult object.
-	 * @param   string               $format  The item format
+	 * @param   Result  $item  The item to index as an FinderIndexerResult object.
 	 *
 	 * @return  void
 	 *
 	 * @throws  \Exception on database error.
 	 */
-	protected function index(FinderIndexerResult $item, $format = 'html')
+	protected function index($item)
 	{
 		// Check if the extension is enabled
-		if (JComponentHelper::isEnabled($this->extension) == false)
+		if (ComponentHelper::isEnabled($this->extension) == false)
 		{
 			return;
 		}
 
 		// Build the necessary route and path information.
-		$item->url   = 'index.php?option=com_docimport&view=Article&id=' . $item->id;
+		$item->url   = 'index.php?option=com_docimport&view=article&id=' . $item->id;
 		$item->route = $item->url;
 		$item->path  = $this->getContentPath($item->route);
 
@@ -225,14 +229,9 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 */
 	protected function setup()
 	{
-		// Load dependent classes.
-		include_once JPATH_SITE . '/components/com_docimport/router.php';
-
 		if (!defined('JDEBUG'))
 		{
-			$config = JFactory::getConfig();
-
-			define('JDEBUG', $config->get('debug', 0));
+			define('JDEBUG', Factory::getApplication()->get('debug', 0));
 		}
 
 		return true;
@@ -243,33 +242,47 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 *
 	 * @param   mixed  $sql  A JDatabaseQuery object or null.
 	 *
-	 * @return  JDatabaseQuery  A database object.
+	 * @return  QueryInterface  A database object.
 	 */
 	protected function getListQuery($sql = null)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		// Check if we can use the supplied SQL query.
-		$sql = ($sql instanceof JDatabaseQuery) ? $sql : $db->getQuery(true);
-		$sql->select('a.docimport_article_id AS id, a.title, a.slug as alias, "" AS summary, a.fulltext AS body');
-		$sql->select('a.enabled, a.docimport_category_id as catid, a.created_on AS start_date, a.created_by');
-		$sql->select('a.modified_on, a.modified_by');
-		$sql->select('a.docimport_article_id, a.slug');
-		$sql->select('c.title AS category, c.enabled AS cat_state, c.access AS cat_access');
-		$sql->select('c.language AS language, c.access AS access');
+		$sql = ($sql instanceof DatabaseQuery) ? $sql : $db->getQuery(true);
 
 		$case_when_category_alias = ' CASE WHEN ';
 		$case_when_category_alias .= $sql->charLength('c.slug');
 		$case_when_category_alias .= ' THEN ';
-		$c_id = $sql->castAsChar('c.docimport_category_id');
-		$case_when_category_alias .= $sql->concatenate(array($c_id, 'c.slug'), ':');
+		$c_id                     = $sql->castAsChar('c.docimport_category_id');
+		$case_when_category_alias .= $sql->concatenate([$c_id, 'c.slug'], ':');
 		$case_when_category_alias .= ' ELSE ';
 		$case_when_category_alias .= $c_id . ' END as catslug';
-		$sql->select($case_when_category_alias);
 
-		$sql->select('u.name AS author');
-		$sql->from('#__docimport_articles AS a');
-		$sql->join('LEFT', '#__docimport_categories AS c ON c.docimport_category_id = a.docimport_category_id');
-		$sql->join('LEFT', '#__users AS u ON u.id = a.created_by');
+		$sql->select([
+//			$db->quoteName('a.docimport_article_id'),
+//			$db->quoteName('a.slug'),
+			$db->quoteName('a.docimport_article_id', 'id'),
+			$db->quoteName('a.title'),
+			$db->quoteName('a.slug', 'alias'),
+			$db->quote('') . ' AS ' . $db->quoteName('summary'),
+			$db->quoteName('a.fulltext', 'body'),
+			$db->quoteName('a.enabled'),
+			$db->quoteName('a.docimport_category_id', 'catid'),
+			$db->quoteName('a.created_on', 'start_date'),
+			$db->quoteName('a.created_by'),
+			$db->quoteName('a.modified_on'),
+			$db->quoteName('a.modified_by'),
+			$db->quoteName('c.title', 'category'),
+			$db->quoteName('c.enabled', 'cat_state'),
+			$db->quoteName('c.access', 'cat_access'),
+			$db->quoteName('c.language', 'language'),
+			$db->quoteName('c.access', 'access'),
+			$case_when_category_alias,
+			$db->quoteName('u.name', 'author'),
+		])
+			->from($db->quoteName('#__docimport_articles', 'a'))
+			->join('LEFT', $db->quoteName('#__docimport_categories', 'c') . 'ON(' . $db->quoteName('c.docimport_category_id') . ' = ' . $db->quoteName('a.docimport_category_id') . ')')
+			->join('LEFT', $db->quoteName('#__users', 'u') . ' ON (' . $db->quoteName('u.id') . ' = ' . $db->quoteName('a.created_by') . ')');
 
 		return $sql;
 	}
@@ -278,9 +291,9 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	 * Method to get the URL for the item. The URL is how we look up the link
 	 * in the Finder index.
 	 *
-	 * @param   integer $id        The id of the item.
-	 * @param   string  $extension The extension the category is in.
-	 * @param   string  $view      The view for the URL.
+	 * @param   integer  $id         The id of the item.
+	 * @param   string   $extension  The extension the category is in.
+	 * @param   string   $view       The view for the URL.
 	 *
 	 * @return  string  The URL of the item.
 	 */
@@ -294,34 +307,27 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	/**
 	 * Method to get a content item to index.
 	 *
-	 * @param   integer $id The id of the content item.
+	 * @param   integer  $id  The id of the content item.
 	 *
-	 * @return  FinderIndexerResult|\Joomla\Component\Finder\Administrator\Indexer\Result  A FinderIndexerResult object.
+	 * @return  Result  A FinderIndexerResult object.
 	 *
-	 * @since   2.5
 	 * @throws  Exception on database error.
+	 * @since   2.5
 	 */
 	protected function getItem($id)
 	{
-		JLog::add('FinderIndexerAdapter::getItem', JLog::INFO);
+		Log::add('FinderIndexerAdapter::getItem', JLog::INFO);
 
 		// Get the list query and add the extra WHERE clause.
 		$sql = $this->getListQuery();
-		$sql->where('a.' . $this->db->quoteName('docimport_article_id') . ' = ' . (int)$id);
+		$sql->where($this->db->quoteName('a.docimport_article_id') . ' = ' . (int) $id);
 
 		// Get the item to index. NOTE: Finder expects database errors to throw exceptions.
 		$this->db->setQuery($sql);
 		$row = $this->db->loadAssoc();
 
-		// Check for a database error. TODO I don't think we need this in Joomla! 3.3 and later.
-		if ($this->db->getErrorNum())
-		{
-			// Throw database error exception.
-			throw new Exception($this->db->getErrorMsg(), 500);
-		}
-
 		// Convert the item to a result object.
-		$item = \Joomla\Utilities\ArrayHelper::toObject($row, 'FinderIndexerResult');
+		$item = ArrayHelper::toObject($row, Result::class);
 
 		// Set the item type.
 		$item->type_id = $this->type_id;
@@ -342,11 +348,6 @@ class plgFinderDocimport extends FinderIndexerAdapter
 	private function getContentPath($url)
 	{
 		static $router;
-
-		if (method_exists(FinderIndexerHelper::class, 'getContentPath'))
-		{
-			return FinderIndexerHelper::getContentPath($url);
-		}
 
 		// Only get the router once.
 		if (!($router instanceof Router))

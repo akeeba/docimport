@@ -256,7 +256,9 @@ class Router extends RouterView
 			->select([
 				$db->quoteName('docimport_article_id', 'id'),
 				$db->quoteName('docimport_category_id', 'catid'),
-			]);
+			])
+			->from($db->quoteName('#__docimport_articles'))
+		;
 
 		return $db->setQuery($query)->loadAssocList('id', 'catid') ?? [];
 	}
