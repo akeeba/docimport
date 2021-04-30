@@ -1,3 +1,4 @@
 DocImport 4.0.0
 ================================================================================
 ~ Rewritten in Joomla 4 core MVC
+- Removed unified search; it's not been used in five years

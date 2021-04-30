@@ -76,15 +76,7 @@ class Dispatcher extends ComponentDispatcher
 		$view       = strtolower($view);
 		$controller = strtolower($controller);
 
-		// Custom dispatchers per view
-		switch ($view)
-		{
-			case 'search':
-				$controller = 'search';
-				break;
-		}
-
-		$this->input->set('view', $controller);
+		$this->input->set('view', $view);
 		$this->input->set('controller', $controller);
 		$this->input->set('task', $task);
 	}

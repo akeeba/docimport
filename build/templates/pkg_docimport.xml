@@ -24,13 +24,10 @@
         <file type="component" id="com_docimport">com_docimport.zip</file>
 
         <!-- Modules -->
-        <file type="module" client="site" id="mod_docimport_search">mod_docimport_categories.zip</file>
-
-        <file type="module" client="site" id="mod_docimport_search">mod_docimport_search.zip</file>
+        <file type="module" client="site" id="mod_docimport_categories">mod_docimport_categories.zip</file>
 
         <!-- Plugins -->
         <file type="plugin" group="finder" id="docimport">plg_finder_docimport.zip</file>
-        <file type="plugin" group="search" id="docimport">plg_search_docimport.zip</file>
 
     </files>
 

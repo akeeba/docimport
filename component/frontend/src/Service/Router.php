@@ -46,9 +46,6 @@ class Router extends RouterView
 		$this->setDbo($db);
 		$this->setMVCFactory($factory);
 
-		$search = new RouterViewConfiguration('search');
-		$this->registerView($search);
-
 		$categories = new RouterViewConfiguration('categories');
 		$this->registerView($categories);
 
