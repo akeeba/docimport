@@ -4,7 +4,7 @@
  * @license   GNU General Public License version 3, or later
  */
 
-CREATE TABLE `#__docimport_categories`
+CREATE TABLE IF NOT EXISTS `#__docimport_categories`
 (
     `docimport_category_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `title`                 varchar(255)        NOT NULL,
