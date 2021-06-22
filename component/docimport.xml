@@ -6,7 +6,7 @@
   -->
 
 <extension type="component" method="upgrade" version="4.0.0">
-	<name>DocImport</name>
+	<name>com_docimport</name>
 	<creationDate>2021-03-02</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@akeeba.com</authorEmail>
