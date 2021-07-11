@@ -26,6 +26,4 @@
         <language tag="en-GB">language/en-GB/en-GB.plg_finder_docimport.sys.ini</language>
     </languages>
 
-    <scriptfile>script.php</scriptfile>
-
 </extension>
